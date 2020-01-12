@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkVsCoreDapper", "EntityFrameworkVsCoreDapper\EntityFrameworkVsCoreDapper.csproj", "{A8CC027E-809B-41D0-875C-84F0CCF685DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkVsCoreDapper.ConsoleTest", "EntityFrameworkVsCoreDapper.ConsoleTest\EntityFrameworkVsCoreDapper.ConsoleTest.csproj", "{5104F4DE-0283-4F18-8FE0-41032B6D75B0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8CC027E-809B-41D0-875C-84F0CCF685DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8CC027E-809B-41D0-875C-84F0CCF685DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8CC027E-809B-41D0-875C-84F0CCF685DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8CC027E-809B-41D0-875C-84F0CCF685DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5104F4DE-0283-4F18-8FE0-41032B6D75B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5104F4DE-0283-4F18-8FE0-41032B6D75B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5104F4DE-0283-4F18-8FE0-41032B6D75B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5104F4DE-0283-4F18-8FE0-41032B6D75B0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A13B66E2-984B-4900-AA7C-7894621F6826}
+	EndGlobalSection
+EndGlobal
