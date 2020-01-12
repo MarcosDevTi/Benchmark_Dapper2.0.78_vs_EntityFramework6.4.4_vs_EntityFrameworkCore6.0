@@ -24,7 +24,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             context.SaveChanges();
             stopwatch.Stop();
-            result = string.Format("Temps écoulé avec EF Core -----------: {0}", stopwatch.Elapsed);
+            result = string.Format("EF Core -----------: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
             context.Dispose();
         }
@@ -42,7 +42,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             context.SaveChanges();
             stopwatch.Stop();
-            result = string.Format("Temps écoulé avec EFCore AsNoTracking: {0}", stopwatch.Elapsed);
+            result = string.Format("EFCore AsNoTracking: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
             context.Dispose();
         }
@@ -67,7 +67,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                 Insert1Item();
             }
             stopwatch.Stop();
-            var result = string.Format("Temps écoulé avec Ef Core Transaction Per Item: {0}", stopwatch.Elapsed);
+            var result = string.Format("Ef Core Transaction Per Item: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
         }
 
@@ -78,7 +78,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             stopwatch.Start();
             var teste = context.Customers.Take(take).ToList();
             stopwatch.Stop();
-            var result = string.Format("Temps écoulé avec EF Core -----------: {0}", stopwatch.Elapsed);
+            var result = string.Format("EF Core -----------: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
             context.Dispose();
         }
@@ -92,7 +92,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             
             var teste = context.Customers.Take(take).ToList();
             stopwatch.Stop();
-            var result = string.Format("Temps écoulé avec EFCore AsNoTracking: {0}", stopwatch.Elapsed);
+            var result = string.Format("EFCore AsNoTracking: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
             context.Dispose();
         }

@@ -35,7 +35,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             }
             stopwatch.Stop();
 
-            result = string.Format("Temps écoulé avec Dapper ------------: {0}", stopwatch.Elapsed);
+            result = string.Format("Dapper ------------: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
         }
 
@@ -55,7 +55,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             }
             stopwatch.Stop();
 
-            var result = string.Format("Temps écoulé avec Dapper ------------: {0}", stopwatch.Elapsed);
+            var result = string.Format("Dapper ------------: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
         }
 
@@ -89,7 +89,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                 Insert1Item();
             }
             stopwatch.Stop();
-            var result = string.Format("Temps écoulé avec Dapper Transaction Per Item: {0}", stopwatch.Elapsed);
+            var result = string.Format("Dapper Transaction Per Item: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
         }
 

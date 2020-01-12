@@ -42,12 +42,12 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
             new EntityFrameworkTests().AjouterCustomersAleatoiresAsNoTracking(quant);
 
 
-            Console.BackgroundColor = ConsoleColor.Blue;
-            Console.WriteLine("Insert avec 100");
-            Console.ResetColor();
-            quant = 100;
-            new DapperTests().InsertTransactionPerItem(quant);
-            new EntityFrameworkTests().InsertTransactionPerItem(quant); 
+            //Console.BackgroundColor = ConsoleColor.Blue;
+            //Console.WriteLine("Insert avec 100");
+            //Console.ResetColor();
+            //quant = 100;
+            //new DapperTests().InsertTransactionPerItem(quant);
+            //new EntityFrameworkTests().InsertTransactionPerItem(quant); 
         }
     }
 }
