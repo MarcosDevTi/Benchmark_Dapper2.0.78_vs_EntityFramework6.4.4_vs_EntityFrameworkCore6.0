@@ -11,10 +11,10 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
             int quant;
 
             Console.BackgroundColor = ConsoleColor.Blue;
-            Console.WriteLine("Insert avec 10 000");
+            Console.WriteLine("Insert avec 100");
             Console.ResetColor();
-            
-             quant = 10000;
+
+            quant = 100;
 
             new DapperTests().AjouterCustomersAleatoires(quant);
             new Ef6Tests().AjouterCustomersAleatoires(quant);
@@ -22,9 +22,9 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
             new EntityFrameworkTests().AjouterCustomersAleatoiresAsNoTracking(quant);
 
             Console.BackgroundColor = ConsoleColor.Blue;
-            Console.WriteLine("Insert avec 500");
+            Console.WriteLine("Insert avec 50");
             Console.ResetColor();
-            quant = 500;
+            quant = 50;
 
             new DapperTests().AjouterCustomersAleatoires(quant);
             new Ef6Tests().AjouterCustomersAleatoires(quant);
@@ -42,12 +42,66 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
             new EntityFrameworkTests().AjouterCustomersAleatoiresAsNoTracking(quant);
 
 
+            Console.BackgroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Insert avec 10 Open and Close");
+            Console.ResetColor();
+            quant = 10;
+
+            new DapperTests().AjouterCustomersAleatoiresOpenClose(quant);
+            new Ef6Tests().AjouterCustomersAleatoiresOpenClose(quant);
+            new EntityFrameworkTests().AjouterCustomersAleatoiresOpenClose(quant);
+            new EntityFrameworkTests().AjouterCustomersAleatoiresAsNoTrackingOpenClose(quant);
+
+            Console.BackgroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Insert avec 5 Open and Close");
+            Console.ResetColor();
+            quant = 5;
+
+            new DapperTests().AjouterCustomersAleatoiresOpenClose(quant);
+            new Ef6Tests().AjouterCustomersAleatoiresOpenClose(quant);
+            new EntityFrameworkTests().AjouterCustomersAleatoiresOpenClose(quant);
+            new EntityFrameworkTests().AjouterCustomersAleatoiresAsNoTrackingOpenClose(quant);
+
+            Console.BackgroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Insert avec 2 Open and Close");
+            Console.ResetColor();
+            quant = 2;
+
+            new DapperTests().AjouterCustomersAleatoiresOpenClose(quant);
+            new Ef6Tests().AjouterCustomersAleatoiresOpenClose(quant);
+            new EntityFrameworkTests().AjouterCustomersAleatoiresOpenClose(quant);
+            new EntityFrameworkTests().AjouterCustomersAleatoiresAsNoTrackingOpenClose(quant);
+
+            Console.BackgroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Insert avec 1 Open and Close");
+            Console.ResetColor();
+            quant = 1;
+
+            new DapperTests().AjouterCustomersAleatoiresOpenClose(quant);
+            new Ef6Tests().AjouterCustomersAleatoiresOpenClose(quant);
+            new EntityFrameworkTests().AjouterCustomersAleatoiresOpenClose(quant);
+            new EntityFrameworkTests().AjouterCustomersAleatoiresAsNoTrackingOpenClose(quant);
+
             //Console.BackgroundColor = ConsoleColor.Blue;
-            //Console.WriteLine("Insert avec 100");
+            //Console.WriteLine("Insert avec 100 000");
             //Console.ResetColor();
-            //quant = 100;
-            //new DapperTests().InsertTransactionPerItem(quant);
-            //new EntityFrameworkTests().InsertTransactionPerItem(quant); 
+            //quant = 100000;
+
+            //new DapperTests().AjouterCustomersAleatoires(quant);
+            //new Ef6Tests().AjouterCustomersAleatoires(quant);
+            //new EntityFrameworkTests().AjouterCustomersAleatoires(quant);
+            //new EntityFrameworkTests().AjouterCustomersAleatoiresAsNoTracking(quant);
+
+
+            //Console.BackgroundColor = ConsoleColor.Blue;
+            //Console.WriteLine("Insert avec 1 000 000");
+            //Console.ResetColor();
+            //quant = 1000000;
+
+            //new DapperTests().AjouterCustomersAleatoires(quant);
+            //new Ef6Tests().AjouterCustomersAleatoires(quant);
+            //new EntityFrameworkTests().AjouterCustomersAleatoires(quant);
+            //new EntityFrameworkTests().AjouterCustomersAleatoiresAsNoTracking(quant);
         }
     }
 }

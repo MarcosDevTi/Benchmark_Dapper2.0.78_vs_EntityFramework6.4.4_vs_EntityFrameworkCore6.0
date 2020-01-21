@@ -21,8 +21,32 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             context.SaveChanges();
             stopwatch.Stop();
-            result = string.Format("EF 6 --------------: {0}", stopwatch.Elapsed);
+            result = string.Format("Temps écoulé avec EF 6: {0}", stopwatch.Elapsed);
             context.Dispose();
+            Console.WriteLine(result);
+        }
+
+        public void AjouterCustomersAleatoiresOpenClose(int interactions)
+        {
+            var result = "";
+
+            var faker = new Faker();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            foreach(var item in new ListTests().ObtenirListCustomersAleatoire(interactions))
+            {
+                using (var context = new EntityFramework.Ef6Context())
+                {
+                    context.Customers.Add(item);
+
+                    context.SaveChanges();
+                    context.Dispose();
+                }
+            }
+          
+            stopwatch.Stop();
+            result = string.Format("Temps écoulé avec EF 6: {0}", stopwatch.Elapsed);
+
             Console.WriteLine(result);
         }
 
@@ -33,7 +57,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             stopwatch.Start();
             var teste = context.Customers.Take(take).ToList();
             stopwatch.Stop();
-            var result = string.Format("EF 6 --------------: {0}", stopwatch.Elapsed);
+            var result = string.Format("Temps écoulé avec EF 6: {0}", stopwatch.Elapsed);
             context.Dispose();
             Console.WriteLine(result);
         }

@@ -24,9 +24,31 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             context.SaveChanges();
             stopwatch.Stop();
-            result = string.Format("EF Core -----------: {0}", stopwatch.Elapsed);
+            result = string.Format("Temps écoulé avec EFCore: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
             context.Dispose();
+        }
+
+        public void AjouterCustomersAleatoiresOpenClose(int interactions)
+        {
+            var result = "";
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            foreach(var item in new ListTests().ObtenirListCustomersAleatoire(interactions))
+            {
+                using (var context = new TesteContext())
+                {
+                    context.Add(item);
+                    context.SaveChanges();
+                    context.Dispose();
+                }
+            }
+
+            stopwatch.Stop();
+            result = string.Format("Temps écoulé avec EFCore: {0}", stopwatch.Elapsed);
+            Console.WriteLine(result);
+
         }
 
         public void AjouterCustomersAleatoiresAsNoTracking(int interactions)
@@ -42,32 +64,29 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             context.SaveChanges();
             stopwatch.Stop();
-            result = string.Format("EFCore AsNoTracking: {0}", stopwatch.Elapsed);
+            result = string.Format("Temps écoulé avec EFCore AsNoTracking: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
             context.Dispose();
         }
 
-        public void Insert1Item()
-        {
-            var faker = new Faker();
-
-            using (var context = new TesteContext())
-            {
-                new ListTests().ObtenirListCustomersAleatoire(1).ForEach(_ => context.Add(_));
-                context.SaveChanges();
-            }
-        }
-
-        public void InsertTransactionPerItem(int interactions)
+        public void AjouterCustomersAleatoiresAsNoTrackingOpenClose(int interactions)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            for (var i = 0; i < interactions; i++)
+
+            foreach(var item in new ListTests().ObtenirListCustomersAleatoire(interactions))
             {
-                Insert1Item();
+                using (var context = new TesteContext())
+                {
+                    context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+                    context.Add(item);
+                    context.SaveChanges();
+                    context.Dispose();
+                }
             }
+            
             stopwatch.Stop();
-            var result = string.Format("Ef Core Transaction Per Item: {0}", stopwatch.Elapsed);
+            var result = string.Format("Temps écoulé avec EFCore AsNoTracking: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
         }
 
@@ -78,10 +97,11 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             stopwatch.Start();
             var teste = context.Customers.Take(take).ToList();
             stopwatch.Stop();
-            var result = string.Format("EF Core -----------: {0}", stopwatch.Elapsed);
+            var result = string.Format("Temps écoulé avec EF Core: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
             context.Dispose();
         }
+
 
         public void SelectCustomersAsNoTracking(int take)
         {
@@ -92,7 +112,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             
             var teste = context.Customers.Take(take).ToList();
             stopwatch.Stop();
-            var result = string.Format("EFCore AsNoTracking: {0}", stopwatch.Elapsed);
+            var result = string.Format("Temps écoulé avec EF 6 Core AsNoTracking: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
             context.Dispose();
         }

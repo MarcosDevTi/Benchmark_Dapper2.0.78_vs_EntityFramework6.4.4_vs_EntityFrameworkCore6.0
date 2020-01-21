@@ -13,7 +13,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         static void Main(string[] args)
         {
             new Insertions();
-            new Selects();
+            //new Selects();
             new AutoMapperTest(300000);
 
             Console.ReadLine();

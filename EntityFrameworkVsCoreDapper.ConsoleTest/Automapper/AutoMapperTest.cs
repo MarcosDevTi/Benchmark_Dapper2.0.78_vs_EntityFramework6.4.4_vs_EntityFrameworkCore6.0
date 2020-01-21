@@ -17,8 +17,8 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Automapper
             var count = customers.Count();
 
             var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<Customer, CustomerViewModel>()
-                .ForMember(d => d.StreetAA, o => o.MapFrom(s => s.Street));
+                cfg.CreateMap<Customer, CustomerViewModel>();
+                //.ForMember(d => d.StreetAA, o => o.MapFrom(s => s.Street));
             });
             config.CompileMappings();
 
