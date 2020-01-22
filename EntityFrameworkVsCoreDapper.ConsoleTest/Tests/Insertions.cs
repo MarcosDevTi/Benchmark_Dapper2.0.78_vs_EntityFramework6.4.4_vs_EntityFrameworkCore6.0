@@ -17,6 +17,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
             quant = 100;
 
             new DapperTests().AjouterCustomersAleatoires(quant);
+            new DapperTests().AjouterCustomersAleatoiresContrib(quant);
             new Ef6Tests().AjouterCustomersAleatoires(quant);
             new EntityFrameworkTests().AjouterCustomersAleatoires(quant);
             new EntityFrameworkTests().AjouterCustomersAleatoiresAsNoTracking(quant);
@@ -48,6 +49,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
             quant = 10;
 
             new DapperTests().AjouterCustomersAleatoiresOpenClose(quant);
+            new DapperTests().AjouterCustomersAleatoiresOpenCloseContrib(quant);
             new Ef6Tests().AjouterCustomersAleatoiresOpenClose(quant);
             new EntityFrameworkTests().AjouterCustomersAleatoiresOpenClose(quant);
             new EntityFrameworkTests().AjouterCustomersAleatoiresAsNoTrackingOpenClose(quant);

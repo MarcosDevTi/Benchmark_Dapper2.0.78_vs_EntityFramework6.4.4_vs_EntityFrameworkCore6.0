@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using Dapper;
+using Dapper.Contrib.Extensions;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,33 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         }
 
 
+        public void AjouterCustomersAleatoiresContrib(int interactions)
+        {
+
+            var result = "";
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+
+                using (var transaction = dbConnection.BeginTransaction())
+                {
+                    AddCustomersContrib(new ListTests().ObtenirListCustomersAleatoire(interactions), dbConnection, transaction);
+
+                    transaction.Commit();
+                }
+
+            }
+            stopwatch.Stop();
+
+            result = string.Format("Temps écoulé avec Dapper Contrib: {0}", stopwatch.Elapsed);
+            Console.WriteLine(result);
+        }
+
+
         public void AjouterCustomersAleatoiresOpenClose(int interactions)
         {
 
@@ -60,6 +88,35 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                 }
             }
             
+            stopwatch.Stop();
+
+            result = string.Format("Temps écoulé avec Dapper: {0}", stopwatch.Elapsed);
+            Console.WriteLine(result);
+        }
+
+        public void AjouterCustomersAleatoiresOpenCloseContrib(int interactions)
+        {
+
+            var result = "";
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            foreach (var item in new ListTests().ObtenirListCustomersAleatoire(interactions))
+            {
+                using (IDbConnection dbConnection = Connection)
+                {
+                    dbConnection.Open();
+
+                    using (var transaction = dbConnection.BeginTransaction())
+                    {
+                        AddCustomersContrib(new List<Customer> { item }, dbConnection, transaction);
+
+                        transaction.Commit();
+                    }
+                    dbConnection.Close();
+                }
+            }
+
             stopwatch.Stop();
 
             result = string.Format("Temps écoulé avec Dapper: {0}", stopwatch.Elapsed);
@@ -114,6 +171,25 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             }
         }
 
+        public void AddCustomersContrib(IEnumerable<Customer> customers, IDbConnection conn, IDbTransaction transaction)
+        {
+            foreach (var customer in customers)
+            {
+                AddAddressContrib(customer.Address, conn, transaction);
+                AddCustomerContrib(customer, conn, transaction);
+
+                foreach (var order in customer.Orders)
+                {
+                    AddOrderContrib(order, conn, transaction);
+                    foreach (var orderItem in order.OrderItems)
+                    {
+                        AddProductContrib(orderItem.Product, conn, transaction);
+                        AddOrderItemContrib(orderItem, conn, transaction);
+                    }
+                }
+            }
+        }
+
         public void AddProduct(Product product, IDbConnection conn, IDbTransaction transaction)
         {
             var sql = "INSERT INTO PRODUCTS (Id, Name, Description, Price, OldPrice, Brand) Values" +
@@ -146,6 +222,17 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var sql = "Insert into OrderItems (Id, ProductId, OrderId) Values (@Id, @ProductId, @OrderId)";
             conn.Execute(sql, orderItem, transaction: transaction);
         }
+
+        public void AddCustomerContrib(Customer customer, IDbConnection conn, IDbTransaction transaction) =>
+             conn.Insert(customer, transaction);
+        public void AddOrderContrib(Order order, IDbConnection conn, IDbTransaction transaction) =>
+             conn.Insert(order, transaction);
+        public void AddOrderItemContrib(OrderItem orderItem, IDbConnection conn, IDbTransaction transaction) =>
+             conn.Insert(orderItem, transaction);
+        public void AddProductContrib(Product product, IDbConnection conn, IDbTransaction transaction) =>
+            conn.Insert(product, transaction);
+        public void AddAddressContrib(Address address, IDbConnection conn, IDbTransaction transaction) =>
+            conn.Insert(address, transaction);
     }
 }
 

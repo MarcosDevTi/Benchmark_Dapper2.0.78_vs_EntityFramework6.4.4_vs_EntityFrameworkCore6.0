@@ -17,7 +17,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
             
             quant = 100;
 
-            new DapperTests().SelectCustomers(quant);
+            //new DapperTests().SelectCustomers(quant);
             new Ef6Tests().SelectCustomers(quant);
             new EntityFrameworkTests().SelectCustomers(quant);
             new EntityFrameworkTests().SelectCustomersAsNoTracking(quant);

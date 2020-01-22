@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -55,7 +56,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var context = new EntityFramework.Ef6Context();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            var teste = context.Customers.Take(take).ToList();
+            var teste = context.Customers.Include(_ => _.Orders.Select(_ => _.OrderItems.Select(p => p.Product))).Include(_ => _.Address).Take(take).ToList();
             stopwatch.Stop();
             var result = string.Format("Temps écoulé avec EF 6: {0}", stopwatch.Elapsed);
             context.Dispose();

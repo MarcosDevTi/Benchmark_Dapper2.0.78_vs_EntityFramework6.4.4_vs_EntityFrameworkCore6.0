@@ -95,7 +95,10 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var context = new TesteContext();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            var teste = context.Customers.Take(take).ToList();
+            var teste = context.Customers
+                .Include(_ => _.Address)
+                .Include(_ => _.Orders).ThenInclude(o => o.OrderItems).ThenInclude(p => p.Product)
+                .Take(take).ToList();
             stopwatch.Stop();
             var result = string.Format("Temps écoulé avec EF Core: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
@@ -109,8 +112,11 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            
-            var teste = context.Customers.Take(take).ToList();
+
+            var teste = context.Customers
+              .Include(_ => _.Address)
+              .Include(_ => _.Orders).ThenInclude(o => o.OrderItems).ThenInclude(p => p.Product)
+              .Take(take).ToList();
             stopwatch.Stop();
             var result = string.Format("Temps écoulé avec EF 6 Core AsNoTracking: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
