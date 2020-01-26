@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EntityFrameworkVsCoreDapper.Migrations
 {
-    [DbContext(typeof(TesteContext))]
+    [DbContext(typeof(DotNetCoreContext))]
     partial class TesteContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -54,7 +54,7 @@ namespace EntityFrameworkVsCoreDapper.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AddressId")
+                    b.Property<Guid?>("AddressId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BirthDate")
@@ -79,43 +79,6 @@ namespace EntityFrameworkVsCoreDapper.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("EntityFrameworkVsCoreDapper.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("EntityFrameworkVsCoreDapper.OrderItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderItems");
-                });
-
             modelBuilder.Entity("EntityFrameworkVsCoreDapper.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -124,6 +87,9 @@ namespace EntityFrameworkVsCoreDapper.Migrations
 
                     b.Property<string>("Brand")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -139,6 +105,8 @@ namespace EntityFrameworkVsCoreDapper.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerId");
+
                     b.ToTable("Products");
                 });
 
@@ -146,29 +114,16 @@ namespace EntityFrameworkVsCoreDapper.Migrations
                 {
                     b.HasOne("EntityFrameworkVsCoreDapper.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId");
                 });
 
-            modelBuilder.Entity("EntityFrameworkVsCoreDapper.Order", b =>
+            modelBuilder.Entity("EntityFrameworkVsCoreDapper.Product", b =>
                 {
-                    b.HasOne("EntityFrameworkVsCoreDapper.Customer", "Customer")
-                        .WithMany("Orders")
+                    b.HasOne("EntityFrameworkVsCoreDapper.Customer", null)
+                        .WithMany("Products")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EntityFrameworkVsCoreDapper.OrderItem", b =>
-                {
-                    b.HasOne("EntityFrameworkVsCoreDapper.Order", null)
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId");
-
-                    b.HasOne("EntityFrameworkVsCoreDapper.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
                 });
 #pragma warning restore 612, 618
         }

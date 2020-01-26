@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using EntityFrameworkVsCoreDapper.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -10,12 +11,51 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
     public class Ef6Tests
     {
+        public void InsertAvg(int interactions)
+        {
+            var tempo = TimeSpan.Zero;
+
+            for (int i = 0; i < 10; i++)
+            {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                
+                using (var context = new Ef6Context())
+                {
+                    new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => context.Customers.Add(_));
+                    context.SaveChanges();
+                }
+
+                stopwatch.Stop();
+                tempo += stopwatch.Elapsed;
+            }
+
+            var result = string.Format("Temps écoulé avec EF 6: {0}", tempo / 10);
+            Console.WriteLine(result);
+        }
+
+        public void AddCustomersSingles(int interactions)
+        {
+            var result = "";
+
+            var faker = new Faker();
+            var context = new Ef6Context();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            new ListTests().ObtenirListCustomersSingles(interactions).ForEach(_ => context.Customers.Add(_));
+
+            context.SaveChanges();
+            stopwatch.Stop();
+            result = string.Format("Temps écoulé avec EF 6: {0}", stopwatch.Elapsed);
+            context.Dispose();
+            Console.WriteLine(result);
+        }
         public void AjouterCustomersAleatoires(int interactions)
         {
             var result = "";
 
             var faker = new Faker();
-            var context = new EntityFramework.Ef6Context();
+            var context = new Ef6Context();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => context.Customers.Add(_));
@@ -36,7 +76,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             stopwatch.Start();
             foreach(var item in new ListTests().ObtenirListCustomersAleatoire(interactions))
             {
-                using (var context = new EntityFramework.Ef6Context())
+                using (var context = new Ef6Context())
                 {
                     context.Customers.Add(item);
 
@@ -53,10 +93,10 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
         public void SelectCustomers(int take)
         {            
-            var context = new EntityFramework.Ef6Context();
+            var context = new Ef6Context();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            var teste = context.Customers.Include(_ => _.Orders.Select(_ => _.OrderItems.Select(p => p.Product))).Include(_ => _.Address).Take(take).ToList();
+            var teste = context.Customers.Take(take).ToList();
             stopwatch.Stop();
             var result = string.Format("Temps écoulé avec EF 6: {0}", stopwatch.Elapsed);
             context.Dispose();

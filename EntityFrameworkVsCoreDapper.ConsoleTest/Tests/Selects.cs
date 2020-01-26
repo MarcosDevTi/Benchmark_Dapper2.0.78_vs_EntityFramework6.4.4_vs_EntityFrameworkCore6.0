@@ -8,62 +8,28 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
     {
         public Selects()
         {
-            int quant;
+            AddProfile(5, "5");
+            AddProfile(10, "10");
+            AddProfile(20, "20");
+            AddProfile(50, "50");
+            AddProfile(100, "100");
+            AddProfile(500, "500");
+            AddProfile(10000, "10 000");
+            AddProfile(50000, "50 000");
+            AddProfile(100000, "100 000");
+            //AddProfile(100000, "100 000");
+            //AddProfile(1000000, "1 000 000");
+            //AddProfile(3500000, "3 500 000");
+        }
 
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Select avec 100");
-            Console.ResetColor();
-            
-            quant = 100;
-
-            //new DapperTests().SelectCustomers(quant);
-            new Ef6Tests().SelectCustomers(quant);
-            new EntityFrameworkTests().SelectCustomers(quant);
-            new EntityFrameworkTests().SelectCustomersAsNoTracking(quant);
-
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Select avec 10 000");
-            Console.ResetColor();
-            
-            quant = 10000;
+        public void AddProfile(int quant, string txtNum)
+        {
+            Montrer(txtNum);
 
             new DapperTests().SelectCustomers(quant);
             new Ef6Tests().SelectCustomers(quant);
-            new EntityFrameworkTests().SelectCustomers(quant);
-            new EntityFrameworkTests().SelectCustomersAsNoTracking(quant);
-
-
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Select avec 100 000");
-            Console.ResetColor();
-            quant = 100000;
-
-            new DapperTests().SelectCustomers(quant);
-            new Ef6Tests().SelectCustomers(quant);
-            new EntityFrameworkTests().SelectCustomers(quant);
-            new EntityFrameworkTests().SelectCustomersAsNoTracking(quant);
-
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Select avec 1 000 000");
-            Console.ResetColor();
-            quant = 1000000;
-
-            new DapperTests().SelectCustomers(quant);
-            new Ef6Tests().SelectCustomers(quant);
-            new EntityFrameworkTests().SelectCustomers(quant);
-            new EntityFrameworkTests().SelectCustomersAsNoTracking(quant);
-
-            Montrer("3 500 000");
-            quant = 3500000;
-
-            new DapperTests().SelectCustomers(quant);
-            new Ef6Tests().SelectCustomers(quant);
-            new EntityFrameworkTests().SelectCustomers(quant);
-            new EntityFrameworkTests().SelectCustomersAsNoTracking(quant);
+            new EfCoreTests().SelectCustomers(quant);
+            new EfCoreTests().SelectCustomersAsNoTracking(quant);
         }
 
         public void Montrer(string numero)

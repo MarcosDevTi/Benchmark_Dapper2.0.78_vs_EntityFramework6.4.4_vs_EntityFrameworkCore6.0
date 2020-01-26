@@ -6,14 +6,14 @@ using System.Text;
 namespace EntityFrameworkVsCoreDapper
 {
     [Table("Address")]
-    public class Address
+    public class Address: Entity
     {
-        public Guid? Id { get; set; } = Guid.NewGuid();
         public string Number { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
         public string ZipCode { get; set; }
         public string AdministrativeRegion { get; set; }
+
     }
 }

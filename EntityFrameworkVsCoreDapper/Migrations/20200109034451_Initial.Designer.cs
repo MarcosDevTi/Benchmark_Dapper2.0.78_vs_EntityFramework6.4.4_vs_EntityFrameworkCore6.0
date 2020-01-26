@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EntityFrameworkVsCoreDapper.Migrations
 {
-    [DbContext(typeof(TesteContext))]
+    [DbContext(typeof(DotNetCoreContext))]
     [Migration("20200109034451_Initial")]
     partial class Initial
     {

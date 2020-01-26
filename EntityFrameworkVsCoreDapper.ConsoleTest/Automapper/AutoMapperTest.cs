@@ -12,7 +12,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Automapper
     {
         public AutoMapperTest(int take)
         {
-            var context = new TesteContext();
+            var context = new DotNetCoreContext();
             var customers = context.Customers.Take(take).ToList();
             var count = customers.Count();
 

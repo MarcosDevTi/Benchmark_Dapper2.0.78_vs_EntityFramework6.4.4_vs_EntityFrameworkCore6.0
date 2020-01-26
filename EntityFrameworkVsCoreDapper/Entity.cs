@@ -4,7 +4,8 @@ using System.Text;
 
 namespace EntityFrameworkVsCoreDapper
 {
-    class BaseRepository
+    public class Entity
     {
+        public Guid Id { get; set; }
     }
 }
