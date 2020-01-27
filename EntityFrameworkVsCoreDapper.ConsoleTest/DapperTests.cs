@@ -12,22 +12,46 @@ using System.Text;
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
-    public class DapperTests
+    public class DapperTests: IDapperTests
     {
+
+        public void SelectProductsSingles(int take)
+        {
+            var sql = $"select top({take}) * from products";
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+                var rders = dbConnection.Query<Product>(sql);
+                dbConnection.Close();
+            }
+
+            stopwatch.Stop();
+
+            var result = string.Format("Temps écoulé avec Dapper single select: {0}", stopwatch.Elapsed);
+            Console.WriteLine(result);
+        }
         public void SelectCustomers(int take)
         {
             var sql = new StringBuilder()
-            .AppendLine($"SELECT top({take}) [c].[Id], [c].[AddressId], [c].[BirthDate], [c].[Email], [c].[FirstName], [c].[LastName], [c].[Status], ")
-            .AppendLine("[a].[Id], [a].[AdministrativeRegion], [a].[City], [a].[Country], [a].[Number], [a].[Street], [a].[ZipCode], ")
-            .AppendLine("[t0].[Id], [t0].[CustomerId]")
-            .AppendLine("FROM [Customers] AS [c]")
-            .AppendLine("INNER JOIN [Address] AS [a] ON [c].[AddressId] = [a].[Id]")
-            .AppendLine("LEFT JOIN (")
-            .AppendLine("    SELECT [o].[Id], [o].[CustomerId]")
-            .AppendLine("    FROM [Products] AS [o]")
-            .AppendLine(") AS [t0] ON [c].[Id] = [t0].[CustomerId]")
-            .AppendLine("")
-            .ToString();
+                .AppendLine("SELECT [t].[Id], [t].[AddressId], [t].[BirthDate], [t].[Email], [t].[FirstName], [t].[LastName], [t].[Status], ")
+                .AppendLine("	   [a0].[Id], [a0].[AdministrativeRegion], [a0].[City], [a0].[Country], [a0].[Number], [a0].[Street], [a0].[ZipCode], ")
+                .AppendLine("	   [p0].[Id], [p0].[Brand], [p0].[CustomerId], [p0].[Description], [p0].[Name], [p0].[OldPrice], [p0].[Price]")
+                .AppendLine("FROM (")
+                .AppendLine($"    SELECT TOP({take}) [c].[Id], [c].[AddressId], [c].[BirthDate], [c].[Email], [c].[FirstName], [c].[LastName], [c].[Status]")
+                .AppendLine("    FROM [Customers] AS [c]")
+                .AppendLine("    LEFT JOIN [Address] AS [a] ON [c].[AddressId] = [a].[Id]")
+                .AppendLine("    WHERE ([a].[City] IS NOT NULL AND ([a].[City] LIKE 'North%')) AND EXISTS (")
+                .AppendLine("        SELECT 1")
+                .AppendLine("        FROM [Products] AS [p]")
+                .AppendLine("        WHERE ([c].[Id] = [p].[CustomerId]) AND ([p].[Brand] = 'Intelligent'))")
+                .AppendLine(") AS [t]")
+                .AppendLine("LEFT JOIN [Address] AS [a0] ON [t].[AddressId] = [a0].[Id]")
+                .AppendLine("LEFT JOIN [Products] AS [p0] ON [t].[Id] = [p0].[CustomerId]")
+                .ToString();
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();

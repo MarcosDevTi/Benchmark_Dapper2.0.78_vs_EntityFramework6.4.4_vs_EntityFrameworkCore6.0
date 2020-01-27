@@ -9,8 +9,13 @@ using System.Text;
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
-    public class EfCoreTests
+    public class EfCoreTests: IEfCoreTests
     {
+        private DotNetCoreContext _netcoreContext;
+        public EfCoreTests(DotNetCoreContext netcoreContext)
+        {
+            _netcoreContext = netcoreContext;
+        }
         public void InsertAvg(int interactions)
         {
             var tempo = TimeSpan.Zero;
@@ -20,11 +25,8 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                using (var context = new DotNetCoreContext())
-                {
-                    new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => context.Customers.Add(_));
-                    context.SaveChanges();
-                }
+                new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => _netcoreContext.Customers.Add(_));
+                _netcoreContext.SaveChanges();
 
                 stopwatch.Stop();
                 tempo += stopwatch.Elapsed;
@@ -43,12 +45,9 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                using (var context = new DotNetCoreContext())
-                {
-                    context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-                    new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => context.Customers.Add(_));
-                    context.SaveChanges();
-                }
+                _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+                new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => _netcoreContext.Customers.Add(_));
+                _netcoreContext.SaveChanges();
 
                 stopwatch.Stop();
                 tempo += stopwatch.Elapsed;
@@ -63,16 +62,14 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var result = "";
 
             var faker = new Faker();
-            var context = new DotNetCoreContext();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            new ListTests().ObtenirListCustomersSingles(interactions).ForEach(_ => context.Add(_));
+            new ListTests().ObtenirListCustomersSingles(interactions).ForEach(_ => _netcoreContext.Add(_));
 
-            context.SaveChanges();
+            _netcoreContext.SaveChanges();
             stopwatch.Stop();
             result = string.Format("Temps écoulé avec EFCore: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
-            context.Dispose();
         }
 
 
@@ -81,18 +78,16 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var result = "";
 
             var faker = new Faker();
-            var context = new DotNetCoreContext();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            new ListTests().ObtenirListCustomersSingles(interactions).ForEach(_ => context.Add(_));
+            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            new ListTests().ObtenirListCustomersSingles(interactions).ForEach(_ => _netcoreContext.Add(_));
 
-            context.SaveChanges();
+            _netcoreContext.SaveChanges();
             stopwatch.Stop();
             result = string.Format("Temps écoulé avec EFCore: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
-            context.Dispose();
         }
 
         public void AjouterCustomersAleatoires(int interactions)
@@ -100,16 +95,14 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var result = "";
 
             var faker = new Faker();
-            var context = new DotNetCoreContext();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => context.Add(_));
+            new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => _netcoreContext.AddAsync(_));
 
-            context.SaveChanges();
+            _netcoreContext.SaveChanges();
             stopwatch.Stop();
             result = string.Format("Temps écoulé avec EFCore: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
-            context.Dispose();
         }
 
         public void AjouterCustomersAleatoiresOpenClose(int interactions)
@@ -118,14 +111,12 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            foreach(var item in new ListTests().ObtenirListCustomersAleatoire(interactions))
+            foreach (var item in new ListTests().ObtenirListCustomersAleatoire(interactions))
             {
-                using (var context = new DotNetCoreContext())
-                {
-                    context.Add(item);
-                    context.SaveChanges();
-                    context.Dispose();
-                }
+
+                _netcoreContext.Add(item);
+                _netcoreContext.SaveChanges();
+
             }
 
             stopwatch.Stop();
@@ -139,17 +130,15 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var result = "";
 
             var faker = new Faker();
-            var context = new DotNetCoreContext();
-            context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => context.Add(_));
+            new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => _netcoreContext.Add(_));
 
-            context.SaveChanges();
+            _netcoreContext.SaveChanges();
             stopwatch.Stop();
             result = string.Format("Temps écoulé avec EFCore AsNoTracking: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
-            context.Dispose();
         }
 
         public void AjouterCustomersAleatoiresAsNoTrackingOpenClose(int interactions)
@@ -157,59 +146,94 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            foreach(var item in new ListTests().ObtenirListCustomersAleatoire(interactions))
+            foreach (var item in new ListTests().ObtenirListCustomersAleatoire(interactions))
             {
-                using (var context = new DotNetCoreContext())
-                {
-                    context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-                    context.Add(item);
-                    context.SaveChanges();
-                    context.Dispose();
-                }
+                _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+                _netcoreContext.Add(item);
+                _netcoreContext.SaveChanges();
             }
-            
+
             stopwatch.Stop();
             var result = string.Format("Temps écoulé avec EFCore AsNoTracking: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
         }
 
+        public void SelectProductsSingles(int take)
+        {
+
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var teste = _netcoreContext.Products.Take(take).ToList();
+
+                stopwatch.Stop();
+                var result = string.Format("Temps écoulé avec EF Core single select: {0}", stopwatch.Elapsed);
+                Console.WriteLine(result);
+                teste = null;
+        }
+
+        public void SelectProductsSinglesAsNoTracking(int take)
+        {
+            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var teste = _netcoreContext.Products.Take(take).ToList();
+
+                stopwatch.Stop();
+                var result = string.Format("Temps écoulé avec EF Core single select AsNoTracking: {0}", stopwatch.Elapsed);
+                Console.WriteLine(result);
+                teste = null;
+        }
+
+
+        public void SelectProductsSinglesAsNoTrackingHardSql(int take)
+        {
+        _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var teste = _netcoreContext.Products.FromSqlRaw($"select top({take}) * from products").ToList();
+
+                stopwatch.Stop();
+                var result = string.Format("Temps écoulé avec EF Core single select AsNoTracking: {0}", stopwatch.Elapsed);
+                Console.WriteLine(result);
+                teste = null;
+        }
+
         public void SelectCustomers(int take)
         {
-            var context = new DotNetCoreContext();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            var teste = context.Customers
+            var teste = _netcoreContext.Customers
                 .Include(_ => _.Address)
                 .Include(_ => _.Products)
-                //.ThenInclude(o => o.OrderItems)
-                //.ThenInclude(p => p.Product);
                 .Take(take);
 
             var list = teste.ToList();
             stopwatch.Stop();
             var result = string.Format("Temps écoulé avec EF Core: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
-            context.Dispose();
+            list = null;
         }
-
 
         public void SelectCustomersAsNoTracking(int take)
         {
-            var context = new DotNetCoreContext();
-            context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var teste = context.Customers
+            var teste = _netcoreContext.Customers
               .Include(_ => _.Address)
               .Include(_ => _.Products)
+              .Where(_ => _.Address.City.StartsWith("North") && _.Products.Any(_ => _.Brand == "Intelligent"))
               .Take(take)
-              //.ThenInclude(o => o.OrderItems).ThenInclude(p => p.Product)
               .ToList();
             stopwatch.Stop();
             var result = string.Format("Temps écoulé avec EF 6 Core AsNoTracking: {0}", stopwatch.Elapsed);
             Console.WriteLine(result);
-            context.Dispose();
         }
     }
 }

@@ -4,13 +4,16 @@ using System.Text;
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
 {
-    public class Insertions
+    public class Inserts: IInserts
     {
-        public Insertions()
+        private readonly IDapperTests _dapperTests;
+        private readonly IEf6Tests _ef6Tests;
+        private readonly IEfCoreTests _efCoreTests;
+        public Inserts(IDapperTests dapperTests, IEf6Tests ef6Tests, IEfCoreTests efCoreTests)
         {
-            //AddProfileInsertAvg(1, 2, 5, 10, 20, 200);
-            //AddProfileCustomersSingles(2, 5, 10, 20, 50, 500, 1000, 10000);
-            AddProfileAjouter(10000, 10000, 13, 45, 46, 5555, 10000);
+            _dapperTests = dapperTests;
+            _ef6Tests = ef6Tests;
+            _efCoreTests = efCoreTests;
         }
 
         public void AddProfileCustomersSingles(params int[] quant)
@@ -24,10 +27,10 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
             Console.WriteLine($"Insert avec {quant}");
             Console.ResetColor();
 
-            new DapperTests().AddCustomersSingles(quant);
-            new Ef6Tests().AddCustomersSingles(quant);
-            new EfCoreTests().AddCustomersSingles(quant);
-            new EfCoreTests().AddCustomersSinglesAsNoTracking(quant);
+            _dapperTests.AddCustomersSingles(quant);
+            _ef6Tests.AddCustomersSingles(quant);
+            _efCoreTests.AddCustomersSingles(quant);
+            _efCoreTests.AddCustomersSinglesAsNoTracking(quant);
         }
 
         public void AddProfileInsertAvg(params int[] quant)
@@ -42,10 +45,10 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
             Console.WriteLine($"Insert avec {quant}");
             Console.ResetColor();
 
-            new DapperTests().InsertAvg(quant);
-            new Ef6Tests().InsertAvg(quant);
-            new EfCoreTests().InsertAvg(quant);
-            new EfCoreTests().InsertAvgAsNoTracking(quant);
+            _dapperTests.InsertAvg(quant);
+            _ef6Tests.InsertAvg(quant);
+            _efCoreTests.InsertAvg(quant);
+            _efCoreTests.InsertAvgAsNoTracking(quant);
         }
 
         public void AddProfileAjouter(params int[] quant)
@@ -62,8 +65,8 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
 
             new DapperTests().AjouterCustomersAleatoires(quant);
             //new Ef6Tests().AjouterCustomersAleatoires(quant);
-            new EfCoreTests().AjouterCustomersAleatoires(quant);
-            new EfCoreTests().AjouterCustomersAleatoiresAsNoTracking(quant);
+            //new EfCoreTests().AjouterCustomersAleatoires(quant);
+            //new EfCoreTests().AjouterCustomersAleatoiresAsNoTracking(quant);
         }
 
         //public void AddProfileOpenClose(int quant)

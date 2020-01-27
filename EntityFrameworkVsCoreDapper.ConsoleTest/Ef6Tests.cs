@@ -9,7 +9,7 @@ using System.Text;
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
-    public class Ef6Tests
+    public class Ef6Tests: IEf6Tests
     {
         public void InsertAvg(int interactions)
         {
@@ -96,7 +96,11 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var context = new Ef6Context();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            var teste = context.Customers.Take(take).ToList();
+            var teste = context.Customers
+                .Include(_ => _.Address)
+                 .Include(_ => _.Products)
+                 .Where(_ => _.Address.City.StartsWith("North") && _.Products.Any(_ => _.Brand == "Intelligent"))
+                .Take(take).ToList();
             stopwatch.Stop();
             var result = string.Format("Temps écoulé avec EF 6: {0}", stopwatch.Elapsed);
             context.Dispose();

@@ -1,21 +1,31 @@
 ﻿using Bogus;
 using EntityFrameworkVsCoreDapper.ConsoleTest.Automapper;
 using EntityFrameworkVsCoreDapper.ConsoleTest.Tests;
-using EntityFrameworkVsCoreDapper.EntityFramework;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using static System.Console;
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
     class Program
     {
+        private static ServiceProvider _serviceProvider;
         static void Main(string[] args)
         {
-            //new Insertions();
-            new Selects();
+            _serviceProvider = new Startup().Initialize();
 
-            Console.ReadLine();
+            RunTests();
+            ReadLine();
+        }
+
+        static void RunTests()
+        {
+            var inserts = _serviceProvider.GetService<IInserts>();
+            var selects = _serviceProvider.GetService<ISelects>();
+
+            selects.Run();
+            //new Selects();
         }
     }
 }
