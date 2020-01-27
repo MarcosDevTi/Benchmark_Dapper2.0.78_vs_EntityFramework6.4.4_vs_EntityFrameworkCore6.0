@@ -63,7 +63,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
             Console.WriteLine($"Insert avec {quant}");
             Console.ResetColor();
 
-            new DapperTests().AjouterCustomersAleatoires(quant);
+            _dapperTests.AjouterCustomersAleatoires(quant);
             //new Ef6Tests().AjouterCustomersAleatoires(quant);
             //new EfCoreTests().AjouterCustomersAleatoires(quant);
             //new EfCoreTests().AjouterCustomersAleatoiresAsNoTracking(quant);

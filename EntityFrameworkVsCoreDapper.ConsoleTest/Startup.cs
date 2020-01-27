@@ -1,4 +1,5 @@
-﻿using EntityFrameworkVsCoreDapper.ConsoleTest.Tests;
+﻿using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
+using EntityFrameworkVsCoreDapper.ConsoleTest.Tests;
 using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.EntityFramework;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             services.AddTransient<IDapperTests, DapperTests>();
             services.AddTransient<IEfCoreTests, EfCoreTests>();
             services.AddTransient<IEf6Tests, Ef6Tests>();
+            services.AddTransient<ConsoleHelper>();
         }
     }
 }
