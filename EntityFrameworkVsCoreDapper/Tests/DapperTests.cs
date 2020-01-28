@@ -45,7 +45,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             };
             _dotNetCoreContext.Add(score);
             _dotNetCoreContext.SaveChanges();
-            return result.Tempo;
+            return
         }
         public TimeSpan SelectCustomers(int take)
         {

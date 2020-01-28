@@ -1,9 +1,5 @@
-﻿using Bogus;
-using EntityFrameworkVsCoreDapper.ConsoleTest.Automapper;
-using EntityFrameworkVsCoreDapper.ConsoleTest.Tests;
+﻿using EntityFrameworkVsCoreDapper.ConsoleTest.Tests;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using static System.Console;
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest
@@ -13,9 +9,13 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         private static ServiceProvider _serviceProvider;
         static void Main(string[] args)
         {
+
+
+
             _serviceProvider = new Startup().Initialize();
 
             RunTests();
+
             ReadLine();
         }
 

@@ -2,11 +2,9 @@
 using EntityFrameworkVsCoreDapper.ConsoleTest.Tests;
 using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.EntityFramework;
+using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
@@ -23,8 +21,8 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         public void Register(IServiceCollection services)
         {
             services.AddDbContext<DotNetCoreContext>(_ => _.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB; 
-                           Initial Catalog=CamparationEntityDapper; Integrated Security=True"));
-            services.AddScoped<DapperContext>();
+                           Initial Catalog=CamparationEntityDapper; Integrated Security=True"), ServiceLifetime.Transient);
+            services.AddTransient<DapperContext>();
             services.AddScoped<Ef6Context>();
             services.AddTransient<IInserts, Inserts>();
             services.AddTransient<ISelects, Selects>();
@@ -32,6 +30,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             services.AddTransient<IEfCoreTests, EfCoreTests>();
             services.AddTransient<IEf6Tests, Ef6Tests>();
             services.AddTransient<ConsoleHelper>();
+            services.AddSingleton<ResultService>();
         }
     }
 }
