@@ -4,14 +4,16 @@ using EntityFrameworkVsCoreDapper.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EntityFrameworkVsCoreDapper.Migrations
 {
     [DbContext(typeof(DotNetCoreContext))]
-    partial class TesteContextModelSnapshot : ModelSnapshot
+    [Migration("20200128034025_ResultClasses")]
+    partial class ResultClasses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,21 +189,15 @@ namespace EntityFrameworkVsCoreDapper.Migrations
                     b.Property<double>("Ram")
                         .HasColumnType("float");
 
-                    b.Property<int>("Take")
-                        .HasColumnType("int");
-
                     b.Property<TimeSpan>("Tempo")
                         .HasColumnType("time");
-
-                    b.Property<int>("TypeObject")
-                        .HasColumnType("int");
 
                     b.Property<int>("TypeTransaction")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Scores");
+                    b.ToTable("Score");
                 });
 
             modelBuilder.Entity("EntityFrameworkVsCoreDapper.Customer", b =>

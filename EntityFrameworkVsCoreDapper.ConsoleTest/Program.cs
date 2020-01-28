@@ -24,6 +24,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var inserts = _serviceProvider.GetService<IInserts>();
             var selects = _serviceProvider.GetService<ISelects>();
 
+            inserts.AddProfileAjouter(1000, 10000, 5000, 1000, 10000, 5000, 1000, 10000, 5000);
             selects.Run();
             //new Selects();
         }

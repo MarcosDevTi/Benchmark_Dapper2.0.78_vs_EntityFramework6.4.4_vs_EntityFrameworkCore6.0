@@ -21,7 +21,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         public void Register(IServiceCollection services)
         {
             services.AddDbContext<DotNetCoreContext>(_ => _.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB; 
-                           Initial Catalog=CamparationEntityDapper; Integrated Security=True"), ServiceLifetime.Transient);
+                           Initial Catalog=CamparationEntityDapper; Integrated Security=True"));
             services.AddTransient<DapperContext>();
             services.AddScoped<Ef6Context>();
             services.AddTransient<IInserts, Inserts>();

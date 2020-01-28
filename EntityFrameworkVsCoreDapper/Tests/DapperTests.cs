@@ -26,6 +26,11 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _resultService = resultService;
             _dotNetCoreContext = dotNetCoreContext;
         }
+
+        public void Clear()
+        {
+            _dapperContext.OpenedConnection.Query<Product>($"select top(1) * from products");
+        }
         public TimeSpan SelectProductsSingles(int take)
         {
             var sql = $"select top({take}) * from products";
@@ -36,16 +41,9 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             var result = _consoleHelper.StopChrono(watch, "Dapper single select");
 
-            var score = new Score
-            {
-                Id = Guid.NewGuid(),
-                Ram = result.Ram,
-                Tempo = result.Tempo,
-                TypeTransaction = TypeTransaction.Dapper
-            };
-            _dotNetCoreContext.Add(score);
-            _dotNetCoreContext.SaveChanges();
-            return
+            _resultService.SaveScore(result, TypeTransaction.Dapper, take, TypeObject.Simple);
+
+            return result.Tempo;
         }
         public TimeSpan SelectCustomers(int take)
         {

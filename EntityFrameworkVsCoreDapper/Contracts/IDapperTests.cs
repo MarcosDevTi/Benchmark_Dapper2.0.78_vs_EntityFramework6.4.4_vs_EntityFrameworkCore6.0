@@ -9,5 +9,6 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         TimeSpan InsertAvg(int interactions);
         TimeSpan AddCustomersSingles(int interactions);
         TimeSpan AjouterCustomersAleatoires(int interactions);
+        void Clear();
     }
 }

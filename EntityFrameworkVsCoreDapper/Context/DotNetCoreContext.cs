@@ -15,6 +15,7 @@ namespace EntityFrameworkVsCoreDapper.EntityFramework
         public DbSet<Product> Products { get; set; }
         public DbSet<ResultItem> ResultItems { get; set; }
         public DbSet<Result> Results { get; set; }
+        public DbSet<Score> Scores { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
