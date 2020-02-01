@@ -1,4 +1,6 @@
-﻿namespace EntityFrameworkVsCoreDapper.Results
+﻿using System.ComponentModel;
+
+namespace EntityFrameworkVsCoreDapper.Results
 {
     public enum TypeTransaction
     {
@@ -6,6 +8,7 @@
         Ef6,
         EfCore,
         EfCoreAsNoTracking,
+        [Description("Ef Core AsNoTr SqlHard")]
         EfCoreAsNoTrackingSqlHard
     }
 }

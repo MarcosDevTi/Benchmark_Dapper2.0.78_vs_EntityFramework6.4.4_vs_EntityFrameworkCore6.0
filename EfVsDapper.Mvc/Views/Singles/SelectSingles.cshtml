@@ -1,7 +1,35 @@
 ﻿@using EntityFrameworkVsCoreDapper.Results
+@using System.ComponentModel
 @model IEnumerable<ResultView>
 
 <h1>Index</h1>
+<p>
+    @{
+        var lastResult = (LastResult)ViewData["LastResult"];
+        if (lastResult != null)
+        {
+            <div class="alert alert-info" role="alert">
+                <div class="row">
+                    <div class="col-2">
+                        <h4>@lastResult.TypeTransaction</h4>
+                    </div>
+                    <div class="col-3">
+                        Tempo: Sec: @lastResult.TempoResult.Seconds, Millisec: @lastResult.TempoResult.Milliseconds
+                    </div>
+                    <div class="col-2">
+                        Ram: @lastResult.Ram
+                    </div>
+                    <div class="col-2">
+                        Amount: @lastResult.Amount
+                    </div>
+                    <div class="col-3">
+                        Total Ram: @lastResult.TotalRam
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</p>
 
 <table class="table table-striped">
     <thead>

@@ -37,6 +37,7 @@ namespace EfVsDapper.Mvc
             services.AddTransient<IEf6Tests, Ef6Tests>();
             services.AddTransient<ConsoleHelper>();
             services.AddTransient<ResultService>();
+            services.AddSingleton<MessageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
