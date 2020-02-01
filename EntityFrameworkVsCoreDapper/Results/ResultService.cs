@@ -2,20 +2,17 @@
 using EntityFrameworkVsCoreDapper.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EntityFrameworkVsCoreDapper.Results
 {
     public class ResultService
     {
-        private readonly DotNetCoreContext _dotNetCoreContext;
-        public ResultService(DotNetCoreContext dotNetCoreContext)
+        private readonly DotNetCoreContext _netcoreContext;
+        public ResultService(DotNetCoreContext netcoreContext)
         {
-            _dotNetCoreContext = dotNetCoreContext;
+            _netcoreContext = netcoreContext;
         }
-        public ICollection<ResultItem> ResultItems { get; set; }
-        public ResultService() => ResultItems = new List<ResultItem>();
-        public void AddResultItem(ResultItem resultItem) => ResultItems.Add(resultItem);
-
         public double GetMemory()
         {
             var process = System.Diagnostics.Process.GetCurrentProcess();
@@ -23,19 +20,73 @@ namespace EntityFrameworkVsCoreDapper.Results
             return process.PrivateMemorySize64.ConvertBytesToMegabytes();
         }
 
-        public void SaveScore((TimeSpan Tempo, double Ram) result, TypeTransaction typeTransaction, int take, TypeObject typeObject)
+        public void SaveSelect(int amount, TimeSpan tempoResult, double initMemory, TypeTransaction typeTransaction, OperationType operationType)
         {
-            var score = new Score
+            var stopMemory = GetMemory();
+            var resultSave = new Result
             {
                 Id = Guid.NewGuid(),
-                Ram = result.Ram,
-                Tempo = result.Tempo,
+                Amount = amount,
+                OperationType = operationType,
+                Tempo = tempoResult,
                 TypeTransaction = typeTransaction,
-                Take = take,
-                TypeObject = typeObject
+                Ram = stopMemory - initMemory
             };
-            _dotNetCoreContext.Add(score);
-            _dotNetCoreContext.SaveChanges();
+
+            var resultExisting = _netcoreContext.Results.FirstOrDefault(_ =>
+            _.Amount == resultSave.Amount && _.OperationType == resultSave.OperationType && _.TypeTransaction == resultSave.TypeTransaction);
+            if (resultExisting != null)
+            {
+                _netcoreContext.Remove(resultExisting);
+            }
+            _netcoreContext.Add(resultSave);
+            _netcoreContext.SaveChanges();
+        }
+
+        public IEnumerable<ResultView> GetResults(OperationType operationType)
+        {
+            var interators = new[] { 1, 5, 50, 200, 10000, 200000, 2000000 };
+            var results = new List<ResultView>();
+
+            foreach (var inter in interators)
+            {
+                results.Add(new ResultView
+                {
+                    Dapper = new ItemResultView
+                    {
+                        Interactions = inter,
+                        Display = GetTempo(inter, TypeTransaction.Dapper, operationType)
+                    },
+                    Ef6 = new ItemResultView
+                    {
+                        Interactions = inter,
+                        Display = GetTempo(inter, TypeTransaction.Ef6, operationType)
+                    },
+                    EFCore = new ItemResultView
+                    {
+                        Interactions = inter,
+                        Display = GetTempo(inter, TypeTransaction.EfCore, operationType)
+                    },
+                    EfCoreAsNoTracking = new ItemResultView
+                    {
+                        Interactions = inter,
+                        Display = GetTempo(inter, TypeTransaction.EfCoreAsNoTracking, operationType)
+                    },
+                    EfCoreAsNoTrackingHardSql = new ItemResultView
+                    {
+                        Interactions = inter,
+                        Display = GetTempo(inter, TypeTransaction.EfCoreAsNoTrackingSqlHard, operationType)
+                    },
+                });
+            }
+
+            return results;
+        }
+
+        public string GetTempo(int amount, TypeTransaction typeTransaction, OperationType operationType)
+        {
+            var result = _netcoreContext.Results.FirstOrDefault(_ => _.OperationType == operationType && _.TypeTransaction == typeTransaction && _.Amount == amount);
+            return $"Tempo: {result?.Tempo.Minutes}:{result?.Tempo.Seconds}:{result?.Tempo.Milliseconds}, Ram: {result?.Ram}";
         }
     }
 }

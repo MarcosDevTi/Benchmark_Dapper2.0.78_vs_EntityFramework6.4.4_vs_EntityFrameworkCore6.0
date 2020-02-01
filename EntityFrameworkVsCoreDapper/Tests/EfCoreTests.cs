@@ -1,5 +1,6 @@
 ﻿using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
 using EntityFrameworkVsCoreDapper.EntityFramework;
+using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -8,12 +9,14 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
     public class EfCoreTests : IEfCoreTests
     {
-        private DotNetCoreContext _netcoreContext;
+        private readonly DotNetCoreContext _netcoreContext;
         private readonly ConsoleHelper _consoleHelper;
-        public EfCoreTests(DotNetCoreContext netcoreContext, ConsoleHelper consoleHelper)
+        private readonly ResultService _resultService;
+        public EfCoreTests(DotNetCoreContext netcoreContext, ConsoleHelper consoleHelper, ResultService resultService)
         {
             _netcoreContext = netcoreContext;
             _consoleHelper = consoleHelper;
+            _resultService = resultService;
         }
 
         public void InitInterface()
@@ -123,9 +126,15 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var watch = _consoleHelper.StartChrono();
 
             var teste = _netcoreContext.Products.Take(take).ToList();
+            var tempoResult = _consoleHelper.StopChrono(watch, "EF Core single select").Tempo;
 
-            return _consoleHelper.StopChrono(watch, "EF Core single select").Tempo;
+            watch.Watch.Stop();
+
+            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.SelectSingle);
+
+            return tempoResult;
         }
+
         public TimeSpan SelectProductsSinglesAsNoTracking(int take)
         {
             var watch = _consoleHelper.StartChrono();
@@ -133,7 +142,11 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             var teste = _netcoreContext.Products.Take(take).ToList();
 
-            return _consoleHelper.StopChrono(watch, "EF Core single select AsNoTracking").Tempo;
+            var tempoResult = _consoleHelper.StopChrono(watch, "EF Core single select AsNoTracking").Tempo;
+
+            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTracking, OperationType.SelectSingle);
+
+            return tempoResult;
         }
         public TimeSpan SelectProductsSinglesAsNoTrackingHardSql(int take)
         {
@@ -142,7 +155,9 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             var teste = _netcoreContext.Products.FromSqlRaw($"select top({take}) * from products").ToList();
 
-            return _consoleHelper.StopChrono(watch, "EF Core single select AsNoTracking").Tempo;
+            var tempoResult = _consoleHelper.StopChrono(watch, "EF Core single select AsNoTracking SqlHard").Tempo;
+            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTrackingSqlHard, OperationType.SelectSingle);
+            return tempoResult;
         }
         public TimeSpan SelectCustomers(int take)
         {
@@ -152,22 +167,25 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                 .Include(_ => _.Address)
                 .Include(_ => _.Products)
                 .Take(take).ToList();
-
-            return _consoleHelper.StopChrono(watch, "EF Core").Tempo;
+            var tempoResult = _consoleHelper.StopChrono(watch, "EF Core").Tempo;
+            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.SelectComplex);
+            return tempoResult;
         }
         public TimeSpan SelectCustomersAsNoTracking(int take)
         {
             var watch = _consoleHelper.StartChrono();
 
-            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            //_netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             var teste = _netcoreContext.Customers
+                .Where(_ => _.Address.City.StartsWith("North") && _.Products.Count(_ => _.Brand == "Intelligent") > 0)
               .Include(_ => _.Address)
               .Include(_ => _.Products)
-              .Where(_ => _.Address.City.StartsWith("North") && _.Products.Any(_ => _.Brand == "Intelligent"))
               .Take(take)
               .ToList();
 
-            return _consoleHelper.StopChrono(watch, "EF Core AsNoTracking").Tempo;
+            var tempoResult = _consoleHelper.StopChrono(watch, "EF Core AsNoTracking").Tempo;
+            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTracking, OperationType.SelectComplex);
+            return tempoResult;
         }
     }
 }

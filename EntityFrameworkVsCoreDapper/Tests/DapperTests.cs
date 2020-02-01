@@ -41,7 +41,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             var result = _consoleHelper.StopChrono(watch, "Dapper single select");
 
-            _resultService.SaveScore(result, TypeTransaction.Dapper, take, TypeObject.Simple);
+            _resultService.SaveSelect(take, result.Tempo, watch.InitMemory, TypeTransaction.Dapper, OperationType.SelectSingle);
 
             return result.Tempo;
         }
@@ -87,7 +87,10 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                 },
                 splitOn: "Id, Id").Distinct();
 
-            return _consoleHelper.StopChrono(watch, "Dapper").Tempo;
+            var tempoResult = _consoleHelper.StopChrono(watch, "Dapper").Tempo;
+            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.SelectComplex);
+
+            return tempoResult;
         }
 
         public TimeSpan InsertAvg(int interactions)

@@ -1,5 +1,6 @@
 ﻿using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
 using EntityFrameworkVsCoreDapper.EntityFramework;
+using EntityFrameworkVsCoreDapper.Results;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -10,10 +11,12 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
     {
         private readonly ConsoleHelper _consoleHelper;
         private readonly Ef6Context _ef6Context;
-        public Ef6Tests(ConsoleHelper consoleHelper, Ef6Context ef6Context)
+        private readonly ResultService _resultService;
+        public Ef6Tests(ConsoleHelper consoleHelper, Ef6Context ef6Context, ResultService resultService)
         {
             _consoleHelper = consoleHelper;
             _ef6Context = ef6Context;
+            _resultService = resultService;
         }
         public TimeSpan InsertAvg(int interactions)
         {
@@ -75,7 +78,24 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                  .Where(_ => _.Address.City.StartsWith("North") && _.Products.Any(_ => _.Brand == "Intelligent"))
                 .Take(take).ToList();
 
-            return _consoleHelper.StopChrono(watch, "EF 6").Tempo;
+            var tempoResult = _consoleHelper.StopChrono(watch, "EF 6").Tempo;
+            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.SelectComplex);
+
+            return tempoResult;
+        }
+
+        public TimeSpan SelectProductsSingles(int take)
+        {
+            var watch = _consoleHelper.StartChrono();
+
+            var teste = _ef6Context.Products.Take(take).ToList();
+            var tempoResult = _consoleHelper.StopChrono(watch, "EF 6 single select").Tempo;
+
+            watch.Watch.Stop();
+
+            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.SelectSingle);
+
+            return tempoResult;
         }
     }
 }

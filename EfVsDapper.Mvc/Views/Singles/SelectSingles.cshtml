@@ -1,0 +1,58 @@
+﻿@using EntityFrameworkVsCoreDapper.Results
+@model IEnumerable<ResultView>
+
+<h1>Index</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Dapper</th>
+            <th scope="col">Ef 6</th>
+            <th scope="col">Ef Core</th>
+            <th scope="col">Ef Core AsNoTracking</th>
+            <th scope="col">Ef Core AsNoTracking Hard Sql</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @{
+            @foreach (var num in Model)
+            {
+                <tr>
+                    <td>@num.EFCore.Interactions</td>
+                    <td>
+                        @num.Dapper.Display <br />
+                        @Html.ActionLink("Refresh", "SelectProductDapper", "Singles",
+                            new { interactions = num.Dapper.Interactions }, new { @class = "badge badge-secondary" })
+                    </td>
+                    <td>
+                        @num.Ef6.Display <br />
+                        @Html.ActionLink("Refresh", "SelectProductEf6", "Singles",
+                            new { interactions = num.Ef6.Interactions }, new { @class = "badge badge-secondary" })
+                    </td>
+                    <td>
+                        @num.EFCore.Display <br />
+                        @Html.ActionLink("Refresh", "SelectProductEfCore", "Singles",
+                            new { interactions = num.EFCore.Interactions }, new { @class = "badge badge-secondary" })
+                    </td>
+                    <td>
+                        @num.EfCoreAsNoTracking.Display <br />
+                        @Html.ActionLink("Refresh", "SelectProductEfCoreAsNoTracking", "Singles",
+                            new { interactions = num.EfCoreAsNoTracking.Interactions }, new { @class = "badge badge-secondary" })
+                    </td>
+                    <td>
+                        @num.EfCoreAsNoTrackingHardSql.Display <br />
+                        @Html.ActionLink("Refresh", "SelectProductEfCoreAsNoTrackingHardSql", "Singles",
+                            new { interactions = num.EfCoreAsNoTrackingHardSql.Interactions }, new { @class = "badge badge-secondary" })
+                    </td>
+                </tr>
+            }
+        }
+
+
+    </tbody>
+</table>
+
+
+

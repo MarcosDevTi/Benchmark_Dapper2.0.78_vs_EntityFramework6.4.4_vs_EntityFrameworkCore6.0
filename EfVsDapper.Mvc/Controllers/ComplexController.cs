@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EfVsDapper.Mvc.Controllers
 {
-    public class SinglesController : Controller
+    public class ComplexController : Controller
     {
         private readonly IDapperTests _dapperTests;
         private readonly IEf6Tests _ef6Tests;
         private readonly IEfCoreTests _efCoreTests;
         private readonly ResultService _resultService;
-        public SinglesController(
+        public ComplexController(
             IDapperTests dapperTests,
             IEfCoreTests efCoreTests,
             IEf6Tests ef6Tests,
@@ -21,43 +21,31 @@ namespace EfVsDapper.Mvc.Controllers
             _ef6Tests = ef6Tests;
             _resultService = resultService;
         }
-        public IActionResult SelectSingles()
+        public IActionResult SelectComplex()
         {
-            return View(_resultService.GetResults(OperationType.SelectSingle));
+            return View(_resultService.GetResults(OperationType.SelectComplex));
         }
         public IActionResult SelectProductDapper(int interactions)
         {
-            _dapperTests.SelectProductsSingles(interactions);
-            return RedirectToAction("SelectSingles");
+            _dapperTests.SelectCustomers(interactions);
+            return RedirectToAction("SelectComplex");
         }
         public IActionResult SelectProductEf6(int interactions)
         {
-            _ef6Tests.SelectProductsSingles(interactions);
-            return RedirectToAction("SelectSingles");
+            _ef6Tests.SelectCustomers(interactions);
+            return RedirectToAction("SelectComplex");
         }
 
         public IActionResult SelectProductEfCore(int interactions)
         {
-            _efCoreTests.SelectProductsSingles(interactions);
-            return RedirectToAction("SelectSingles");
+            _efCoreTests.SelectCustomers(interactions);
+            return RedirectToAction("SelectComplex");
         }
 
         public IActionResult SelectProductEfCoreAsNoTracking(int interactions)
         {
-            _efCoreTests.SelectProductsSinglesAsNoTracking(interactions);
-            return RedirectToAction("SelectSingles");
-        }
-
-        public IActionResult SelectProductEfCoreAsNoTrackingHardSql(int interactions)
-        {
-            _efCoreTests.SelectProductsSinglesAsNoTrackingHardSql(interactions);
-            return RedirectToAction("SelectSingles");
-        }
-
-        public IActionResult Clear()
-        {
-            _dapperTests.Clear();
-            return RedirectToAction("Index");
+            _efCoreTests.SelectCustomersAsNoTracking(interactions);
+            return RedirectToAction("SelectComplex");
         }
     }
 }
