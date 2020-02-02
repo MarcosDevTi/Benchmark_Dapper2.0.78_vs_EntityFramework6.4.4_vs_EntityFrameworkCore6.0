@@ -1,0 +1,42 @@
+﻿@using EntityFrameworkVsCoreDapper.Results
+@model IEnumerable<ResultView>
+
+    <div style="display:flex">
+        <div class="mr-lg-5">Input Single Objects</div>
+
+        <div class="mr-lg-5">Count Products: @ViewBag.CountProducts</div>
+        <div>Count Customers: @ViewBag.CountCustomers</div>
+    </div>
+<last-result last-result="@ViewBag.LastResult"></last-result>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Dapper</th>
+            <th scope="col">Ef 6</th>
+            <th scope="col">Ef Core</th>
+            <th scope="col">Ef Core AsNoTracking</th>
+            <th scope="col">Ef Core AsNoTracking Hard Sql</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.EFCore.Interactions</td>
+
+                <cell-result action-name="InsertProductDapper" controller-name="Singles" item-result-view="@product.Dapper"></cell-result>
+                <cell-result action-name="InsertProductEf6" controller-name="Singles" item-result-view="@product.Ef6"></cell-result>
+                <cell-result action-name="InsertProductEfCore" controller-name="Singles" item-result-view="@product.EFCore"></cell-result>
+                <cell-result action-name="InsertProductEfCoreAsNoTracking" controller-name="Singles" item-result-view="@product.EfCoreAsNoTracking"></cell-result>
+                <cell-result action-name="InsertProductEfCoreAsNoTrackingHardSql" controller-name="Singles" item-result-view="@product.EfCoreAsNoTrackingHardSql"></cell-result>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+

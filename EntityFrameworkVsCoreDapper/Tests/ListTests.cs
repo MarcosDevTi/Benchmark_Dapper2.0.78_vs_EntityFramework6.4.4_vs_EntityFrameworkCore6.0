@@ -1,12 +1,34 @@
 ﻿using Bogus;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
     public class ListTests
     {
+        public List<Product> ObtenirListProductsAleatoire(int interactions, Guid? customerId)
+        {
+            var faker = new Faker();
+
+            var list = new List<Product>();
+            for (var i = 0; i < interactions; i++)
+            {
+                var productId = Guid.NewGuid();
+                list.Add(new Product
+                {
+                    Id = productId,
+                    Name = faker.Commerce.ProductName(),
+                    Description = faker.Lorem.Paragraph(),
+                    Brand = faker.Commerce.ProductAdjective(),
+                    Price = faker.Random.Decimal(2M, 15000M),
+                    OldPrice = faker.Random.Decimal(2M, 15000M),
+                    CustomerId = customerId
+                }
+                );
+            }
+
+            return list;
+        }
         public List<Customer> ObtenirListCustomersAleatoire(int interactions)
         {
             var faker = new Faker();

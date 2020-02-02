@@ -26,6 +26,12 @@ namespace EntityFrameworkVsCoreDapper.Results
             return process.PrivateMemorySize64.ConvertBytesToMegabytes();
         }
 
+        public void ClearResult(Guid id)
+        {
+            _netcoreContext.Results.Remove(_netcoreContext.Results.Find(id));
+            _netcoreContext.SaveChanges();
+        }
+
         public void SaveSelect(int amount, TimeSpan tempoResult, double initMemory, TypeTransaction typeTransaction, OperationType operationType)
         {
             var stopMemory = GetMemory();
@@ -101,12 +107,20 @@ namespace EntityFrameworkVsCoreDapper.Results
             }
         }
 
-        public IEnumerable<ResultView> GetResults(OperationType operationType)
+        public long CountCustomers()
         {
-            var interators = new[] { 1, 5, 50, 200, 10000, 200000, 2000000 };
+            return _netcoreContext.Customers.Count();
+        }
+
+        public long CountProducts()
+        {
+            return _netcoreContext.Products.Count();
+        }
+        public IEnumerable<ResultView> GetResults(OperationType operationType, params int[] sequenceAmountInteractions)
+        {
             var results = new List<ResultView>();
 
-            foreach (var inter in interators)
+            foreach (var inter in sequenceAmountInteractions)
             {
                 results.Add(new ResultView
                 {
@@ -147,6 +161,7 @@ namespace EntityFrameworkVsCoreDapper.Results
 
             return new ResultDetailsCell
             {
+                IdResult = result?.Id,
                 TempoMin = FormatTempo(result?.TempoMin),
                 TempoMax = FormatTempo(result?.TempoMax),
                 Ram = result?.RamMax
@@ -199,6 +214,7 @@ namespace EntityFrameworkVsCoreDapper.Results
 
     public class ResultDetailsCell
     {
+        public Guid? IdResult { get; set; }
         public string TempoMax { get; set; }
         public string TempoMin { get; set; }
         public double? Ram { get; set; }

@@ -1,6 +1,7 @@
 ﻿using EntityFrameworkVsCoreDapper.ConsoleTest;
 using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace EfVsDapper.Mvc.Controllers
 {
@@ -24,10 +25,30 @@ namespace EfVsDapper.Mvc.Controllers
             _resultService = resultService;
             _messageService = messageService;
         }
+
+        public IActionResult Clear(Guid idResult)
+        {
+            _resultService.ClearResult(idResult);
+            return RedirectToAction("SelectSingles");
+        }
         public IActionResult SelectSingles()
         {
             ViewBag.LastResult = _messageService.LastResult;
-            return View(_resultService.GetResults(OperationType.SelectSingle));
+            ViewBag.CountProducts = _resultService.CountProducts();
+            ViewBag.CountCustomers = _resultService.CountCustomers();
+
+            var sequenceAmountInteractions = new[] { 1, 5, 50, 200, 10000, 200000, 2000000 };
+            return View(_resultService.GetResults(OperationType.SelectSingle, sequenceAmountInteractions));
+        }
+
+        public IActionResult InsertSingles()
+        {
+            ViewBag.LastResult = _messageService.LastResult;
+            ViewBag.CountProducts = _resultService.CountProducts();
+            ViewBag.CountCustomers = _resultService.CountCustomers();
+
+            var sequenceAmountInteractions = new[] { 1, 5, 50, 200, 10000, 200000, 2000000 };
+            return View(_resultService.GetResults(OperationType.InsertSingle, sequenceAmountInteractions));
         }
         public IActionResult SelectProductDapper(int interactions)
         {
@@ -58,10 +79,33 @@ namespace EfVsDapper.Mvc.Controllers
             return RedirectToAction("SelectSingles");
         }
 
-        public IActionResult Clear()
+        public IActionResult InsertProductDapper(int interactions)
         {
-            _dapperTests.Clear();
-            return RedirectToAction("Index");
+            _dapperTests.InsertProductsSingles(interactions);
+            return RedirectToAction("InsertSingles");
+        }
+        public IActionResult InsertProductEf6(int interactions)
+        {
+            _ef6Tests.InsertProductsSingles(interactions);
+            return RedirectToAction("InsertSingles");
+        }
+
+        public IActionResult InsertProductEfCore(int interactions)
+        {
+            _efCoreTests.InsertProductsSingles(interactions);
+            return RedirectToAction("InsertSingles");
+        }
+
+        public IActionResult InsertProductEfCoreAsNoTracking(int interactions)
+        {
+            _efCoreTests.InsertProductsSinglesAsNoTracking(interactions);
+            return RedirectToAction("InsertSingles");
+        }
+
+        public IActionResult InsertProductEfCoreAsNoTrackingHardSql(int interactions)
+        {
+            _efCoreTests.InsertProductSingleAsNoTrackingHardSql(interactions);
+            return RedirectToAction("InsertSingles");
         }
     }
 }

@@ -9,7 +9,9 @@ namespace EfVsDapper.Mvc.TagHelpers
     {
         public string ActionName { get; set; }
         public string ControllerName { get; set; }
-        public ResultView ResultView { get; set; }
+        //public ResultView ResultView { get; set; }
+
+        public ItemResultView ItemResultView { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -18,19 +20,22 @@ namespace EfVsDapper.Mvc.TagHelpers
               .AppendLine("     <div>")
               .AppendLine("         <div>")
               .AppendLine("             <i class=\"far fa-clock\"></i>")
-              .AppendLine($"             Min: {ResultView.Dapper.Display.TempoMin}")
+              .AppendLine($"             Min: {ItemResultView.Display.TempoMin}")
               .AppendLine("         </div>")
               .AppendLine("         <div>")
               .AppendLine("             <i class=\"far fa-clock\"></i>")
-              .AppendLine($"             Max: {ResultView.Dapper.Display.TempoMax}")
+              .AppendLine($"             Max: {ItemResultView.Display.TempoMax}")
               .AppendLine("         </div>")
               .AppendLine("     </div>")
               .AppendLine("     <div>")
-              .AppendLine("         <i class=\"fas fa-memory\"></i>")
-              .AppendLine($"         {ResultView.Dapper.Display.Ram}")
-              .AppendLine($"         <a href=\"/{ControllerName}/{ActionName}?interactions={ResultView.Dapper.Interactions}\" class=\"badge badge-primary\">")
-              .AppendLine("             <i class=\"fas fa-sync-alt\">   Reflesh</i>")
+               .AppendLine($"         <a href=\"/{ControllerName}/Clear?idResult={ItemResultView.Display.IdResult}\" class=\"badge badge-danger\">")
+              .AppendLine("             <i class=\"far fa-trash-alt\"></i>")
               .AppendLine("         </a>")
+              .AppendLine($"         <a href=\"/{ControllerName}/{ActionName}?interactions={ItemResultView.Interactions}\" class=\"badge badge-primary\">")
+              .AppendLine("             <i class=\"fas fa-sync-alt\"></i>")
+              .AppendLine("         </a>")
+              .AppendLine("         <i class=\"fas fa-memory ml-2\"></i>")
+              .AppendLine($"         {ItemResultView.Display.Ram?.ToString("0.##")} MB")
               .AppendLine("     </div>")
               .AppendLine(" </td>")
               .ToString();

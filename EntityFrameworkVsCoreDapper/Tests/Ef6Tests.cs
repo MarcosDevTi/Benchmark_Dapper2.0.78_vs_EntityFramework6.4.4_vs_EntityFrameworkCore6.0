@@ -54,7 +54,9 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => _ef6Context.Customers.Add(_));
             _ef6Context.SaveChanges();
 
-            return _consoleHelper.StopChrono(watch, "EF 6").Tempo;
+            var tempoResult = _consoleHelper.StopChrono(watch, "EF 6").Tempo;
+            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.InsertComplex);
+            return tempoResult;
         }
         public TimeSpan AjouterCustomersAleatoiresOpenClose(int interactions)
         {
@@ -95,6 +97,18 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.SelectSingle);
 
+            return tempoResult;
+        }
+
+        public TimeSpan InsertProductsSingles(int interactions)
+        {
+            var watch = _consoleHelper.StartChrono();
+
+            new ListTests().ObtenirListProductsAleatoire(interactions, null).ForEach(_ => _ef6Context.Products.Add(_));
+            _ef6Context.SaveChanges();
+
+            var tempoResult = _consoleHelper.StopChrono(watch, "EF 6 single select").Tempo;
+            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.InsertSingle);
             return tempoResult;
         }
     }

@@ -1,7 +1,12 @@
 ﻿@using EntityFrameworkVsCoreDapper.Results
 @model IEnumerable<ResultView>
 
-<h1>Select Single Objects</h1>
+<div style="display:flex">
+    <div class="mr-lg-5">Select Single Objects</div>
+
+    <div class="mr-lg-5">Count Products: @ViewBag.CountProducts</div>
+    <div>Count Customers: @ViewBag.CountCustomers</div>
+</div>
 <last-result last-result="@ViewBag.LastResult"></last-result>
 
 <table class="table table-striped">
@@ -16,20 +21,7 @@
         </tr>
     </thead>
     <tbody>
-        @{
-            @foreach (var num in Model)
-            {
-                <tr>
-                    <td>@num.EFCore.Interactions</td>
-
-                    <cell-result action-name="SelectProductDapper" controller-name="Singles" result-view="@num"></cell-result>
-                    <cell-result action-name="SelectProductEf6" controller-name="Singles" result-view="@num"></cell-result>
-                    <cell-result action-name="SelectProductEfCore" controller-name="Singles" result-view="@num"></cell-result>
-                    <cell-result action-name="SelectProductEfCoreAsNoTracking" controller-name="Singles" result-view="@num"></cell-result>
-                    <cell-result action-name="SelectProductEfCoreAsNoTrackingHardSql" controller-name="Singles" result-view="@num"></cell-result>
-                </tr>
-            }
-        }
+        @Html.DisplayFor(_ => Model)
     </tbody>
 </table>
 

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EntityFrameworkVsCoreDapper
 {
-    public class Product: Entity
+    public class Product : Entity
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -17,6 +15,6 @@ namespace EntityFrameworkVsCoreDapper
         public string Photo { get; set; }
         public string Url { get; set; }
         public string Type { get; set; }
-        public Guid CustomerId { get; set; }
+        public Guid? CustomerId { get; set; }
     }
 }

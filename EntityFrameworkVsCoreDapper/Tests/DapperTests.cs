@@ -2,7 +2,6 @@
 using Dapper.Contrib.Extensions;
 using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
 using EntityFrameworkVsCoreDapper.Context;
-using EntityFrameworkVsCoreDapper.EntityFramework;
 using EntityFrameworkVsCoreDapper.Results;
 using System;
 using System.Collections.Generic;
@@ -17,20 +16,13 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         private readonly DapperContext _dapperContext;
         private readonly ConsoleHelper _consoleHelper;
         private readonly ResultService _resultService;
-        private readonly DotNetCoreContext _dotNetCoreContext;
-        public DapperTests(DapperContext dapperContext, ConsoleHelper consoleHelper, ResultService resultService,
-            DotNetCoreContext dotNetCoreContext)
+        public DapperTests(DapperContext dapperContext, ConsoleHelper consoleHelper, ResultService resultService)
         {
             _dapperContext = dapperContext;
             _consoleHelper = consoleHelper;
             _resultService = resultService;
-            _dotNetCoreContext = dotNetCoreContext;
         }
 
-        public void Clear()
-        {
-            _dapperContext.OpenedConnection.Query<Product>($"select top(1) * from products");
-        }
         public TimeSpan SelectProductsSingles(int take)
         {
             var sql = $"select top({take}) * from products";
@@ -93,6 +85,36 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             return tempoResult;
         }
 
+        public TimeSpan InsertProductsSingles(int interactions)
+        {
+            var watch = _consoleHelper.StartChrono();
+
+            using (var transaction = _dapperContext.OpenedConnection.BeginTransaction())
+            {
+                AddProducts(new ListTests().ObtenirListProductsAleatoire(interactions, null), transaction);
+                transaction.Commit();
+            }
+            var tempoResult = _consoleHelper.StopChrono(watch, "Dapper").Tempo;
+
+            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.InsertSingle);
+            return tempoResult;
+        }
+
+        public TimeSpan AjouterCustomersAleatoires(int interactions)
+        {
+            var watch = _consoleHelper.StartChrono();
+
+            using (var transaction = _dapperContext.OpenedConnection.BeginTransaction())
+            {
+                AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions), transaction);
+                transaction.Commit();
+            }
+
+            var tempoResult = _consoleHelper.StopChrono(watch, "Dapper").Tempo;
+            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.InsertComplex);
+            return tempoResult;
+        }
+
         public TimeSpan InsertAvg(int interactions)
         {
             var tempo = TimeSpan.Zero;
@@ -128,18 +150,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             return _consoleHelper.StopChrono(watch, "Dapper").Tempo;
         }
 
-        public TimeSpan AjouterCustomersAleatoires(int interactions)
-        {
-            var watch = _consoleHelper.StartChrono();
 
-            using (var transaction = _dapperContext.OpenedConnection.BeginTransaction())
-            {
-                AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions), transaction);
-                transaction.Commit();
-            }
-
-            return _consoleHelper.StopChrono(watch, "Dapper").Tempo;
-        }
 
         public void AddCustomersSingles(IEnumerable<Customer> customers, IDbTransaction transaction)
         {
@@ -162,6 +173,13 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                 }
             }
         }
+
+        public void AddProducts(IEnumerable<Product> products, IDbTransaction transaction)
+        {
+            foreach (var product in products)
+                AddProduct(product, transaction);
+        }
+
 
         public void AddProduct(Product product, IDbTransaction transaction)
         {
@@ -187,6 +205,8 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _dapperContext.OpenedConnection.Insert(product, transaction);
         public void AddAddressContrib(Address address, IDbTransaction transaction) =>
             _dapperContext.OpenedConnection.Insert(address, transaction);
+
+
     }
 }
 

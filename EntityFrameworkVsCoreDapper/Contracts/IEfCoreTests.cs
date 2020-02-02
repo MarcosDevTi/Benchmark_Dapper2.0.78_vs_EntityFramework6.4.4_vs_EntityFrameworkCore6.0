@@ -4,7 +4,6 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
     public interface IEfCoreTests
     {
-        void InitInterface();
         TimeSpan InsertAvg(int interactions);
         TimeSpan InsertAvgAsNoTracking(int interactions);
         TimeSpan AddCustomersSingles(int interactions);
@@ -12,11 +11,16 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         TimeSpan AjouterCustomersAleatoires(int interactions);
         TimeSpan AjouterCustomersAleatoiresOpenClose(int interactions);
         TimeSpan AjouterCustomersAleatoiresAsNoTracking(int interactions);
+        TimeSpan InsertCustomerSingleAsNotrackingHardSql(int interactions);
         TimeSpan AjouterCustomersAleatoiresAsNoTrackingOpenClose(int interactions);
         TimeSpan SelectProductsSingles(int take);
         TimeSpan SelectProductsSinglesAsNoTracking(int take);
         TimeSpan SelectProductsSinglesAsNoTrackingHardSql(int take);
         TimeSpan SelectCustomers(int take);
         TimeSpan SelectCustomersAsNoTracking(int take);
+        TimeSpan InsertProductsSingles(int interactions);
+        TimeSpan InsertProductsSinglesAsNoTracking(int interactions);
+        TimeSpan InsertProductSingleAsNoTrackingHardSql(int interactions);
+
     }
 }
