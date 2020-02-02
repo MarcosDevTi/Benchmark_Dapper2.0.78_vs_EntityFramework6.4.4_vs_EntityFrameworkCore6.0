@@ -23,7 +23,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _resultService = resultService;
         }
 
-        public TimeSpan SelectProductsSingles(int take)
+        public TimeSpan SelectSingleProducts(int take)
         {
             var sql = $"select top({take}) * from products";
 
@@ -37,7 +37,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             return result.Tempo;
         }
-        public TimeSpan SelectCustomers(int take)
+        public TimeSpan SelectComplexCustomers(int take)
         {
             var sql = new StringBuilder()
                 .AppendLine("SELECT [t].[Id], [t].[AddressId], [t].[BirthDate], [t].[Email], [t].[FirstName], [t].[LastName], [t].[Status], ")
@@ -85,7 +85,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             return tempoResult;
         }
 
-        public TimeSpan InsertProductsSingles(int interactions)
+        public TimeSpan InsertSingleProducts(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -99,8 +99,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.InsertSingle);
             return tempoResult;
         }
-
-        public TimeSpan AjouterCustomersAleatoires(int interactions)
+        public TimeSpan InsertComplexCustomers(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -113,51 +112,6 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var tempoResult = _consoleHelper.StopChrono(watch, "Dapper").Tempo;
             _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.InsertComplex);
             return tempoResult;
-        }
-
-        public TimeSpan InsertAvg(int interactions)
-        {
-            var tempo = TimeSpan.Zero;
-
-            for (int i = 0; i < 10; i++)
-            {
-                var watch = _consoleHelper.StartChrono();
-
-                using (var transaction = _dapperContext.OpenedConnection.BeginTransaction())
-                {
-                    AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions), transaction);
-                    transaction.Commit();
-                    transaction.Dispose();
-                }
-
-                watch.Watch.Stop();
-                tempo += watch.Watch.Elapsed;
-            }
-
-            return _consoleHelper.DisplayChrono(tempo / 10, "Dapper");
-        }
-
-        public TimeSpan AddCustomersSingles(int interactions)
-        {
-            var watch = _consoleHelper.StartChrono();
-
-            using (var transaction = _dapperContext.OpenedConnection.BeginTransaction())
-            {
-                AddCustomersSingles(new ListTests().ObtenirListCustomersSingles(interactions), transaction);
-                transaction.Commit();
-            }
-
-            return _consoleHelper.StopChrono(watch, "Dapper").Tempo;
-        }
-
-
-
-        public void AddCustomersSingles(IEnumerable<Customer> customers, IDbTransaction transaction)
-        {
-            foreach (var customer in customers)
-            {
-                AddCustomer(customer, transaction);
-            }
         }
 
         public void AddCustomers(IEnumerable<Customer> customers, IDbTransaction transaction)
@@ -173,13 +127,11 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                 }
             }
         }
-
         public void AddProducts(IEnumerable<Product> products, IDbTransaction transaction)
         {
             foreach (var product in products)
                 AddProduct(product, transaction);
         }
-
 
         public void AddProduct(Product product, IDbTransaction transaction)
         {
@@ -205,8 +157,6 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _dapperContext.OpenedConnection.Insert(product, transaction);
         public void AddAddressContrib(Address address, IDbTransaction transaction) =>
             _dapperContext.OpenedConnection.Insert(address, transaction);
-
-
     }
 }
 

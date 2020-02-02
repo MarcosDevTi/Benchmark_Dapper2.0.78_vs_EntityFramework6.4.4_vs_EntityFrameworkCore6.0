@@ -47,48 +47,48 @@ namespace EfVsDapper.Mvc.Controllers
 
         public IActionResult SelectProductDapper(int interactions)
         {
-            _dapperTests.SelectProductsSingles(interactions);
+            _dapperTests.SelectSingleProducts(interactions);
             return RedirectToAction("SelectSingles");
         }
         public IActionResult SelectProductEf6(int interactions)
         {
-            _ef6Tests.SelectProductsSingles(interactions);
+            _ef6Tests.SelectSingleProducts(interactions);
             return RedirectToAction("SelectSingles");
         }
         public IActionResult SelectProductEfCore(int interactions)
         {
-            _efCoreTests.SelectProductsSingles(interactions);
+            _efCoreTests.SelectSingleProducts(interactions);
             return RedirectToAction("SelectSingles");
         }
         public IActionResult SelectProductEfCoreAsNoTracking(int interactions)
         {
-            _efCoreTests.SelectProductsSinglesAsNoTracking(interactions);
+            _efCoreTests.SelectSingleProductsAsNoTracking(interactions);
             return RedirectToAction("SelectSingles");
         }
         public IActionResult SelectProductEfCoreAsNoTrackingHardSql(int interactions)
         {
-            _efCoreTests.SelectProductsSinglesAsNoTrackingHardSql(interactions);
+            _efCoreTests.SelectSingleProductsAsNoTrackingSqlQuery(interactions);
             return RedirectToAction("SelectSingles");
         }
 
         public IActionResult InsertProductDapper(int interactions)
         {
-            _dapperTests.InsertProductsSingles(interactions);
+            _dapperTests.InsertSingleProducts(interactions);
             return RedirectToAction("InsertSingles");
         }
         public IActionResult InsertProductEf6(int interactions)
         {
-            _ef6Tests.InsertProductsSingles(interactions);
+            _ef6Tests.InsertSingleProducts(interactions);
             return RedirectToAction("InsertSingles");
         }
         public IActionResult InsertProductEfCore(int interactions)
         {
-            _efCoreTests.InsertProductsSingles(interactions);
+            _efCoreTests.InsertSingleProducts(interactions);
             return RedirectToAction("InsertSingles");
         }
         public IActionResult InsertProductEfCoreAsNoTrackingHardSql(int interactions)
         {
-            _efCoreTests.InsertProductSingleAsNoTrackingHardSql(interactions);
+            _efCoreTests.InsertSingleProductsAsNoTrackingSqlCommand(interactions);
             return RedirectToAction("InsertSingles");
         }
 

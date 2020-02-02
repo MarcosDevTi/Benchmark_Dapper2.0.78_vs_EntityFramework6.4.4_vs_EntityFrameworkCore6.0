@@ -35,10 +35,10 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
         {
             _consoleHelper.ShowTitleSelect(quant.ToString());
 
-            var dapper = _dapperTests.SelectProductsSingles(quant);
-            var efCore = _efCoreTests.SelectProductsSingles(quant);
-            var efCoreAsNoTr = _efCoreTests.SelectProductsSinglesAsNoTracking(quant);
-            var EfAsNoTrHardSql = _efCoreTests.SelectProductsSinglesAsNoTrackingHardSql(quant);
+            var dapper = _dapperTests.SelectSingleProducts(quant);
+            var efCore = _efCoreTests.SelectSingleProducts(quant);
+            var efCoreAsNoTr = _efCoreTests.SelectSingleProductsAsNoTracking(quant);
+            var EfAsNoTrHardSql = _efCoreTests.SelectSingleProductsAsNoTrackingSqlQuery(quant);
 
             //_consoleHelper.ShowFaster(dapper, efCore, efCoreAsNoTr, EfAsNoTrHardSql);
         }
@@ -53,10 +53,10 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
         {
             _consoleHelper.ShowTitleSelect(quant.ToString());
 
-            var dapper = _dapperTests.SelectCustomers(quant);
-            var ef6 = _ef6Tests.SelectCustomers(quant);
-            var efCore = _efCoreTests.SelectCustomers(quant);
-            var efCoreAsNoTr = _efCoreTests.SelectCustomersAsNoTracking(quant);
+            var dapper = _dapperTests.SelectComplexCustomers(quant);
+            var ef6 = _ef6Tests.SelectComplexCustomers(quant);
+            var efCore = _efCoreTests.SelectComplexCustomers(quant);
+            var efCoreAsNoTr = _efCoreTests.SelectComplexCustomersAsNoTracking(quant);
 
             _consoleHelper.ShowFaster(dapper, efCore, efCoreAsNoTr);
         }

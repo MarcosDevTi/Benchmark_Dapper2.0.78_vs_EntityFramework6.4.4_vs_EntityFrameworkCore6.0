@@ -21,26 +21,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _resultService = resultService;
         }
 
-        public TimeSpan AddCustomersSingles(int interactions)
-        {
-            var watch = _consoleHelper.StartChrono();
-
-            new ListTests().ObtenirListCustomersSingles(interactions).ForEach(_ => _netcoreContext.Add(_));
-            _netcoreContext.SaveChanges();
-
-            return _consoleHelper.StopChrono(watch, "EFCore").Tempo;
-        }
-        public TimeSpan AddCustomersSinglesAsNoTracking(int interactions)
-        {
-            var watch = _consoleHelper.StartChrono();
-
-            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            new ListTests().ObtenirListCustomersSingles(interactions).ForEach(_ => _netcoreContext.Add(_));
-            _netcoreContext.SaveChanges();
-
-            return _consoleHelper.StopChrono(watch, "EFCore").Tempo;
-        }
-        public TimeSpan AjouterCustomersAleatoires(int interactions)
+        public TimeSpan InsertComplexCustomers(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -50,45 +31,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.InsertComplex);
             return tempoResult;
         }
-        public TimeSpan AjouterCustomersAleatoiresAsNoTracking(int interactions)
-        {
-            var watch = _consoleHelper.StartChrono();
-
-            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => _netcoreContext.Add(_));
-            _netcoreContext.SaveChanges();
-
-            var tempoResult = _consoleHelper.StopChrono(watch, "EFCore AsNoTracking").Tempo;
-            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTracking, OperationType.InsertComplex);
-            return tempoResult;
-        }
-        public TimeSpan AjouterCustomersAleatoiresOpenClose(int interactions)
-        {
-            var watch = _consoleHelper.StartChrono();
-
-            foreach (var item in new ListTests().ObtenirListCustomersAleatoire(interactions))
-            {
-                _netcoreContext.Add(item);
-                _netcoreContext.SaveChanges();
-            }
-
-            return _consoleHelper.StopChrono(watch, "EFCore").Tempo;
-        }
-
-        public TimeSpan AjouterCustomersAleatoiresAsNoTrackingOpenClose(int interactions)
-        {
-            var watch = _consoleHelper.StartChrono();
-
-            foreach (var item in new ListTests().ObtenirListCustomersAleatoire(interactions))
-            {
-                _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-                _netcoreContext.Add(item);
-                _netcoreContext.SaveChanges();
-            }
-
-            return _consoleHelper.StopChrono(watch, "EFCore AsNoTracking").Tempo;
-        }
-        public TimeSpan SelectProductsSingles(int take)
+        public TimeSpan SelectSingleProducts(int take)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -101,8 +44,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             return tempoResult;
         }
-
-        public TimeSpan SelectProductsSinglesAsNoTracking(int take)
+        public TimeSpan SelectSingleProductsAsNoTracking(int take)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -115,7 +57,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 
             return tempoResult;
         }
-        public TimeSpan SelectProductsSinglesAsNoTrackingHardSql(int take)
+        public TimeSpan SelectSingleProductsAsNoTrackingSqlQuery(int take)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -126,7 +68,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTrackingSqlHard, OperationType.SelectSingle);
             return tempoResult;
         }
-        public TimeSpan SelectCustomers(int take)
+        public TimeSpan SelectComplexCustomers(int take)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -138,7 +80,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.SelectComplex);
             return tempoResult;
         }
-        public TimeSpan SelectCustomersAsNoTracking(int take)
+        public TimeSpan SelectComplexCustomersAsNoTracking(int take)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -154,8 +96,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTracking, OperationType.SelectComplex);
             return tempoResult;
         }
-
-        public TimeSpan InsertProductsSingles(int interactions)
+        public TimeSpan InsertSingleProducts(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -166,8 +107,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.InsertSingle);
             return tempoResult;
         }
-
-        public TimeSpan InsertProductSingleAsNoTrackingHardSql(int interactions)
+        public TimeSpan InsertSingleProductsAsNoTrackingSqlCommand(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -180,11 +120,9 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTrackingSqlHard, OperationType.InsertSingle);
             return tempoResult;
         }
-
-        public TimeSpan InsertCustomerSingleAsNotrackingHardSql(int interactions)
+        public TimeSpan InsertComplexCustomersAsNoTrackingSqlCommand(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
-
 
             _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions));

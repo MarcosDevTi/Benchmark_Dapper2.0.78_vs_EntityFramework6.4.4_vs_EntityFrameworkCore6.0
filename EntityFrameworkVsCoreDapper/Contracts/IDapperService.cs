@@ -4,11 +4,10 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
     public interface IDapperService
     {
-        TimeSpan SelectProductsSingles(int take);
-        TimeSpan SelectCustomers(int take);
+        TimeSpan SelectSingleProducts(int take);
+        TimeSpan SelectComplexCustomers(int take);
 
-        TimeSpan InsertProductsSingles(int interactions);
-        TimeSpan AddCustomersSingles(int interactions);
-        TimeSpan AjouterCustomersAleatoires(int interactions);
+        TimeSpan InsertSingleProducts(int interactions);
+        TimeSpan InsertComplexCustomers(int interactions);
     }
 }

@@ -47,43 +47,43 @@ namespace EfVsDapper.Mvc.Controllers
 
         public IActionResult SelectProductDapper(int interactions)
         {
-            _dapperTests.SelectCustomers(interactions);
+            _dapperTests.SelectComplexCustomers(interactions);
             return RedirectToAction("SelectComplex");
         }
         public IActionResult SelectProductEf6(int interactions)
         {
-            _ef6Tests.SelectCustomers(interactions);
+            _ef6Tests.SelectComplexCustomers(interactions);
             return RedirectToAction("SelectComplex");
         }
         public IActionResult SelectProductEfCore(int interactions)
         {
-            _efCoreTests.SelectCustomers(interactions);
+            _efCoreTests.SelectComplexCustomers(interactions);
             return RedirectToAction("SelectComplex");
         }
         public IActionResult SelectProductEfCoreAsNoTracking(int interactions)
         {
-            _efCoreTests.SelectCustomersAsNoTracking(interactions);
+            _efCoreTests.SelectComplexCustomersAsNoTracking(interactions);
             return RedirectToAction("SelectComplex");
         }
 
         public IActionResult InsertCustomerDapper(int interactions)
         {
-            _dapperTests.AjouterCustomersAleatoires(interactions);
+            _dapperTests.InsertComplexCustomers(interactions);
             return RedirectToAction("InsertComplex");
         }
         public IActionResult InsertCustomerEf6(int interactions)
         {
-            _ef6Tests.AjouterCustomersAleatoires(interactions);
+            _ef6Tests.InsertComplexCustomers(interactions);
             return RedirectToAction("InsertComplex");
         }
         public IActionResult InsertCustomerEfCore(int interactions)
         {
-            _efCoreTests.AjouterCustomersAleatoires(interactions);
+            _efCoreTests.InsertComplexCustomers(interactions);
             return RedirectToAction("InsertComplex");
         }
         public IActionResult InsertCustomerEfCoreAsNoTrackingHardSql(int interactions)
         {
-            _efCoreTests.InsertCustomerSingleAsNotrackingHardSql(interactions);
+            _efCoreTests.InsertComplexCustomersAsNoTrackingSqlCommand(interactions);
             return RedirectToAction("InsertComplex");
         }
 
