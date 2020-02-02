@@ -26,9 +26,9 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             services.AddScoped<Ef6Context>();
             services.AddTransient<IInserts, Inserts>();
             services.AddTransient<ISelects, Selects>();
-            services.AddTransient<IDapperTests, DapperTests>();
-            services.AddTransient<IEfCoreTests, EfCoreTests>();
-            services.AddTransient<IEf6Tests, Ef6Tests>();
+            services.AddTransient<IDapperService, DapperService>();
+            services.AddTransient<IEfCoreService, EfCoreService>();
+            services.AddTransient<IEf6Service, Ef6Service>();
             services.AddTransient<ConsoleHelper>();
             services.AddSingleton<ResultService>();
         }

@@ -2,10 +2,9 @@
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
-    public interface IEf6Tests
+    public interface IEf6Service
     {
         TimeSpan InsertProductsSingles(int interactions);
-        TimeSpan InsertAvg(int interactions);
         TimeSpan AddCustomersSingles(int interactions);
         TimeSpan AjouterCustomersAleatoires(int interactions);
         TimeSpan AjouterCustomersAleatoiresOpenClose(int interactions);

@@ -8,14 +8,12 @@ namespace EntityFrameworkVsCoreDapper.EntityFramework
         public DotNetCoreContext(DbContextOptions<DotNetCoreContext> options)
             : base(options)
         {
-
+            // Database.SetCommandTimeout(1500000000);
         }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Address { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ResultItem> ResultItems { get; set; }
         public DbSet<Result> Results { get; set; }
-        public DbSet<Score> Scores { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

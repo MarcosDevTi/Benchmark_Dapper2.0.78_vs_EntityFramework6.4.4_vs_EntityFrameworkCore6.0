@@ -17,7 +17,6 @@
             <th scope="col">Dapper</th>
             <th scope="col">Ef 6</th>
             <th scope="col">Ef Core</th>
-            <th scope="col">Ef Core AsNoTracking</th>
             <th scope="col">Ef Core AsNoTrackingHardSql</th>
         </tr>
     </thead>
@@ -31,7 +30,6 @@
                 <cell-result action-name="InsertCustomerDapper" controller-name="Complex" item-result-view="@product.Dapper"></cell-result>
                 <cell-result action-name="InsertCustomerEf6" controller-name="Complex" item-result-view="@product.Ef6"></cell-result>
                 <cell-result action-name="InsertCustomerEfCore" controller-name="Complex" item-result-view="@product.EFCore"></cell-result>
-                <cell-result action-name="InsertCustomerEfCoreAsNoTracking" controller-name="Complex" item-result-view="@product.EfCoreAsNoTracking"></cell-result>
                 <cell-result action-name="InsertCustomerEfCoreAsNoTrackingHardSql" controller-name="Complex" item-result-view="@product.EfCoreAsNoTrackingHardSql"></cell-result>
             </tr>
         }

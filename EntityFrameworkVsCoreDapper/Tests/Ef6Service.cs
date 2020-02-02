@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
-    public class Ef6Tests : IEf6Tests
+    public class Ef6Service : IEf6Service
     {
         private readonly ConsoleHelper _consoleHelper;
         private readonly Ef6Context _ef6Context;
         private readonly ResultService _resultService;
-        public Ef6Tests(ConsoleHelper consoleHelper, Ef6Context ef6Context, ResultService resultService)
+        public Ef6Service(ConsoleHelper consoleHelper, Ef6Context ef6Context, ResultService resultService)
         {
             _consoleHelper = consoleHelper;
             _ef6Context = ef6Context;

@@ -4,12 +4,12 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
 {
     public class Selects : ISelects
     {
-        private readonly IDapperTests _dapperTests;
-        private readonly IEf6Tests _ef6Tests;
-        private readonly IEfCoreTests _efCoreTests;
+        private readonly IDapperService _dapperTests;
+        private readonly IEf6Service _ef6Tests;
+        private readonly IEfCoreService _efCoreTests;
         private readonly ConsoleHelper _consoleHelper;
 
-        public Selects(IDapperTests dapperTests, IEf6Tests ef6Tests, IEfCoreTests efCoreTests, ConsoleHelper consoleHelper)
+        public Selects(IDapperService dapperTests, IEf6Service ef6Tests, IEfCoreService efCoreTests, ConsoleHelper consoleHelper)
         {
             _dapperTests = dapperTests;
             _ef6Tests = ef6Tests;
@@ -21,12 +21,8 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
         {
             //_efCoreTests.InitInterface();
             var start = _consoleHelper.StartChrono();
-
-
             AddProfileSingleSelect(4000000);
-
-
-               AddProfileCustomer(1, 2, 3, 5, 10, 20, 50, 100, 200, 500, 1000);
+            AddProfileCustomer(1, 2, 3, 5, 10, 20, 50, 100, 200, 500, 1000);
         }
 
         public void AddProfileSingleSelect(params int[] quant)
@@ -62,7 +58,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Tests
             var efCore = _efCoreTests.SelectCustomers(quant);
             var efCoreAsNoTr = _efCoreTests.SelectCustomersAsNoTracking(quant);
 
-             _consoleHelper.ShowFaster(dapper, efCore, efCoreAsNoTr);
+            _consoleHelper.ShowFaster(dapper, efCore, efCoreAsNoTr);
         }
     }
 }

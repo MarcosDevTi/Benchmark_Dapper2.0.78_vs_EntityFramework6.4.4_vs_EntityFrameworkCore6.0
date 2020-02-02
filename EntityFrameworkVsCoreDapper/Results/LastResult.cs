@@ -19,11 +19,5 @@ namespace EntityFrameworkVsCoreDapper.Results
         public TypeTransaction TypeTransaction { get; set; }
         public OperationType OperationType { get; set; }
         public double TotalRam { get; set; }
-        public override string ToString()
-        {
-            return $"Amount: {Amount}, " +
-                $"\nTempo( min: {TempoResult.TotalMinutes}, sec: {TempoResult.Seconds}, mils: {TempoResult.Milliseconds}), " +
-                $"\nRam: {Ram}, TypeTransaction: {TypeTransaction}, OperationType: {OperationType}";
-        }
     }
 }

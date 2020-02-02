@@ -11,12 +11,12 @@ using System.Text;
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
-    public class DapperTests : IDapperTests
+    public class DapperService : IDapperService
     {
         private readonly DapperContext _dapperContext;
         private readonly ConsoleHelper _consoleHelper;
         private readonly ResultService _resultService;
-        public DapperTests(DapperContext dapperContext, ConsoleHelper consoleHelper, ResultService resultService)
+        public DapperService(DapperContext dapperContext, ConsoleHelper consoleHelper, ResultService resultService)
         {
             _dapperContext = dapperContext;
             _consoleHelper = consoleHelper;

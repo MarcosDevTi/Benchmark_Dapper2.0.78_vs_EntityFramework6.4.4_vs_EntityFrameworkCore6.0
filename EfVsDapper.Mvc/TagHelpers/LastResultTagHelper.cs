@@ -1,5 +1,6 @@
 ﻿using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
 using System.Text;
 
 namespace EfVsDapper.Mvc.TagHelpers
@@ -19,7 +20,7 @@ namespace EfVsDapper.Mvc.TagHelpers
             .AppendLine($"                        <h4>{LastResult?.TypeTransaction}</h4>")
             .AppendLine("                    </div>")
             .AppendLine("                    <div class=\"col-3\">")
-            .AppendLine($"                        Tempo: Sec: {LastResult?.TempoResult.Seconds}, Millisec: {LastResult.TempoResult.Milliseconds}")
+            .AppendLine($"                        Tempo: {DisplayTime(LastResult.TempoResult)}")
             .AppendLine("                    </div>")
             .AppendLine("                    <div class=\"col-2\">")
             .AppendLine($"                        Ram: {LastResult?.Ram}")
@@ -36,6 +37,27 @@ namespace EfVsDapper.Mvc.TagHelpers
 
                 output.Content.SetHtmlContent(sb.ToString());
             }
+        }
+
+        public string DisplayTime(TimeSpan? tempo)
+        {
+            var result = string.Empty;
+            var min = tempo?.Minutes;
+            var sec = tempo?.Seconds;
+            var millisec = tempo?.Milliseconds;
+            if (millisec > 0)
+            {
+                result += millisec + " milisec";
+            }
+            if (sec > 0)
+            {
+                result = sec + " sec, " + result;
+            }
+            if (min > 0)
+            {
+                result = min + " minutes, " + result;
+            }
+            return result;
         }
 
     }

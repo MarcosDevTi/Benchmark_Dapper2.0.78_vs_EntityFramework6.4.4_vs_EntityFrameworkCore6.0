@@ -9,53 +9,18 @@ using System.Linq;
 
 namespace EntityFrameworkVsCoreDapper.ConsoleTest
 {
-    public class EfCoreTests : IEfCoreTests
+    public class EfCoreService : IEfCoreService
     {
         private readonly DotNetCoreContext _netcoreContext;
         private readonly ConsoleHelper _consoleHelper;
         private readonly ResultService _resultService;
-        public EfCoreTests(DotNetCoreContext netcoreContext, ConsoleHelper consoleHelper, ResultService resultService)
+        public EfCoreService(DotNetCoreContext netcoreContext, ConsoleHelper consoleHelper, ResultService resultService)
         {
             _netcoreContext = netcoreContext;
             _consoleHelper = consoleHelper;
             _resultService = resultService;
         }
 
-        public TimeSpan InsertAvg(int interactions)
-        {
-            var tempo = TimeSpan.Zero;
-
-            for (int i = 0; i < 10; i++)
-            {
-                var watch = _consoleHelper.StartChrono();
-
-                new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => _netcoreContext.Customers.Add(_));
-                _netcoreContext.SaveChanges();
-
-                watch.Watch.Stop();
-                tempo += watch.Watch.Elapsed;
-            }
-
-            return _consoleHelper.DisplayChrono(tempo / 10, "EFCore");
-        }
-        public TimeSpan InsertAvgAsNoTracking(int interactions)
-        {
-            var tempo = TimeSpan.Zero;
-
-            for (int i = 0; i < 10; i++)
-            {
-                var watch = _consoleHelper.StartChrono();
-
-                _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-                new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => _netcoreContext.Customers.Add(_));
-                _netcoreContext.SaveChanges();
-
-                watch.Watch.Stop();
-                tempo += watch.Watch.Elapsed;
-            }
-
-            return _consoleHelper.DisplayChrono(tempo / 10, "EFCore");
-        }
         public TimeSpan AddCustomersSingles(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
@@ -202,24 +167,10 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             return tempoResult;
         }
 
-        public TimeSpan InsertProductsSinglesAsNoTracking(int interactions)
-        {
-            var watch = _consoleHelper.StartChrono();
-           
-
-            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            new ListTests().ObtenirListProductsAleatoire(interactions, null).ForEach(_ => _netcoreContext.Products.Add(_));
-            _netcoreContext.SaveChanges();
-
-            var tempoResult = _consoleHelper.StopChrono(watch, "EF Core").Tempo;
-            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTracking, OperationType.InsertSingle);
-            return tempoResult;
-        }
-
         public TimeSpan InsertProductSingleAsNoTrackingHardSql(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
-            
+
 
             _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             AddProducts(new ListTests().ObtenirListProductsAleatoire(interactions, null));
@@ -233,7 +184,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         public TimeSpan InsertCustomerSingleAsNotrackingHardSql(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
-            
+
 
             _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions));

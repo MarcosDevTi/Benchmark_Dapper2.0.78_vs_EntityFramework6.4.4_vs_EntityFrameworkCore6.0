@@ -82,7 +82,6 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                     Status = faker.Person.Gender.ToString(),
                 });
             }
-
             return list;
         }
 
@@ -106,7 +105,6 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                 }
                 );
             }
-
             return list;
         }
     }
