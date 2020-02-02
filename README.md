@@ -1,5 +1,5 @@
-<h1>ORMs benchmark</h1>
-
+<h3>Select single objects</h3>
+<img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/SelectSingleObjects.PNG"> </img>
 <div>Dapper 2.0.30</div>
 <div>EntityFramework 6.4</div>
 <div>EntityFrameworkCore 3.1</div>
@@ -148,11 +148,3 @@ SELECT Name,Email,Street,Number,City,Country FROM Customers
 </ul>
 </div>
 
-
-<div>
-<h2>AutoMapper</h2>
-<h3>Count: 300 000</h3>
-<ul>
-<li>_mapper.Map<IEnumerable<CustomerViewModel>>(customers): 00:00:00.0793546</li>
-</ul>
-</div>
