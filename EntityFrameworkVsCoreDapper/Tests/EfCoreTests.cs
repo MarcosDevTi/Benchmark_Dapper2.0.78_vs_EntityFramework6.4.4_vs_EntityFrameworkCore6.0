@@ -175,7 +175,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         {
             var watch = _consoleHelper.StartChrono();
 
-            //_netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             var teste = _netcoreContext.Customers
                 .Where(_ => _.Address.City.StartsWith("North") && _.Products.Count(_ => _.Brand == "Intelligent") > 0)
               .Include(_ => _.Address)

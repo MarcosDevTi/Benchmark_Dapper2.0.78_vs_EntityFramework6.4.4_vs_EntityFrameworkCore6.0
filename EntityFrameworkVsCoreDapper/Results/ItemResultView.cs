@@ -3,6 +3,6 @@
     public class ItemResultView
     {
         public int Interactions { get; set; }
-        public string Display { get; set; }
+        public ResultDetailsCell Display { get; set; }
     }
 }

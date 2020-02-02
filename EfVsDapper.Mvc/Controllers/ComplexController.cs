@@ -10,19 +10,23 @@ namespace EfVsDapper.Mvc.Controllers
         private readonly IEf6Tests _ef6Tests;
         private readonly IEfCoreTests _efCoreTests;
         private readonly ResultService _resultService;
+        private readonly MessageService _messageService;
         public ComplexController(
             IDapperTests dapperTests,
             IEfCoreTests efCoreTests,
             IEf6Tests ef6Tests,
-            ResultService resultService)
+            ResultService resultService,
+            MessageService messageService)
         {
             _dapperTests = dapperTests;
             _efCoreTests = efCoreTests;
             _ef6Tests = ef6Tests;
             _resultService = resultService;
+            _messageService = messageService;
         }
         public IActionResult SelectComplex()
         {
+            ViewBag.LastResult = _messageService.LastResult;
             return View(_resultService.GetResults(OperationType.SelectComplex));
         }
         public IActionResult SelectProductDapper(int interactions)

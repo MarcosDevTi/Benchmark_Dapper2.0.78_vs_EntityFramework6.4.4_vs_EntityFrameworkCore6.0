@@ -2,6 +2,7 @@
 using EntityFrameworkVsCoreDapper.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace EntityFrameworkVsCoreDapper.Results
@@ -19,13 +20,11 @@ namespace EntityFrameworkVsCoreDapper.Results
         public double GetMemory()
         {
             GC.GetTotalMemory(true);
-            var process = System.Diagnostics.Process.GetCurrentProcess();
+            var process = Process.GetCurrentProcess();
             process.Refresh();
 
             return process.PrivateMemorySize64.ConvertBytesToMegabytes();
         }
-
-
 
         public void SaveSelect(int amount, TimeSpan tempoResult, double initMemory, TypeTransaction typeTransaction, OperationType operationType)
         {
@@ -56,18 +55,12 @@ namespace EntityFrameworkVsCoreDapper.Results
 
                 _netcoreContext.Add(resultSave);
                 _netcoreContext.SaveChanges();
-
-
             }
             else
             {
                 SaveChangementResult(resultTracked, tempoResult, ramDiference);
-
             }
-
         }
-
-
 
         public void ManageResult(IEnumerable<Result> resultsTrackeds)
         {
@@ -144,19 +137,20 @@ namespace EntityFrameworkVsCoreDapper.Results
                     },
                 });
             }
-
             return results;
         }
 
-        public string GetTempo(int amount, TypeTransaction typeTransaction, OperationType operationType)
+        public ResultDetailsCell GetTempo(int amount, TypeTransaction typeTransaction, OperationType operationType)
         {
-            var result = _netcoreContext.Results.FirstOrDefault(_ => _.OperationType == operationType && _.TypeTransaction == typeTransaction && _.Amount == amount);
+            var result = _netcoreContext.Results.FirstOrDefault(_ =>
+                _.OperationType == operationType && _.TypeTransaction == typeTransaction && _.Amount == amount);
 
-            var txtResult = "Min: " + FormatTempo(result?.TempoMin);
-            txtResult += "\n\rMax: " + FormatTempo(result?.TempoMax);
-            txtResult += $"\n\rRam: {result?.RamMax}";
-
-            return txtResult;
+            return new ResultDetailsCell
+            {
+                TempoMin = FormatTempo(result?.TempoMin),
+                TempoMax = FormatTempo(result?.TempoMax),
+                Ram = result?.RamMax
+            };
         }
 
         public string FormatTempo(TimeSpan? tempo)
@@ -166,20 +160,48 @@ namespace EntityFrameworkVsCoreDapper.Results
             {
                 if (tempo?.Minutes != 0)
                 {
-                    result += "Min: " + tempo?.Minutes;
+                    result += " " + tempo?.Minutes + " minutes";
                 }
                 if (tempo?.Seconds != 0)
                 {
-                    result += "Sec: " + tempo?.Seconds;
+                    result += " " + tempo?.Seconds + " seconds";
                 }
                 if (tempo?.Milliseconds != 0)
                 {
-                    result += "Millsec: " + tempo?.Milliseconds;
+                    result += " " + tempo?.Milliseconds + " milliseconds";
+                }
+            }
+            return result;
+        }
+
+
+        public string FormatTempoSimplified(TimeSpan? tempo)
+        {
+            var result = string.Empty;
+            if (tempo != null)
+            {
+                if (tempo?.Minutes != 0)
+                {
+                    result += tempo?.Minutes;
+                }
+                if (tempo?.Seconds != 0)
+                {
+                    result += tempo?.Minutes == null ? ": " : "" + tempo?.Seconds;
+                }
+                if (tempo?.Milliseconds != 0)
+                {
+                    result += tempo?.Seconds == null ? ": " : "" + tempo?.Milliseconds;
                 }
             }
             return result;
         }
     }
 
+    public class ResultDetailsCell
+    {
+        public string TempoMax { get; set; }
+        public string TempoMin { get; set; }
+        public double? Ram { get; set; }
+    }
 
 }

@@ -26,7 +26,7 @@ namespace EfVsDapper.Mvc.Controllers
         }
         public IActionResult SelectSingles()
         {
-            ViewData["LastResult"] = _messageService.LastResult;
+            ViewBag.LastResult = _messageService.LastResult;
             return View(_resultService.GetResults(OperationType.SelectSingle));
         }
         public IActionResult SelectProductDapper(int interactions)
