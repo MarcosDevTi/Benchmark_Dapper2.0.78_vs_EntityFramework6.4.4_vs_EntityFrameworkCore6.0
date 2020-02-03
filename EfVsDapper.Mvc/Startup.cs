@@ -1,6 +1,5 @@
 using EntityFrameworkVsCoreDapper.ConsoleTest;
 using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
-using EntityFrameworkVsCoreDapper.ConsoleTest.Tests;
 using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.EntityFramework;
 using EntityFrameworkVsCoreDapper.Results;
@@ -15,14 +14,10 @@ namespace EfVsDapper.Mvc
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
@@ -30,8 +25,6 @@ namespace EfVsDapper.Mvc
                            Initial Catalog=CamparationEntityDapper; Integrated Security=True"), ServiceLifetime.Transient);
             services.AddScoped<DapperContext>();
             services.AddScoped<Ef6Context>();
-            services.AddTransient<IInserts, Inserts>();
-            services.AddTransient<ISelects, Selects>();
             services.AddTransient<IDapperService, DapperService>();
             services.AddTransient<IEfCoreService, EfCoreService>();
             services.AddTransient<IEf6Service, Ef6Service>();
@@ -40,7 +33,6 @@ namespace EfVsDapper.Mvc
             services.AddSingleton<MessageService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -50,7 +42,6 @@ namespace EfVsDapper.Mvc
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-
             }
 
             app.UseStaticFiles();

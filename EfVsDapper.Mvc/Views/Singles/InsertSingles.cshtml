@@ -1,12 +1,12 @@
 ﻿@using EntityFrameworkVsCoreDapper.Results
 @model IEnumerable<ResultView>
 
-    <div style="display:flex">
-        <div class="mr-lg-5">Input Single Objects</div>
+<div style="display:flex">
+    <div class="mr-lg-5">Input Single Objects</div>
 
-        <div class="mr-lg-5">Count Products: @ViewBag.CountProducts</div>
-        <div>Count Customers: @ViewBag.CountCustomers</div>
-    </div>
+    <div class="mr-lg-5">Count Products: @ViewBag.CountProducts</div>
+    <div>Count Customers: @ViewBag.CountCustomers</div>
+</div>
 <last-result last-result="@ViewBag.LastResult"></last-result>
 
 <table class="table table-striped">
@@ -16,7 +16,7 @@
             <th scope="col">Dapper</th>
             <th scope="col">Ef 6</th>
             <th scope="col">Ef Core</th>
-            <th scope="col">Ef Core AsNoTracking Hard Sql</th>
+            <th scope="col">Ef Core AsNoTracking Sql Command</th>
         </tr>
     </thead>
     <tbody>

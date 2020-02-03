@@ -57,7 +57,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
                         ZipCode = faker.Address.ZipCode(),
                         AdministrativeRegion = faker.Address.CountryCode()
                     },
-                    Products = List20Products(idCustomer)
+                    Products = List5Products(idCustomer)
                 });
             }
 
@@ -85,12 +85,12 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             return list;
         }
 
-        private List<Product> List20Products(Guid customerId)
+        private List<Product> List5Products(Guid customerId)
         {
             var faker = new Faker();
 
             var list = new List<Product>();
-            for (var i = 0; i < 20; i++)
+            for (var i = 0; i < 5; i++)
             {
                 var productId = Guid.NewGuid();
                 list.Add(new Product

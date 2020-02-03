@@ -9,7 +9,6 @@ namespace EfVsDapper.Mvc.TagHelpers
     {
         public string ActionName { get; set; }
         public string ControllerName { get; set; }
-        //public ResultView ResultView { get; set; }
 
         public ItemResultView ItemResultView { get; set; }
 

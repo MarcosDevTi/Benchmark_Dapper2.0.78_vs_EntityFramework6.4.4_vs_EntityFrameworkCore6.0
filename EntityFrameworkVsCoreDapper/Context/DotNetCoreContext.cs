@@ -1,4 +1,5 @@
-﻿using EntityFrameworkVsCoreDapper.Results;
+﻿using EntityFrameworkVsCoreDapper.Context.Maps;
+using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkVsCoreDapper.EntityFramework
@@ -8,12 +9,19 @@ namespace EntityFrameworkVsCoreDapper.EntityFramework
         public DotNetCoreContext(DbContextOptions<DotNetCoreContext> options)
             : base(options)
         {
-            // Database.SetCommandTimeout(1500000000);
+
         }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Address { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Result> Results { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new ProductMap());
+            modelBuilder.ApplyConfiguration(new CustomerMap());
+            modelBuilder.ApplyConfiguration(new AddressMap());
+        }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

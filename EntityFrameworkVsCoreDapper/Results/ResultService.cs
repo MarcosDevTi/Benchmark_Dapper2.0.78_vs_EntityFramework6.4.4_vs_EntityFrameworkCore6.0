@@ -107,15 +107,8 @@ namespace EntityFrameworkVsCoreDapper.Results
             }
         }
 
-        public long CountCustomers()
-        {
-            return _netcoreContext.Customers.Count();
-        }
-
-        public long CountProducts()
-        {
-            return _netcoreContext.Products.Count();
-        }
+        public long CountCustomers() => _netcoreContext.Customers.Count();
+        public long CountProducts() => _netcoreContext.Products.Count();
         public IEnumerable<ResultView> GetResults(OperationType operationType, params int[] sequenceAmountInteractions)
         {
             var results = new List<ResultView>();

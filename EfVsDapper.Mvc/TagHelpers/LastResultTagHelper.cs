@@ -17,7 +17,7 @@ namespace EfVsDapper.Mvc.TagHelpers
             .AppendLine("<div class=\"alert alert-info\" role=\"alert\">")
             .AppendLine("                <div class=\"row\">")
             .AppendLine("                    <div class=\"col-2\">")
-            .AppendLine($"                        <h4>{LastResult?.TypeTransaction}</h4>")
+            .AppendLine($"                        <h5>{LastResult?.TypeTransaction}</h5>")
             .AppendLine("                    </div>")
             .AppendLine("                    <div class=\"col-3\">")
             .AppendLine($"                        Tempo: {DisplayTime(LastResult.TempoResult)}")
