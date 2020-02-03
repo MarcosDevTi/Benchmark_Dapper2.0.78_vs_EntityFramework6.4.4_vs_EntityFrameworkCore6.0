@@ -92,10 +92,10 @@ namespace EfVsDapper.Mvc.Controllers
             return RedirectToAction("InsertSingles");
         }
 
-        public IActionResult Clear(Guid idResult)
+        public IActionResult Clear(Guid idResult, string ActionRetour)
         {
             _resultService.ClearResult(idResult);
-            return RedirectToAction("SelectSingles");
+            return RedirectToAction(ActionRetour);
         }
     }
 }

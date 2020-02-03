@@ -9,6 +9,7 @@ namespace EfVsDapper.Mvc.TagHelpers
     {
         public string ActionName { get; set; }
         public string ControllerName { get; set; }
+        public string ActionRetour { get; set; }
 
         public ItemResultView ItemResultView { get; set; }
 
@@ -27,7 +28,7 @@ namespace EfVsDapper.Mvc.TagHelpers
               .AppendLine("         </div>")
               .AppendLine("     </div>")
               .AppendLine("     <div>")
-               .AppendLine($"         <a href=\"/{ControllerName}/Clear?idResult={ItemResultView.Display.IdResult}\" class=\"badge badge-danger\">")
+               .AppendLine($"         <a href=\"/{ControllerName}/Clear?idResult={ItemResultView.Display.IdResult}&actionRetour={ActionRetour}\" class=\"badge badge-danger\">")
               .AppendLine("             <i class=\"far fa-trash-alt\"></i>")
               .AppendLine("         </a>")
               .AppendLine($"         <a href=\"/{ControllerName}/{ActionName}?interactions={ItemResultView.Interactions}\" class=\"badge badge-primary\">")

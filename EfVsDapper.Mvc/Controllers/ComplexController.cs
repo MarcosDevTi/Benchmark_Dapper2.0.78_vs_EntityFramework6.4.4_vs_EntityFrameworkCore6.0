@@ -32,7 +32,7 @@ namespace EfVsDapper.Mvc.Controllers
             ViewBag.CountProducts = _resultService.CountProducts();
             ViewBag.CountCustomers = _resultService.CountCustomers();
 
-            var sequenceAmountInteractions = new[] { 1, 5, 50, 200, 10000, 100000 };
+            var sequenceAmountInteractions = new[] { 1, 5, 50, 200, 1000, 10000, 50000, 500000, 1000000 };
             return View(_resultService.GetResults(OperationType.SelectComplex, sequenceAmountInteractions));
         }
         public IActionResult InsertComplex()
@@ -41,7 +41,7 @@ namespace EfVsDapper.Mvc.Controllers
             ViewBag.CountProducts = _resultService.CountProducts();
             ViewBag.CountCustomers = _resultService.CountCustomers();
 
-            var sequenceAmountInteractions = new[] { 1, 5, 50, 200, 1000, 2000, 5000 };
+            var sequenceAmountInteractions = new[] { 1, 5, 50, 100, 500, 1000, 5000, 10000, 20000};
             return View(_resultService.GetResults(OperationType.InsertComplex, sequenceAmountInteractions));
         }
 
@@ -87,10 +87,10 @@ namespace EfVsDapper.Mvc.Controllers
             return RedirectToAction("InsertComplex");
         }
 
-        public IActionResult Clear(Guid idResult)
+        public IActionResult Clear(Guid idResult, string actionRetour)
         {
             _resultService.ClearResult(idResult);
-            return RedirectToAction("SelectComplex");
+            return RedirectToAction(actionRetour);
         }
     }
 }

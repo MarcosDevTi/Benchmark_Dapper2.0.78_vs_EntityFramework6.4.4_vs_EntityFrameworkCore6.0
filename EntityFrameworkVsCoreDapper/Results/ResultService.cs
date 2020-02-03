@@ -28,6 +28,8 @@ namespace EntityFrameworkVsCoreDapper.Results
 
         public void ClearResult(Guid id)
         {
+            var result = _netcoreContext.Results.Find(id);
+            if (result == null) return;
             _netcoreContext.Results.Remove(_netcoreContext.Results.Find(id));
             _netcoreContext.SaveChanges();
         }

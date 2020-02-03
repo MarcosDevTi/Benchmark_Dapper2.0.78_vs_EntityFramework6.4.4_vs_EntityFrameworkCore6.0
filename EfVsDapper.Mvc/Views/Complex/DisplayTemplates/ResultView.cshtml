@@ -3,10 +3,10 @@
 
 <tr>
     <td>@Model.EFCore.Interactions</td>
-    <cell-result action-name="SelectProductDapper" controller-name="Complex" item-result-view="@Model.Dapper"></cell-result>
-    <cell-result action-name="SelectProductEf6" controller-name="Complex" item-result-view="@Model.Ef6"></cell-result>
-    <cell-result action-name="SelectProductEfCore" controller-name="Complex" item-result-view="@Model.EFCore"></cell-result>
-    <cell-result action-name="SelectProductEfCoreAsNoTracking" controller-name="Complex" item-result-view="@Model.EfCoreAsNoTracking"></cell-result>
+    <cell-result action-retour="SelectComplex" action-name="SelectProductDapper" controller-name="Complex" item-result-view="@Model.Dapper"></cell-result>
+    <cell-result action-retour="SelectComplex" action-name="SelectProductEf6" controller-name="Complex" item-result-view="@Model.Ef6"></cell-result>
+    <cell-result action-retour="SelectComplex" action-name="SelectProductEfCore" controller-name="Complex" item-result-view="@Model.EFCore"></cell-result>
+    <cell-result action-retour="SelectComplex" action-name="SelectProductEfCoreAsNoTracking" controller-name="Complex" item-result-view="@Model.EfCoreAsNoTracking"></cell-result>
     @*<cell-result action-name="InsertCustomerEfCoreAsNoTrackingHardSql" controller-name="Complex" item-result-view="@Model.EfCoreAsNoTrackingHardSql"></cell-result>*@
 </tr>
 

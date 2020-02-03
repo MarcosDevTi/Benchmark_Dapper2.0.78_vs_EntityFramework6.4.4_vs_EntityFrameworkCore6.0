@@ -2,7 +2,7 @@
 @model IEnumerable<ResultView>
 
 <div style="display:flex">
-    <div class="mr-lg-5">Inserts Single Objects</div>
+    <div class="mr-lg-5" style="font-size: 20px;font-weight: 700;">Inserts Single Objects</div>
 
     <div class="mr-lg-5">Count Products: @ViewBag.CountProducts</div>
     <div>Count Customers: @ViewBag.CountCustomers</div>
@@ -27,10 +27,10 @@
             <tr>
                 <td>@product.EFCore.Interactions</td>
 
-                <cell-result action-name="InsertCustomerDapper" controller-name="Complex" item-result-view="@product.Dapper"></cell-result>
-                <cell-result action-name="InsertCustomerEf6" controller-name="Complex" item-result-view="@product.Ef6"></cell-result>
-                <cell-result action-name="InsertCustomerEfCore" controller-name="Complex" item-result-view="@product.EFCore"></cell-result>
-                <cell-result action-name="InsertCustomerEfCoreAsNoTrackingHardSql" controller-name="Complex" item-result-view="@product.EfCoreAsNoTrackingHardSql"></cell-result>
+                <cell-result action-retour="InsertComplex" action-name="InsertCustomerDapper" controller-name="Complex" item-result-view="@product.Dapper"></cell-result>
+                <cell-result action-retour="InsertComplex" action-name="InsertCustomerEf6" controller-name="Complex" item-result-view="@product.Ef6"></cell-result>
+                <cell-result action-retour="InsertComplex" action-name="InsertCustomerEfCore" controller-name="Complex" item-result-view="@product.EFCore"></cell-result>
+                <cell-result action-retour="InsertComplex" action-name="InsertCustomerEfCoreAsNoTrackingHardSql" controller-name="Complex" item-result-view="@product.EfCoreAsNoTrackingHardSql"></cell-result>
             </tr>
         }
 

@@ -26,10 +26,10 @@
             <tr>
                 <td>@product.EFCore.Interactions</td>
 
-                <cell-result action-name="InsertProductDapper" controller-name="Singles" item-result-view="@product.Dapper"></cell-result>
-                <cell-result action-name="InsertProductEf6" controller-name="Singles" item-result-view="@product.Ef6"></cell-result>
-                <cell-result action-name="InsertProductEfCore" controller-name="Singles" item-result-view="@product.EFCore"></cell-result>
-                <cell-result action-name="InsertProductEfCoreAsNoTrackingHardSql" controller-name="Singles" item-result-view="@product.EfCoreAsNoTrackingHardSql"></cell-result>
+                <cell-result controller-name="Singles" action-retour="InsertSingles" action-name="InsertProductDapper" item-result-view="@product.Dapper" ></cell-result>
+                <cell-result controller-name="Singles" action-retour="InsertSingles" action-name="InsertProductEf6" item-result-view="@product.Ef6"></cell-result>
+                <cell-result controller-name="Singles" action-retour="InsertSingles" action-name="InsertProductEfCore" item-result-view="@product.EFCore"></cell-result>
+                <cell-result controller-name="Singles" action-retour="InsertSingles" action-name="InsertProductEfCoreAsNoTrackingHardSql" item-result-view="@product.EfCoreAsNoTrackingHardSql"></cell-result>
             </tr>
         }
 
