@@ -1,0 +1,13 @@
+﻿@using EntityFrameworkVsCoreDapperNetFramework.Results
+@using EfVsDapper.Mvc5.TagHelpers
+@model ResultView
+
+<tr>
+    <td>@Model.EFCore.Interactions</td>
+
+    @Html.GetCellResultTag(Model.Dapper, "Complex", "SelectProductDapper")
+    @Html.GetCellResultTag(Model.Ef6, "Complex", "SelectProductEf6")
+    @Html.GetCellResultTag(Model.EFCore, "Complex", "SelectProductEfCore")
+    @Html.GetCellResultTag(Model.EfCoreAsNoTracking, "Complex", "SelectProductEfCoreAsNoTracking")
+</tr>
+

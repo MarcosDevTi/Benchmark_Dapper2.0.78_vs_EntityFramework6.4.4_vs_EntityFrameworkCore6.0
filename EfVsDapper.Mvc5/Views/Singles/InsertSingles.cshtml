@@ -1,0 +1,41 @@
+﻿@using EntityFrameworkVsCoreDapperNetFramework.Results
+@using EfVsDapper.Mvc5.TagHelpers
+@model IEnumerable<ResultView>
+
+<div style="display:flex">
+    <div class="mr-lg-5">Input Single Objects</div>
+
+    <div class="mr-lg-5">Count Products: @ViewBag.CountProducts</div>
+    <div>Count Customers: @ViewBag.CountCustomers</div>
+</div>
+
+@Html.GetLastResult((LastResult)ViewBag.LastResult)
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Dapper</th>
+            <th scope="col">Ef 6</th>
+            <th scope="col">Ef Core</th>
+            <th scope="col">Ef Core AsNoTracking Sql Command</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var product in Model)
+        {
+        <tr>
+            <td>@product.EFCore.Interactions</td>
+            @Html.GetCellResultTag(product.Dapper, "Singles", "InsertProductDapper")
+            @Html.GetCellResultTag(product.Ef6, "Singles", "InsertProductEf6")
+            @Html.GetCellResultTag(product.EFCore, "Singles", "InsertProductEfCore")
+            @Html.GetCellResultTag(product.EfCoreAsNoTrackingHardSql, "Singles", "InsertProductEfCoreAsNoTrackingHardSql")
+        </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
