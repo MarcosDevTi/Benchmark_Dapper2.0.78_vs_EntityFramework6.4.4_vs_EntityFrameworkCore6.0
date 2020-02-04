@@ -27,8 +27,6 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest.Helpers
             var stopMemory = _resultService.GetMemory();
             watch.Watch.Stop();
 
-            var result = $"Time elapsed with {txt}: {watch.Watch.Elapsed}, {stopMemory - watch.InitMemory} MB";
-            Console.WriteLine(result);
             return (watch.Watch.Elapsed, stopMemory - watch.InitMemory);
         }
     }
