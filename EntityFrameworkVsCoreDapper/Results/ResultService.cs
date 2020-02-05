@@ -12,6 +12,7 @@ namespace EntityFrameworkVsCoreDapper.Results
 
         private readonly DotNetCoreContext _netcoreContext;
         private readonly MessageService _messageService;
+        public int InteractionElement { get; set; }
         public ResultService(DotNetCoreContext netcoreContext, MessageService messageService)
         {
             _netcoreContext = netcoreContext;

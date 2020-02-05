@@ -112,7 +112,6 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var watch = _consoleHelper.StartChrono();
 
 
-            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             AddProducts(new ListTests().ObtenirListProductsAleatoire(interactions, null));
             _netcoreContext.SaveChanges();
 
@@ -124,7 +123,6 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         {
             var watch = _consoleHelper.StartChrono();
 
-            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions));
             _netcoreContext.SaveChanges();
 

@@ -1,12 +1,12 @@
 ﻿@using EntityFrameworkVsCoreDapper.Results
 @model IEnumerable<ResultView>
 
-    <div style="display:flex">
-        <div class="mr-lg-5">Select Complex Objects</div>
+<div style="display:flex">
+    <div class="mr-lg-5">Select Complex Objects</div>
 
-        <div class="mr-lg-5">Count Products: @ViewBag.CountProducts</div>
-        <div>Count Customers: @ViewBag.CountCustomers</div>
-    </div>
+    <div class="mr-lg-5">Count Products: @ViewBag.CountProducts</div>
+    <div>Count Customers: @ViewBag.CountCustomers</div>
+</div>
 <last-result last-result="@ViewBag.LastResult"></last-result>
 
 <table class="table table-striped">
@@ -20,7 +20,22 @@
         </tr>
     </thead>
     <tbody>
-        @Html.DisplayFor(_ => Model)
+
+        @{
+            var interac = 0;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.EFCore.Interactions</td>
+                    <cell-result action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductDapper" controller-name="Complex" item-result-view="@item.Dapper"></cell-result>
+                    <cell-result action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductEf6" controller-name="Complex" item-result-view="@item.Ef6"></cell-result>
+                    <cell-result action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductEfCore" controller-name="Complex" item-result-view="@item.EFCore"></cell-result>
+                    <cell-result action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductEfCoreAsNoTracking" controller-name="Complex" item-result-view="@item.EfCoreAsNoTracking"></cell-result>
+                </tr>
+                interac++;
+            }
+        }
+
     </tbody>
 </table>
 

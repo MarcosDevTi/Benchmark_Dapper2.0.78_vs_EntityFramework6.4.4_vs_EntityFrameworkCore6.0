@@ -41,7 +41,7 @@ namespace EfVsDapper.Mvc.Controllers
             ViewBag.CountProducts = _resultService.CountProducts();
             ViewBag.CountCustomers = _resultService.CountCustomers();
 
-            var sequenceAmountInteractions = new[] { 1, 5, 50, 100, 500, 1000, 5000, 10000, 20000};
+            var sequenceAmountInteractions = new[] { 1, 5, 50, 100, 500, 1000, 5000, 10000, 20000 };
             return View(_resultService.GetResults(OperationType.InsertComplex, sequenceAmountInteractions));
         }
 
