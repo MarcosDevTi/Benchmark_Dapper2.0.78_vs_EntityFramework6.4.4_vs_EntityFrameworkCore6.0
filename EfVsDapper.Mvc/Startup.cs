@@ -21,8 +21,8 @@ namespace EfVsDapper.Mvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<DotNetCoreContext>(_ => _.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB; 
-                           Initial Catalog=CamparationEntityDapper; Integrated Security=True"), ServiceLifetime.Transient);
+            services.AddDbContext<DotNetCoreContext>(_ =>
+                _.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<DapperContext>();
             services.AddScoped<Ef6Context>();
             services.AddTransient<IDapperService, DapperService>();

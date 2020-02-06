@@ -1,19 +1,18 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace EntityFrameworkVsCoreDapper.Context
 {
-    public class DapperContext: IDisposable
+    public class DapperContext : IDisposable
     {
         public IDbConnection OpenedConnection { get; set; }
+        private readonly IConfiguration _configuration;
 
-        public DapperContext()
+        public DapperContext(IConfiguration _configuration)
         {
-            var connStrings = "Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=CamparationEntityDapper; Integrated Security=True";
-            OpenedConnection = new SqlConnection(connStrings); ;
+            OpenedConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")); ;
             OpenedConnection.Open();
         }
 

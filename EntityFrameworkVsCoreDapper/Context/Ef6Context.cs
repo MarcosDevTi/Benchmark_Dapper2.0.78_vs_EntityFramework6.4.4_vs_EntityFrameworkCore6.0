@@ -4,7 +4,7 @@ namespace EntityFrameworkVsCoreDapper.EntityFramework
 {
     public class Ef6Context : DbContext
     {
-        public Ef6Context() : base("Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog = CamparationEntityDapper; Integrated Security = True")
+        public Ef6Context() : base("DefaultConnection")
         {
 
         }
