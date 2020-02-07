@@ -31,6 +31,15 @@ namespace EfVsDapper.Mvc
             services.AddTransient<ConsoleHelper>();
             services.AddTransient<ResultService>();
             services.AddSingleton<MessageService>();
+
+            var miniprofilerConectionString = this.Configuration.GetConnectionString("MiniProfilerDatabase");
+
+            services.AddMiniProfiler(options =>
+            {
+                options.PopupRenderPosition = StackExchange.Profiling.RenderPosition.BottomLeft;
+                options.PopupShowTimeWithChildren = true;
+            })
+          .AddEntityFramework();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -47,6 +56,8 @@ namespace EfVsDapper.Mvc
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseMiniProfiler();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using StackExchange.Profiling;
+using StackExchange.Profiling.Data;
 using System;
 using System.Data;
 
@@ -12,7 +14,7 @@ namespace EntityFrameworkVsCoreDapper.Context
 
         public DapperContext(IConfiguration _configuration)
         {
-            OpenedConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")); ;
+            OpenedConnection = new ProfiledDbConnection(new SqlConnection(_configuration.GetConnectionString("DefaultConnection")), MiniProfiler.Current);
             OpenedConnection.Open();
         }
 
