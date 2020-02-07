@@ -1,0 +1,22 @@
+﻿@model (string Sql, string Title)
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Sql generated</h1>
+
+<pre style="font-family:Consolas;font-size:18px;color:black;background:white;">Customers.<span style="color:#74531f;">Where</span>(<span style="color:#1f377f;">c</span>&nbsp;=&gt;&nbsp;<span style="color:#1f377f;">c</span>.Address.Country&nbsp;!=&nbsp;<span style="color:#a31515;">&quot;Brazil&quot;</span>&nbsp;&amp;&amp;&nbsp;<span style="color:#1f377f;">c</span>.Products.<span style="color:#74531f;">Count</span>()&nbsp;&gt;&nbsp;50)
+</pre>
+
+<hr />
+@Html.ActionLink("Ef Core", "GetCustomersWhereAddressCountryAndProductsCount", "Queries", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Ef 6", "GetCustomersEf6WhereAddressCountryAndProductsCount", "Queries", null, new { @class = "btn btn-primary" })
+
+
+
+
+<pre class="mt-4">
+@Model.Sql
+</pre>
+
+

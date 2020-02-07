@@ -1,0 +1,11 @@
+﻿@model (string Query, int Num)
+@{
+    ViewData["Title"] = "GetCustomersWhereAddressCountryAndProductsCount";
+}
+
+<pre style="font-family:Consolas;font-size:13px;color:black;background:white;">Customers.<span style="color:#74531f;">Where</span>(<span style="color:#1f377f;">c</span>&nbsp;=&gt;&nbsp;<span style="color:#1f377f;">c</span>.Address.Country&nbsp;!=&nbsp;<span style="color:#a31515;">&quot;Brazil&quot;</span>&nbsp;&amp;&amp;&nbsp;<span style="color:#1f377f;">c</span>.Products.<span style="color:#74531f;">Count</span>()&nbsp;&gt;&nbsp;50)
+</pre>
+
+<pre>
+@Model.Query
+</pre>

@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Diagnostics;
 
 namespace EntityFrameworkVsCoreDapper.EntityFramework
 {
@@ -6,6 +7,7 @@ namespace EntityFrameworkVsCoreDapper.EntityFramework
     {
         public Ef6Context() : base("DefaultConnection")
         {
+            Database.Log = (query) => Debug.Write(query);
 
         }
         public DbSet<Customer> Customers { get; set; }
