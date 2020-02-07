@@ -3,10 +3,15 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Sql generated</h1>
+<h1>EntityFramework Sql Generated</h1>
 
-<pre style="font-family:Consolas;font-size:18px;color:black;background:white;">Customers.<span style="color:#74531f;">Where</span>(<span style="color:#1f377f;">c</span>&nbsp;=&gt;&nbsp;<span style="color:#1f377f;">c</span>.Address.Country&nbsp;!=&nbsp;<span style="color:#a31515;">&quot;Brazil&quot;</span>&nbsp;&amp;&amp;&nbsp;<span style="color:#1f377f;">c</span>.Products.<span style="color:#74531f;">Count</span>()&nbsp;&gt;&nbsp;50)
-</pre>
+
+<pre style="font-family:Consolas;font-size:18px;color:black;background:white;"><span style="color:blue;">var</span>&nbsp;<span style="color:#1f377f;">query</span>&nbsp;=&nbsp;_context.Customers.<span style="color:#74531f;">Where</span>(<span style="color:#1f377f;">c</span>&nbsp;=&gt;&nbsp;<span style="color:#1f377f;">c</span>.Address.Country&nbsp;==&nbsp;<span style="color:#a31515;">&quot;Brazil&quot;</span>&nbsp;&amp;&amp;&nbsp;<span style="color:#1f377f;">c</span>.Products.<span style="color:#74531f;">Count</span>()&nbsp;&gt;&nbsp;50).<span style="color:#74531f;">Select</span>(<span style="color:#1f377f;">_</span>&nbsp;=&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">new</span>&nbsp;{&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;=&nbsp;<span style="color:#1f377f;">_</span>.FirstName,&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#1f377f;">_</span>.Address.City,&nbsp;TotalPrice&nbsp;=&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#1f377f;">_</span>.Products.<span style="color:#74531f;">Sum</span>(<span style="color:#1f377f;">p</span>&nbsp;=&gt;&nbsp;<span style="color:#1f377f;">p</span>.Price)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});</pre>
 
 <hr />
 @Html.ActionLink("Ef Core", "GetCustomersWhereAddressCountryAndProductsCount", "Queries", null, new { @class = "btn btn-primary" })
@@ -14,9 +19,16 @@
 
 
 
+<div class="row">
+    <div class="col-md-8">
+        <pre class="mt-4" style="font-size:18px;">
+        @Model.Sql
+        </pre>
+    </div>
+    <div class="col-md-4">
+        <img src="~/images/customers_dependency.PNG" />
+    </div>
+</div>
 
-<pre class="mt-4">
-@Model.Sql
-</pre>
 
 

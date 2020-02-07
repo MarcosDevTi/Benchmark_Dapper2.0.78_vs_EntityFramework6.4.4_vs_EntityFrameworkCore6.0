@@ -21,14 +21,21 @@ namespace EfVsDapper.Mvc.Controllers
 
         public IActionResult GetCustomersWhereAddressCountryAndProductsCount()
         {
-            var query = _dotNetCoreContext.Customers.Where(c => c.Address.Country != "Brazil" && c.Products.Count() > 50);
+            var query = _dotNetCoreContext.Customers.Where(c => c.Address.Country == "Brazil" && c.Products.Count() > 50).Select(_ =>
+            new { 
+                Name = _.FirstName, 
+                _.Address.City, TotalPrice = 
+                _.Products.Sum(p => p.Price) 
+            });
             var result = query.ToSql();
-            return RedirectToAction("Index", new { Sql = result, Title= "Ef Core" });
+            return RedirectToAction("Index", new { Sql = result, Title = "Ef Core" });
         }
 
         public IActionResult GetCustomersEf6WhereAddressCountryAndProductsCount()
         {
-            var query = _ef6Context.Customers.Where(c => c.Address.Country != "Brazil" && c.Products.Count() > 50);
+            var query = _ef6Context.Customers.Where(c => c.Address.Country == "Brazil" && c.Products.Count() > 50).Select(_ =>
+            new { Name = _.FirstName, _.Address.City, TotalPrice = _.Products.Sum(p => p.Price) }
+            );
             var sql = query.ToString();
 
             return RedirectToAction("Index", new { Sql = sql, Title = "Ef 6" });
