@@ -32,7 +32,7 @@ namespace EfVsDapper.Mvc.Controllers
             ViewBag.CountProducts = _resultService.CountProducts();
             ViewBag.CountCustomers = _resultService.CountCustomers();
 
-            var sequenceAmountInteractions = new[] { 1, 5, 50, 200, 1000, 20000, 1000000 };
+            var sequenceAmountInteractions = new[] { 1, 5, 50, 200, 1000, 20000, 1000000, 2000000};
             return View(_resultService.GetResults(OperationType.SelectSingle, sequenceAmountInteractions));
         }
         public IActionResult InsertSingles()
@@ -41,7 +41,7 @@ namespace EfVsDapper.Mvc.Controllers
             ViewBag.CountProducts = _resultService.CountProducts();
             ViewBag.CountCustomers = _resultService.CountCustomers();
 
-            var sequenceAmountInteractions = new[] { 1, 5, 50, 200, 1000, 50000, 1000000 };
+            var sequenceAmountInteractions = new[] { 1, 5, 50, 200, 1000, 50000 };
             return View(_resultService.GetResults(OperationType.InsertSingle, sequenceAmountInteractions));
         }
 

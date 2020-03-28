@@ -33,6 +33,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         public TimeSpan InsertSingleProducts(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
+            var aa = new ListTests().ObtenirListProductsAleatoire(interactions, null);
 
             new ListTests().ObtenirListProductsAleatoire(interactions, null).ForEach(_ => _ef6Context.Products.Add(_));
             _ef6Context.SaveChanges();

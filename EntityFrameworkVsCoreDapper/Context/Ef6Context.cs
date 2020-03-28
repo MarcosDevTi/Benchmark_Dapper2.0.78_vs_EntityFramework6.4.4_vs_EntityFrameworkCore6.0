@@ -5,7 +5,7 @@ namespace EntityFrameworkVsCoreDapper.EntityFramework
 {
     public class Ef6Context : DbContext
     {
-        public Ef6Context() : base("DefaultConnection")
+        public Ef6Context() : base("CamparationEntityDapper")
         {
             Database.Log = (query) => Debug.Write(query);
 
