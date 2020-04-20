@@ -1,5 +1,6 @@
 ﻿using EntityFrameworkVsCoreDapper.EntityFramework;
 using EntityFrameworkVsCoreDapper.Extensions;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -67,7 +68,14 @@ namespace EntityFrameworkVsCoreDapper.Results
             }
             else
             {
-                SaveChangementResult(resultTracked, tempoResult, ramDiference);
+                if (typeTransaction == TypeTransaction.EfCoreAsNoTracking || typeTransaction == TypeTransaction.EfCoreAsNoTrackingSqlHard)
+                {
+                    _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+                }
+
+                SaveChangementResult(_netcoreContext.Results.FirstOrDefault(_ =>
+        _.Amount == amount && _.OperationType == operationType && _.TypeTransaction == typeTransaction), tempoResult, ramDiference);
+
             }
         }
 
@@ -108,10 +116,13 @@ namespace EntityFrameworkVsCoreDapper.Results
             {
                 _netcoreContext.SaveChanges();
             }
+
+
         }
 
         public long CountCustomers() => _netcoreContext.Customers.Count();
         public long CountProducts() => _netcoreContext.Products.Count();
+
         public IEnumerable<ResultView> GetResults(OperationType operationType, params int[] sequenceAmountInteractions)
         {
             var results = new List<ResultView>();
@@ -185,7 +196,6 @@ namespace EntityFrameworkVsCoreDapper.Results
             return result;
         }
 
-
         public string FormatTempoSimplified(TimeSpan? tempo)
         {
             var result = string.Empty;
@@ -206,14 +216,6 @@ namespace EntityFrameworkVsCoreDapper.Results
             }
             return result;
         }
-    }
-
-    public class ResultDetailsCell
-    {
-        public Guid? IdResult { get; set; }
-        public string TempoMax { get; set; }
-        public string TempoMin { get; set; }
-        public double? Ram { get; set; }
     }
 
 }

@@ -5,6 +5,6 @@
         SelectSingle,
         SelectComplex,
         InsertSingle,
-        InsertComplex
+        InsertComplex,
     }
 }

@@ -2,6 +2,7 @@ using EntityFrameworkVsCoreDapper.ConsoleTest;
 using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
 using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.EntityFramework;
+using EntityFrameworkVsCoreDapper.Helpers;
 using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,15 +23,16 @@ namespace EfVsDapper.Mvc
         {
             services.AddControllersWithViews();
             services.AddDbContext<DotNetCoreContext>(_ =>
-                _.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                _.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
             services.AddScoped<DapperContext>();
             services.AddScoped<Ef6Context>();
-            services.AddTransient<IDapperService, DapperService>();
-            services.AddTransient<IEfCoreService, EfCoreService>();
-            services.AddTransient<IEf6Service, Ef6Service>();
-            services.AddTransient<ConsoleHelper>();
-            services.AddTransient<ResultService>();
+            services.AddScoped<IDapperService, DapperService>();
+            services.AddScoped<IEfCoreService, EfCoreService>();
+            services.AddScoped<IEf6Service, Ef6Service>();
+            services.AddScoped<ConsoleHelper>();
+            services.AddScoped<ResultService>();
             services.AddSingleton<MessageService>();
+            services.AddSingleton<ReflectionService>();
 
             var miniprofilerConectionString = this.Configuration.GetConnectionString("MiniProfilerDatabase");
 

@@ -2,7 +2,7 @@
 @model IEnumerable<ResultView>
 
 <div style="display:flex">
-    <div class="mr-lg-5" style="font-size: 20px;font-weight: 700;">Inserts Single Objects</div>
+    <div class="mr-lg-5" style="font-size: 20px;font-weight: 700;">Inserts Complex Objects</div>
 
     <div class="mr-lg-5">Count Products: @ViewBag.CountProducts</div>
     <div>Count Customers: @ViewBag.CountCustomers</div>
@@ -13,11 +13,11 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">Dapper</th>
-            <th scope="col">Ef 6</th>
-            <th scope="col">Ef Core</th>
-            <th scope="col">Ef Core AsNoTracking Sql Command</th>
+            <th style="width: 10%" scope="col">#</th>
+            <th style="width: 30%" scope="col">Dapper</th>
+            <th style="width: 30%" scope="col">Ef 6</th>
+            <th style="width: 30%" scope="col">Ef Core</th>
+            @*<th style="width: 23.75%" scope="col">Ef Core AsNoTracking Sql Command</th>*@
         </tr>
     </thead>
     <tbody>
@@ -31,7 +31,7 @@
                     <cell-result action-retour="InsertComplex" interaction-element="@interac" action-name="InsertCustomerDapper" controller-name="Complex" item-result-view="@item.Dapper"></cell-result>
                     <cell-result action-retour="InsertComplex" interaction-element="@interac" action-name="InsertCustomerEf6" controller-name="Complex" item-result-view="@item.Ef6"></cell-result>
                     <cell-result action-retour="InsertComplex" interaction-element="@interac" action-name="InsertCustomerEfCore" controller-name="Complex" item-result-view="@item.EFCore"></cell-result>
-                    <cell-result action-retour="InsertComplex" interaction-element="@interac" action-name="InsertCustomerEfCoreAsNoTrackingHardSql" controller-name="Complex" item-result-view="@item.EfCoreAsNoTrackingHardSql"></cell-result>
+                    @*<cell-result action-retour="InsertComplex" interaction-element="@interac" action-name="InsertCustomerEfCoreAsNoTrackingHardSql" controller-name="Complex" item-result-view="@item.EfCoreAsNoTrackingHardSql"></cell-result>*@
                 </tr>
                 interac++;
             }

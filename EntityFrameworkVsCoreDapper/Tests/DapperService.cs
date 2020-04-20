@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Bogus;
+using Dapper;
 using Dapper.Contrib.Extensions;
 using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
 using EntityFrameworkVsCoreDapper.Context;
@@ -39,21 +40,24 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         }
         public TimeSpan SelectComplexCustomers(int take)
         {
+            var faker = new Faker();
             var sql = new StringBuilder()
-                .AppendLine("SELECT [t].[Id], [t].[AddressId], [t].[BirthDate], [t].[Email], [t].[FirstName], [t].[LastName], [t].[Status], ")
-                .AppendLine("	   [a0].[Id], [a0].[AdministrativeRegion], [a0].[City], [a0].[Country], [a0].[Number], [a0].[Street], [a0].[ZipCode], ")
-                .AppendLine("	   [p0].[Id], [p0].[Brand], [p0].[CustomerId], [p0].[Description], [p0].[Name], [p0].[OldPrice], [p0].[Price]")
+                .AppendLine("SELECT [t].[Id], [t].[AddressId], [t].[BirthDate], [t].[Email], [t].[FirstName], [t].[LastName], [t].[Status], [a0].[Id], " +
+                "[a0].[AdministrativeRegion], [a0].[City], [a0].[Country], [a0].[Number], [a0].[Street], [a0].[ZipCode], [p0].[Id], [p0].[Brand], [p0].[CustomerId], " +
+                "[p0].[Description], [p0].[Name], [p0].[OldPrice], [p0].[Price]")
                 .AppendLine("FROM (")
                 .AppendLine($"    SELECT TOP({take}) [c].[Id], [c].[AddressId], [c].[BirthDate], [c].[Email], [c].[FirstName], [c].[LastName], [c].[Status]")
                 .AppendLine("    FROM [Customers] AS [c]")
                 .AppendLine("    LEFT JOIN [Address] AS [a] ON [c].[AddressId] = [a].[Id]")
-                .AppendLine("    WHERE ([a].[City] IS NOT NULL AND ([a].[City] LIKE 'North%')) AND EXISTS (")
+                .AppendLine($"    WHERE ((([c].[FirstName] <> N'{faker.Name.FirstName().Replace("'", "")}') OR [c].[FirstName] IS NULL) AND ([a].[City] IS NOT NULL AND NOT ([a].[City]" +
+                $" LIKE N'{faker.Address.City().Replace("'", "")}%'))) AND EXISTS (")
                 .AppendLine("        SELECT 1")
                 .AppendLine("        FROM [Products] AS [p]")
-                .AppendLine("        WHERE ([c].[Id] = [p].[CustomerId]) AND ([p].[Brand] = 'Intelligent'))")
+                .AppendLine($"        WHERE ([c].[Id] = [p].[CustomerId]) AND (([p].[Description] <> N'{faker.Commerce.ProductName().Replace("'", "")}') OR [p].[Description] IS NULL))")
                 .AppendLine(") AS [t]")
                 .AppendLine("LEFT JOIN [Address] AS [a0] ON [t].[AddressId] = [a0].[Id]")
                 .AppendLine("LEFT JOIN [Products] AS [p0] ON [t].[Id] = [p0].[CustomerId]")
+                .AppendLine("ORDER BY [t].[Id], [p0].[Id]")
                 .ToString();
 
             var watch = _consoleHelper.StartChrono();

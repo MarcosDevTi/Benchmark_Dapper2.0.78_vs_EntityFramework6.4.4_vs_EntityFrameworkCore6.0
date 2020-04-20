@@ -12,11 +12,11 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">Dapper</th>
-            <th scope="col">Ef 6</th>
-            <th scope="col">Ef Core</th>
-            <th scope="col">Ef Core AsNoTracking Sql Command</th>
+            <th style="width: 10%" scope="col">#</th>
+            <th style="width: 30%" scope="col">Dapper</th>
+            <th style="width: 30%" scope="col">Ef 6</th>
+            <th style="width: 30%" scope="col">Ef Core</th>
+            @*<th style="width: 23.75%" scope="col">Ef Core AsNoTracking Sql Command</th>*@
         </tr>
     </thead>
     <tbody>
@@ -30,7 +30,7 @@
                     <cell-result controller-name="Singles" interaction-element="@interac" action-retour="InsertSingles" action-name="InsertProductDapper" item-result-view="@item.Dapper"></cell-result>
                     <cell-result controller-name="Singles" interaction-element="@interac" action-retour="InsertSingles" action-name="InsertProductEf6" item-result-view="@item.Ef6"></cell-result>
                     <cell-result controller-name="Singles" interaction-element="@interac" action-retour="InsertSingles" action-name="InsertProductEfCore" item-result-view="@item.EFCore"></cell-result>
-                    <cell-result controller-name="Singles" interaction-element="@interac" action-retour="InsertSingles" action-name="InsertProductEfCoreAsNoTrackingHardSql" item-result-view="@item.EfCoreAsNoTrackingHardSql"></cell-result>
+                    @*<cell-result controller-name="Singles" interaction-element="@interac" action-retour="InsertSingles" action-name="InsertProductEfCoreAsNoTrackingHardSql" item-result-view="@item.EfCoreAsNoTrackingHardSql"></cell-result>*@
                 </tr>
                 interac++;
             }

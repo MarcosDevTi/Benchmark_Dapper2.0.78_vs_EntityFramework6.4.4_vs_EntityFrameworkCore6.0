@@ -12,11 +12,11 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">Dapper</th>
-            <th scope="col">Ef 6</th>
-            <th scope="col">Ef Core</th>
-            <th scope="col">Ef Core AsNoTracking</th>
+            <th style="width: 5%" scope="col">#</th>
+            <th style="width: 23.75%" scope="col">Dapper</th>
+            <th style="width: 23.75%" scope="col">Ef 6</th>
+            <th style="width: 23.75%" scope="col">Ef Core</th>
+            <th style="width: 23.75%" scope="col">Ef Core AsNoTracking</th>
         </tr>
     </thead>
     <tbody>
@@ -27,10 +27,10 @@
             {
                 <tr>
                     <td>@item.EFCore.Interactions</td>
-                    <cell-result action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductDapper" controller-name="Complex" item-result-view="@item.Dapper"></cell-result>
-                    <cell-result action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductEf6" controller-name="Complex" item-result-view="@item.Ef6"></cell-result>
-                    <cell-result action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductEfCore" controller-name="Complex" item-result-view="@item.EFCore"></cell-result>
-                    <cell-result action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductEfCoreAsNoTracking" controller-name="Complex" item-result-view="@item.EfCoreAsNoTracking"></cell-result>
+                    <cell-result class="col-sm-2" action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductDapper" controller-name="Complex" item-result-view="@item.Dapper"></cell-result>
+                    <cell-result class="col-sm-3" action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductEf6" controller-name="Complex" item-result-view="@item.Ef6"></cell-result>
+                    <cell-result class="col-sm-3" action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductEfCore" controller-name="Complex" item-result-view="@item.EFCore"></cell-result>
+                    <cell-result class="col-sm-3" action-retour="SelectComplex" interaction-element="@interac" action-name="SelectProductEfCoreAsNoTracking" controller-name="Complex" item-result-view="@item.EfCoreAsNoTracking"></cell-result>
                 </tr>
                 interac++;
             }

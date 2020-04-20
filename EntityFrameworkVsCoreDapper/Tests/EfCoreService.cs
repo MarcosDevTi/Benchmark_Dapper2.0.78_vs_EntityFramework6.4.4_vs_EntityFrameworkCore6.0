@@ -1,5 +1,7 @@
-﻿using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
+﻿using Bogus;
+using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
 using EntityFrameworkVsCoreDapper.EntityFramework;
+using EntityFrameworkVsCoreDapper.Extensions;
 using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -70,27 +72,35 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
         }
         public TimeSpan SelectComplexCustomers(int take)
         {
+            var faker = new Faker();
             var watch = _consoleHelper.StartChrono();
 
-            var teste = _netcoreContext.Customers
-                .Include(_ => _.Address)
-                .Include(_ => _.Products)
-                .Take(take).ToList();
+            var teste = _netcoreContext.Customers.Include(_ => _.Address).Include(_ => _.Products)
+                .Where(_ => _.FirstName != "Test First Name" && !_.Address.City.StartsWith(faker.Address.City().Replace("'", "")) && 
+                _.Products.Count(_ => _.Description != faker.Commerce.ProductName().Replace("'", "")) > 0)
+                .Take(take);
+
+            var res = teste.ToList();
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core").Tempo;
             _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.SelectComplex);
             return tempoResult;
         }
         public TimeSpan SelectComplexCustomersAsNoTracking(int take)
         {
+            var faker = new Faker();
             var watch = _consoleHelper.StartChrono();
 
             _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             var teste = _netcoreContext.Customers
-                .Where(_ => _.Address.City.StartsWith("North") && _.Products.Count(_ => _.Brand == "Intelligent") > 0)
-              .Include(_ => _.Address)
-              .Include(_ => _.Products)
-              .Take(take)
-              .ToList();
+                .Include(_ => _.Address)
+                .Include(_ => _.Products)
+                .Where(_ => _.FirstName != "Test First Name" && !_.Address.City.StartsWith(faker.Address.City().Replace("'", "")) && _.Products.Any(_ =>
+                _.Description != faker.Commerce.ProductName().Replace("'", "")))
+                .Take(take);
+
+            
+
+            var aa = teste.ToList();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core AsNoTracking").Tempo;
             _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTracking, OperationType.SelectComplex);

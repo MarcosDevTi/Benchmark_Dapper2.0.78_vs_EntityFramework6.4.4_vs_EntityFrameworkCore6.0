@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mvc Core 3.1.1</title>
+    <title>.Net Core 3.1.1</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" />
@@ -63,8 +63,9 @@
                                 Queries
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-controller="Queries" asp-action="Index">Customers.Where(c => c.Address.Country != "Brazil" && c.Products.Count() > 50)</a>
-                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" asp-controller="Queries" asp-action="Index">Join Customers - Where Address and Products</a>
+
+                                <a class="dropdown-item" asp-controller="Queries" asp-action="JoinProductWithCustomersAndAddressIndex">Join Product With Customers And Address Query sintax</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Something else here</a>
                             </div>
@@ -84,6 +85,10 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Singles" asp-action="InsertSingles">Insert Singles</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Reflection" asp-action="Index">Reflection</a>
                         </li>
                         <li class="nav-item">
                             <a href="/Complex/InsertCustomerDapper?interactions=200000" class="badge badge-primary">

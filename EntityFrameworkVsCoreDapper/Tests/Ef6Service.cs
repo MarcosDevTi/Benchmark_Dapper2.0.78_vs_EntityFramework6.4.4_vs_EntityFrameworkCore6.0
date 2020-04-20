@@ -18,7 +18,7 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _ef6Context = ef6Context;
             _resultService = resultService;
         }
-       
+
         public TimeSpan InsertComplexCustomers(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
@@ -48,10 +48,12 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             var watch = _consoleHelper.StartChrono();
 
             var teste = _ef6Context.Customers
-                .Include(_ => _.Address)
-                 .Include(_ => _.Products)
-                 .Where(_ => _.Address.City.StartsWith("North") && _.Products.Any(_ => _.Brand == "Intelligent"))
-                .Take(take).ToList();
+                .Where(_ => _.FirstName != "Teste firstName" && !_.Address.City.StartsWith("Teste") && _.Products.Any(_ => _.Description != "desc test"))
+                .Take(take);
+
+            var sql = teste.ToString();
+
+            teste.ToList();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF 6").Tempo;
             _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.SelectComplex);

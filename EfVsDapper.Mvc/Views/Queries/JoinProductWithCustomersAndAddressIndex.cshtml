@@ -1,0 +1,38 @@
+﻿@model (string Sql, string Title)
+@{
+    ViewData["Title"] = "JoinProductWithCustomersAndAddressIndex";
+}
+
+<h2>Join Product With Customers And Address Query sintax</h2>
+
+<pre style="font-family:Consolas;font-size:18px;color:black;background:white;"><span style="color:blue;">var</span>&nbsp;<span style="color:#1f377f;">query</span>&nbsp;=&nbsp;<span style="color:blue;">from</span>&nbsp;p&nbsp;<span style="color:blue;">in</span>&nbsp;_dotNetCoreContext.Products
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">join</span>&nbsp;c&nbsp;<span style="color:blue;">in</span>&nbsp;_dotNetCoreContext.Customers
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">on</span>&nbsp;p.CustomerId&nbsp;<span style="color:blue;">equals</span>&nbsp;c.Id
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">where</span>&nbsp;c.LastName&nbsp;==&nbsp;<span style="color:#a31515;">&quot;LastName&nbsp;test&quot;</span>&nbsp;&amp;&amp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p.Name&nbsp;!=&nbsp;<span style="color:#a31515;">&quot;Name&nbsp;product&nbsp;Test&quot;</span>&nbsp;&amp;&amp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c.Address.Street&nbsp;==&nbsp;<span style="color:#a31515;">&quot;Name&nbsp;street&nbsp;test&quot;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">select</span>&nbsp;<span style="color:blue;">new</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NameProduct&nbsp;=&nbsp;p.Name,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PriceProduct&nbsp;=&nbsp;p.Price,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CustomerName&nbsp;=&nbsp;c.FirstName&nbsp;+&nbsp;<span style="color:#a31515;">&quot;&nbsp;&quot;</span>&nbsp;+&nbsp;c.LastName,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StreetName&nbsp;=&nbsp;c.Address.Street
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">var</span>&nbsp;<span style="color:#1f377f;">result</span>&nbsp;=&nbsp;<span style="color:#1f377f;">query</span>.<span style="color:#74531f;">ToSql</span>();</pre>
+
+
+@Html.ActionLink("Ef Core", "JoinProductWithCustomersAndAddressEfCore", "Queries", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Ef 6", "JoinProductWithCustomersAndAddressEf6", "Queries", null, new { @class = "btn btn-primary" })
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <pre class="mt-4" style="font-size:18px;">
+        @Model.Sql
+        </pre>
+    </div>
+    <div class="col-md-4">
+        <img src="~/images/customers_dependency.PNG" />
+    </div>
+</div>

@@ -1,0 +1,40 @@
+﻿@model EntityFrameworkVsCoreDapper.Results.ReflectionResult
+
+
+
+
+
+
+
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/CreateListReflection/?iterations=1000000">1.000.000 Interactions</a>
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/CreateListReflection/?iterations=10000000">10.000.000 Interactions</a>
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/CreateListReflection/?iterations=100000000">100.000.000 Interactions</a>
+
+        <h3>Create List with Reflection: @Model?.ListReflection</h3>
+    </li>
+    <li class="list-group-item">
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/CreateListNormaly/?iterations=1000000">1.000.000 Interactions</a>
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/CreateListNormaly/?iterations=10000000">10.000.000 Interactions</a>
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/CreateListNormaly/?iterations=100000000">100.000.000 Interactions</a>
+
+        <h3>Create List Normally: @Model?.ListWithoutReflection</h3>
+    </li>
+    <li class="list-group-item">
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/StaticMethod/?iterations=1000000">1.000.000 Interactions</a>
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/StaticMethod/?iterations=10000000">10.000.000 Interactions</a>
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/StaticMethod/?iterations=100000000">100.000.000 Interactions</a>
+
+        <h3>Call Add Normally: @Model?.StaticMethod</h3>
+    </li>
+    <li class="list-group-item">
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/ReflectionMethod/?iterations=1000000">1.000.000 Interactions</a>
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/ReflectionMethod/?iterations=10000000">10.000.000 Interactions</a>
+        <a class="btn btn-outline-primary btn-sm" href="/Reflection/ReflectionMethod/?iterations=100000000">100.000.000 Interactions</a>
+
+        <h3>Call Add with Reflection: @Model?.ReflectionMethod</h3>
+    </li>
+
+</ul>

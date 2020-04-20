@@ -6,6 +6,6 @@
         Ef6,
         EfCore,
         EfCoreAsNoTracking,
-        EfCoreAsNoTrackingSqlHard
+        EfCoreAsNoTrackingSqlHard,
     }
 }
