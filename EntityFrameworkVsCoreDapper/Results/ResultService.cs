@@ -1,6 +1,7 @@
 ﻿using EntityFrameworkVsCoreDapper.EntityFramework;
 using EntityFrameworkVsCoreDapper.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -123,6 +124,20 @@ namespace EntityFrameworkVsCoreDapper.Results
         public long CountCustomers() => _netcoreContext.Customers.Count();
         public long CountProducts() => _netcoreContext.Products.Count();
 
+        public ResultViewChart GetResultsChart(OperationType operationType, params int[] sequenceAmountInteractions)
+        {
+            var result = new ResultViewChart
+            {
+                Dapper = GetTempoChart(sequenceAmountInteractions, TypeTransaction.Dapper, operationType),
+                Ef6 = GetTempoChart(sequenceAmountInteractions, TypeTransaction.Ef6, operationType),
+                EFCore = GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCore, operationType),
+                EfCoreAsNoTracking = GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCoreAsNoTracking, operationType),
+                EfCoreAsNoTrackingHardSql = GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCoreAsNoTrackingSqlHard, operationType)
+            };
+
+            return result;
+        }
+
         public IEnumerable<ResultView> GetResults(OperationType operationType, params int[] sequenceAmountInteractions)
         {
             var results = new List<ResultView>();
@@ -159,6 +174,17 @@ namespace EntityFrameworkVsCoreDapper.Results
                 });
             }
             return results;
+        }
+
+        public string GetTempoChart(int[] interactions, TypeTransaction typeTransaction, OperationType operationType)
+        {
+            var result = _netcoreContext.Results
+                .Where(_ => _.OperationType == operationType && _.TypeTransaction == typeTransaction && interactions.Contains(_.Amount))
+                .OrderBy(_ => _.Amount)
+                .Select(_ => _.TempoMin.TotalMilliseconds)
+                .ToArray();
+
+            return JsonConvert.SerializeObject(result);
         }
 
         public ResultDetailsCell GetTempo(int amount, TypeTransaction typeTransaction, OperationType operationType)

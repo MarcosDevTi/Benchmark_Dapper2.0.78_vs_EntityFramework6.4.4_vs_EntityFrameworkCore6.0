@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using EntityFrameworkVsCoreDapper.Results
+@using EfVsDapper.Mvc.Helpers
+@using Newtonsoft.Json
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -90,6 +93,23 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Reflection" asp-action="Index">Reflection</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Reports
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index" asp-route-interactions="@InteractionsService.SelectComplexJson" , asp-route-operationType="@OperationType.SelectComplex">Select Complex</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index" asp-route-interactions="@InteractionsService.SelectSingleJson" , asp-route-operationType="@OperationType.SelectSingle">Select Singles</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index" asp-route-interactions="@InteractionsService.InsertComplexJson" , asp-route-operationType="@OperationType.InsertComplex">Insert Complex</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index" asp-route-interactions="@InteractionsService.InsertSingleJson" , asp-route-operationType="@OperationType.InsertSingle">Insert Singles</a>
+                            </div>
+                        </li>
+
                         <li class="nav-item">
                             <a href="/Complex/InsertCustomerDapper?interactions=200000" class="badge badge-primary">
                                 <i class="fas fa-sync-alt"></i> Insert 200 000 Customers

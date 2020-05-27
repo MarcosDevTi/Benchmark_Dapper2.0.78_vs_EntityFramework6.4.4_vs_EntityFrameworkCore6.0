@@ -1,6 +1,4 @@
-using EntityFrameworkVsCoreDapper.EntityFramework;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -19,8 +17,8 @@ namespace EfVsDapper.Mvc
             {
                 try
                 {
-                    var context = scope.ServiceProvider.GetService<DotNetCoreContext>();
-                    context.Database.Migrate();
+                    //var context = scope.ServiceProvider.GetService<DotNetCoreContext>();
+                    //context.Database.Migrate();
                 }
                 catch (Exception ex)
                 {

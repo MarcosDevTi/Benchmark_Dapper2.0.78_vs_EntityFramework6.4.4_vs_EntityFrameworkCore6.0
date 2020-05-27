@@ -1,0 +1,39 @@
+﻿@using EntityFrameworkVsCoreDapper.Results
+@model ResultViewChart
+
+<canvas id="myChart" width="400" height="150"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'horizontalBar',
+        data: {
+            labels: @ViewBag.Interactions,
+            datasets: [
+                {
+                    label: "Dapper",
+                    backgroundColor: "#ff5722",
+                    data: @Model.Dapper
+                }, {
+                    label: "Ef 6",
+                    backgroundColor: "#8bc34a",
+                    data: @Model.Ef6
+                }, {
+                    label: "Ef Core",
+                    backgroundColor: "#607d8b",
+                    data: @Model.EFCore
+                }, {
+                    label: "Ef Core As No Tracking",
+                    backgroundColor: "#03a9f4",
+                    data: @Model.EfCoreAsNoTracking
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: '@ViewBag.OperationType'
+            }
+        }
+    });
+</script>

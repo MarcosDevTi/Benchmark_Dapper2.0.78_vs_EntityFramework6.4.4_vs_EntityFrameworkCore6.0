@@ -1,4 +1,5 @@
-﻿using EntityFrameworkVsCoreDapper.ConsoleTest;
+﻿using EfVsDapper.Mvc.Helpers;
+using EntityFrameworkVsCoreDapper.ConsoleTest;
 using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -32,8 +33,7 @@ namespace EfVsDapper.Mvc.Controllers
             ViewBag.CountProducts = _resultService.CountProducts();
             ViewBag.CountCustomers = _resultService.CountCustomers();
 
-            var sequenceAmountInteractions = new[] { 1, 50, 200, 1000, 50000, 100000, 400000 };
-            return View(_resultService.GetResults(OperationType.SelectSingle, sequenceAmountInteractions));
+            return View(_resultService.GetResults(OperationType.SelectSingle, InteractionsService.SelectSingle));
         }
         public IActionResult InsertSingles()
         {
@@ -41,8 +41,7 @@ namespace EfVsDapper.Mvc.Controllers
             ViewBag.CountProducts = _resultService.CountProducts();
             ViewBag.CountCustomers = _resultService.CountCustomers();
 
-            var sequenceAmountInteractions = new[] { 1, 5, 200, 500, 1000, 5000, 50000 };
-            return View(_resultService.GetResults(OperationType.InsertSingle, sequenceAmountInteractions));
+            return View(_resultService.GetResults(OperationType.InsertSingle, InteractionsService.InsertSingle));
         }
 
         public IActionResult SelectProductDapper(int interactions)
