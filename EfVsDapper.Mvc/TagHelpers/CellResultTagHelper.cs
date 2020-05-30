@@ -4,11 +4,9 @@ using System.Text;
 
 namespace EfVsDapper.Mvc.TagHelpers
 {
-
     [HtmlTargetElement("cell-result")]
     public class CellResultTagHelper : TagHelper
     {
-
         public string ActionName { get; set; }
         public string ControllerName { get; set; }
         public string ActionRetour { get; set; }

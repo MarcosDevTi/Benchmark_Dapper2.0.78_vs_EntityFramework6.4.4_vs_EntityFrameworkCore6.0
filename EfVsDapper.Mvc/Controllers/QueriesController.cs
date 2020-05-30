@@ -26,13 +26,6 @@ namespace EfVsDapper.Mvc.Controllers
 
         public IActionResult GetCustomersWhereAddressCountryAndProductsCount()
         {
-            //var customer = _dotNetCoreContext.Customers.Include(_ => _.Address)
-            //    .FirstOrDefault(_ => _.Id == new Guid("39741DC6-D9EA-4438-9B55-00000B1248D5"));
-            //customer.Address.City = "Cidade teste";
-            //_dotNetCoreContext.SaveChanges();
-
-
-
             var query = _dotNetCoreContext.Customers.Where(c => c.Address.Country == "Brazil" && c.Products.Count() > 50).Select(_ =>
             new
             {
@@ -60,10 +53,6 @@ namespace EfVsDapper.Mvc.Controllers
             var sql = query.ToString();
             return RedirectToAction("Index", new { Sql = sql, Title = "Ef 6" });
         }
-
-
-
-
 
         public IActionResult JoinProductWithCustomersAndAddressEfCore()
         {

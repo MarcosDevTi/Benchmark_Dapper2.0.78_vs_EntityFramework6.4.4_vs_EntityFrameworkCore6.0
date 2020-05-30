@@ -68,7 +68,6 @@ namespace EfVsDapper.Mvc.Controllers
 
         public IActionResult ReflectionMethod(int iterations)
         {
-
             var list = new List<int>();
 
             Type listType = typeof(List<int>);

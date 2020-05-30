@@ -22,6 +22,11 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
+    <Folder Include="Scripts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\chrono.js" />
   </ItemGroup>
 
 

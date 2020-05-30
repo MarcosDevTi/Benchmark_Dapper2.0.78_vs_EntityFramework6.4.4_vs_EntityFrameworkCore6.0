@@ -7,10 +7,8 @@ namespace EntityFrameworkVsCoreDapper.EntityFramework
     public class DotNetCoreContext : DbContext
     {
         public DotNetCoreContext(DbContextOptions<DotNetCoreContext> options)
-            : base(options)
-        {
+            : base(options) { }
 
-        }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Address { get; set; }
         public DbSet<Product> Products { get; set; }

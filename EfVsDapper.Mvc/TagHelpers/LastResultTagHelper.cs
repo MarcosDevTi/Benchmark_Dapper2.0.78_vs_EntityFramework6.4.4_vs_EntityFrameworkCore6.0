@@ -59,6 +59,5 @@ namespace EfVsDapper.Mvc.TagHelpers
             }
             return result;
         }
-
     }
 }
