@@ -1,3 +1,6 @@
+<h3>Insert complex objects</h3>
+<img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/insert complex graph.PNG"> </img>
+
 <h3>Select single objects</h3>
 <img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/SelectSingleObjects.PNG"> </img>
 <div>Dapper 2.0.30</div>
