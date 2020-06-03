@@ -1,11 +1,11 @@
-﻿using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
-using EntityFrameworkVsCoreDapper.EntityFramework;
-using EntityFrameworkVsCoreDapper.Results;
-using System;
-using System.Data.Entity;
+﻿using System;
 using System.Linq;
+using EntityFrameworkVsCoreDapper.Context;
+using EntityFrameworkVsCoreDapper.Contracts;
+using EntityFrameworkVsCoreDapper.Helpers;
+using EntityFrameworkVsCoreDapper.Results;
 
-namespace EntityFrameworkVsCoreDapper.ConsoleTest
+namespace EntityFrameworkVsCoreDapper.Tests
 {
     public class Ef6Service : IEf6Service
     {

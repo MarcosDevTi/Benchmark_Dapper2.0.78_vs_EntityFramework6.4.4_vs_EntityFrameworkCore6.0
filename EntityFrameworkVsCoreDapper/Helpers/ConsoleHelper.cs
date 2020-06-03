@@ -1,8 +1,8 @@
-﻿using EntityFrameworkVsCoreDapper.Results;
-using System;
+﻿using System;
 using System.Diagnostics;
+using EntityFrameworkVsCoreDapper.Results;
 
-namespace EntityFrameworkVsCoreDapper.ConsoleTest.Helpers
+namespace EntityFrameworkVsCoreDapper.Helpers
 {
     public class ConsoleHelper
     {

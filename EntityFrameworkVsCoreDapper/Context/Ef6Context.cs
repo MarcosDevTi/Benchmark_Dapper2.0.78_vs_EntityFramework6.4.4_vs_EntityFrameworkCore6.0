@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Diagnostics;
 
-namespace EntityFrameworkVsCoreDapper.EntityFramework
+namespace EntityFrameworkVsCoreDapper.Context
 {
     public class Ef6Context : DbContext
     {

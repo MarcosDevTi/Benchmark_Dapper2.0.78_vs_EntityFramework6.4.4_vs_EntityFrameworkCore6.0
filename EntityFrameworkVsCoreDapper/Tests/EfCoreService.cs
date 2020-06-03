@@ -1,15 +1,15 @@
-﻿using Bogus;
-using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
-using EntityFrameworkVsCoreDapper.EntityFramework;
-using EntityFrameworkVsCoreDapper.Extensions;
-using EntityFrameworkVsCoreDapper.Results;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Bogus;
+using EntityFrameworkVsCoreDapper.Context;
+using EntityFrameworkVsCoreDapper.Contracts;
+using EntityFrameworkVsCoreDapper.Helpers;
+using EntityFrameworkVsCoreDapper.Results;
+using Microsoft.EntityFrameworkCore;
 
-namespace EntityFrameworkVsCoreDapper.ConsoleTest
+namespace EntityFrameworkVsCoreDapper.Tests
 {
     public class EfCoreService : IEfCoreService
     {

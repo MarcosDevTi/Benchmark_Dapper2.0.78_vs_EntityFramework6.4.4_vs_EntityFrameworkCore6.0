@@ -2,7 +2,7 @@
     , timeStopped = null
     , stoppedDuration = 0
     , started = null;
-idP
+idP;
 function clockRunning() {
     var currentTime = new Date()
         , timeElapsed = new Date(currentTime - timeBegan - stoppedDuration)
@@ -18,7 +18,7 @@ function clockRunning() {
 
 
 function startChrono(id) {
-    idP = id
+    idP = id;
 
     if (timeBegan === null) {
         timeBegan = new Date();

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EntityFrameworkVsCoreDapper.ConsoleTest
+namespace EntityFrameworkVsCoreDapper.Contracts
 {
     public interface IDapperService
     {

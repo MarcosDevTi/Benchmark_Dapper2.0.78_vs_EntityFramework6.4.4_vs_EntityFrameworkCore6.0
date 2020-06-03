@@ -1,4 +1,4 @@
-﻿using EntityFrameworkVsCoreDapper.EntityFramework;
+﻿using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -33,7 +33,10 @@ namespace EntityFrameworkVsCoreDapper.Results
         {
             var result = _netcoreContext.Results.Find(id);
             if (result == null) return;
-            _netcoreContext.Results.Remove(_netcoreContext.Results.Find(id));
+            var itemForRemove = _netcoreContext.Results.Find(id);
+            if (itemForRemove == null) return;
+
+            _netcoreContext.Results.Remove(itemForRemove);
             _netcoreContext.SaveChanges();
         }
 
@@ -84,9 +87,9 @@ namespace EntityFrameworkVsCoreDapper.Results
         {
             if (resultsTrackeds.Count() > 1)
             {
-                var bestTempo = resultsTrackeds.Min(_ => _.TempoMin);
-                _netcoreContext.RemoveRange(_netcoreContext.Results.Where(_ => _.TempoMin != bestTempo));
-                _netcoreContext.SaveChanges();
+                //var bestTempo = resultsTrackeds.Min(_ => _.TempoMin);
+                //_netcoreContext.RemoveRange(_netcoreContext.Results.Where(_ => _.TempoMin != bestTempo));
+                //_netcoreContext.SaveChanges();
             }
         }
 

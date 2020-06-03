@@ -2,7 +2,7 @@
 using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.EntityFrameworkCore;
 
-namespace EntityFrameworkVsCoreDapper.EntityFramework
+namespace EntityFrameworkVsCoreDapper.Context
 {
     public class DotNetCoreContext : DbContext
     {

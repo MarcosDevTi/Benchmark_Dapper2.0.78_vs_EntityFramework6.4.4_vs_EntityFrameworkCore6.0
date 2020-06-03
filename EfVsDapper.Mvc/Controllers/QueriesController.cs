@@ -1,7 +1,7 @@
-﻿using EntityFrameworkVsCoreDapper.EntityFramework;
-using EntityFrameworkVsCoreDapper.Extensions;
+﻿using EntityFrameworkVsCoreDapper.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using EntityFrameworkVsCoreDapper.Context;
 
 namespace EfVsDapper.Mvc.Controllers
 {

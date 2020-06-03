@@ -1,8 +1,8 @@
 ﻿using EfVsDapper.Mvc.Helpers;
-using EntityFrameworkVsCoreDapper.ConsoleTest;
 using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using EntityFrameworkVsCoreDapper.Contracts;
 
 namespace EfVsDapper.Mvc.Controllers
 {

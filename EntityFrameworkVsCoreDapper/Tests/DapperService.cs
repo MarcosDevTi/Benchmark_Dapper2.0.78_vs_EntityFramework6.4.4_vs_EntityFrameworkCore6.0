@@ -1,16 +1,17 @@
-﻿using Bogus;
-using Dapper;
-using Dapper.Contrib.Extensions;
-using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
-using EntityFrameworkVsCoreDapper.Context;
-using EntityFrameworkVsCoreDapper.Results;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using Bogus;
+using Dapper;
+using Dapper.Contrib.Extensions;
+using EntityFrameworkVsCoreDapper.Context;
+using EntityFrameworkVsCoreDapper.Contracts;
+using EntityFrameworkVsCoreDapper.Helpers;
+using EntityFrameworkVsCoreDapper.Results;
 
-namespace EntityFrameworkVsCoreDapper.ConsoleTest
+namespace EntityFrameworkVsCoreDapper.Tests
 {
     public class DapperService : IDapperService
     {
@@ -163,4 +164,3 @@ namespace EntityFrameworkVsCoreDapper.ConsoleTest
             _dapperContext.OpenedConnection.Insert(address, transaction);
     }
 }
-

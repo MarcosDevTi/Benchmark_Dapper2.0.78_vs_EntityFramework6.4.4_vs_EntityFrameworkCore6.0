@@ -1,8 +1,8 @@
-﻿using Bogus;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Bogus;
 
-namespace EntityFrameworkVsCoreDapper.ConsoleTest
+namespace EntityFrameworkVsCoreDapper.Tests
 {
     public class ListTests
     {

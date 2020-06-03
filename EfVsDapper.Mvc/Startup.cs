@@ -1,9 +1,8 @@
-using EntityFrameworkVsCoreDapper.ConsoleTest;
-using EntityFrameworkVsCoreDapper.ConsoleTest.Helpers;
 using EntityFrameworkVsCoreDapper.Context;
-using EntityFrameworkVsCoreDapper.EntityFramework;
+using EntityFrameworkVsCoreDapper.Contracts;
 using EntityFrameworkVsCoreDapper.Helpers;
 using EntityFrameworkVsCoreDapper.Results;
+using EntityFrameworkVsCoreDapper.Tests;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
