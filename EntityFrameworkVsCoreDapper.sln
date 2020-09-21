@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFrameworkVsCoreDapper
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfVsDapper.Mvc", "EfVsDapper.Mvc\EfVsDapper.Mvc.csproj", "{CD07D63C-7131-403D-A98D-FD80C7613B5B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Net5", "Net5", "{5609B2FA-BF9A-4F6D-96A6-741E1FA05CDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

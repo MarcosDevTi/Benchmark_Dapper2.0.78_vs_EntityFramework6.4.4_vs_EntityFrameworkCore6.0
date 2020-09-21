@@ -13,12 +13,14 @@ namespace EntityFrameworkVsCoreDapper.Context
         public DbSet<Address> Address { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Result> Results { get; set; }
+        public DbSet<ProductPage> ProductPages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProductMap());
             modelBuilder.ApplyConfiguration(new CustomerMap());
             modelBuilder.ApplyConfiguration(new AddressMap());
+            modelBuilder.ApplyConfiguration(new ProductPageMap());
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

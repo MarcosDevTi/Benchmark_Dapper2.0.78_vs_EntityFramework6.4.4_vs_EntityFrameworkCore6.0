@@ -4,14 +4,16 @@ using EntityFrameworkVsCoreDapper.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EntityFrameworkVsCoreDapper.Migrations
 {
     [DbContext(typeof(DotNetCoreContext))]
-    partial class DotNetCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20200921063916_ProductPagesAdded")]
+    partial class ProductPagesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,24 +145,18 @@ namespace EntityFrameworkVsCoreDapper.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FullDescription")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageLink")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SmallDescription")
-                        .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Id");
 
                     b.ToTable("ProductPages");
                 });

@@ -10,5 +10,7 @@ namespace EntityFrameworkVsCoreDapper
         public decimal OldPrice { get; set; }
         public string Brand { get; set; }
         public Guid? CustomerId { get; set; }
+        public Guid? ProductPageId { get; set; }
+        public ProductPage ProductPage { get; set; }
     }
 }

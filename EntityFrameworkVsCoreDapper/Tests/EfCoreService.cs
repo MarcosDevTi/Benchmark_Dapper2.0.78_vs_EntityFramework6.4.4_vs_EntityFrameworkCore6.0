@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Bogus;
+﻿using Bogus;
 using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.Contracts;
 using EntityFrameworkVsCoreDapper.Helpers;
 using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace EntityFrameworkVsCoreDapper.Tests
 {
@@ -76,7 +76,7 @@ namespace EntityFrameworkVsCoreDapper.Tests
             var watch = _consoleHelper.StartChrono();
 
             var teste = _netcoreContext.Customers.Include(_ => _.Address).Include(_ => _.Products)
-                .Where(_ => _.FirstName != "Test First Name" && !_.Address.City.StartsWith(faker.Address.City().Replace("'", "")) && 
+                .Where(_ => _.FirstName != "Test First Name" && !_.Address.City.StartsWith(faker.Address.City().Replace("'", "")) &&
                 _.Products.Count(_ => _.Description != faker.Commerce.ProductName().Replace("'", "")) > 0)
                 .Take(take);
 
@@ -98,7 +98,7 @@ namespace EntityFrameworkVsCoreDapper.Tests
                 _.Description != faker.Commerce.ProductName().Replace("'", "")))
                 .Take(take);
 
-            
+
 
             var aa = teste.ToList();
 
@@ -164,7 +164,7 @@ namespace EntityFrameworkVsCoreDapper.Tests
             var sql = "INSERT INTO PRODUCTS (Id, Name, Description, Price, OldPrice, Brand, CustomerId) Values" +
                 $"('{product.Id}', '{product.Name}', '{product.Description}', {product.Price.ToString(CultureInfo.CreateSpecificCulture("en-US"))}, " +
                 $"{product.OldPrice.ToString(CultureInfo.CreateSpecificCulture("en-US"))}, '{product.Brand}', {FormatCustomer(product.CustomerId)})";
-            _netcoreContext.Database.ExecuteSqlCommand(sql);
+            _netcoreContext.Database.ExecuteSqlRaw(sql);
         }
 
         private string FormatCustomer(Guid? id)
@@ -177,13 +177,13 @@ namespace EntityFrameworkVsCoreDapper.Tests
         {
             var sql = "Insert into Address (Id, Number, Street, City, Country, ZipCode, AdministrativeRegion) Values" +
                 $"('{address.Id}','{address.Number}', '{address.Street.Replace("'", "")}', '{address.City.Replace("'", "")}', '{address.Country.Replace("'", "")}', '{address.ZipCode}', '{address.AdministrativeRegion}')";
-            _netcoreContext.Database.ExecuteSqlCommand(sql);
+            _netcoreContext.Database.ExecuteSqlRaw(sql);
         }
         public void AddCustomer(Customer customer)
         {
             var sql = "Insert into Customers (Id, FirstName, LastName, Email, Status, BirthDate, AddressId) Values" +
                 $"('{customer.Id}', '{customer.FirstName.Replace("'", "")}', '{customer.LastName.Replace("'", "")}', '{customer.Email}', '{customer.Status}', '{customer.BirthDate}', '{customer.AddressId}')";
-            _netcoreContext.Database.ExecuteSqlCommand(sql);
+            _netcoreContext.Database.ExecuteSqlRaw(sql);
         }
     }
 }

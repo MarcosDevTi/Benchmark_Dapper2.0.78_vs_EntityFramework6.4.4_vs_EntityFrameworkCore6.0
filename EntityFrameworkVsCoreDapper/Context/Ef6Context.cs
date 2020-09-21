@@ -13,5 +13,6 @@ namespace EntityFrameworkVsCoreDapper.Context
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Address> Address { get; set; }
+        public DbSet<ProductPage> ProductPages { get; set; }
     }
 }
