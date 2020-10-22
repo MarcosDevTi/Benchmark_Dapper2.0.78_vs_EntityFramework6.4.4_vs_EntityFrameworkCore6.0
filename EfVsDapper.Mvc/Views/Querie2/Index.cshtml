@@ -1,0 +1,38 @@
+﻿@model (string Sql, string Title)
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Join Customers - Where Address and Products</h2>
+
+<pre style="font-family:Consolas;font-size:19px;color:gainsboro;background:#1e1e1e;"><span style="color:#569cd6;">var</span>&nbsp;<span style="color:#9cdcfe;">query</span>&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;_dotNetCoreContext<span style="color:#b4b4b4;">.</span>Customers<span style="color:#b4b4b4;">.</span><span style="color:#dcdcaa;">Where</span>(<span style="color:#9cdcfe;">c</span>&nbsp;<span style="color:#b4b4b4;">=&gt;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe;">c</span><span style="color:#b4b4b4;">.</span>Address<span style="color:#b4b4b4;">.</span>Country&nbsp;<span style="color:#b4b4b4;">==</span>&nbsp;<span style="color:#d69d85;">&quot;Brazil&quot;</span>&nbsp;<span style="color:#b4b4b4;">&amp;&amp;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe;">c</span><span style="color:#b4b4b4;">.</span>Products<span style="color:#b4b4b4;">.</span><span style="color:#dcdcaa;">Count</span>()&nbsp;<span style="color:#b4b4b4;">&gt;</span>&nbsp;<span style="color:#b5cea8;">50</span>&nbsp;<span style="color:#b4b4b4;">&amp;&amp;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe;">c</span><span style="color:#b4b4b4;">.</span>Products<span style="color:#b4b4b4;">.</span><span style="color:#dcdcaa;">Any</span>(<span style="color:#9cdcfe;">_</span>&nbsp;<span style="color:#b4b4b4;">=&gt;</span>&nbsp;<span style="color:#9cdcfe;">_</span><span style="color:#b4b4b4;">.</span>ProductPage<span style="color:#b4b4b4;">.</span>Title<span style="color:#b4b4b4;">.</span><span style="color:#dcdcaa;">Contains</span>(<span style="color:#d69d85;">&quot;prod&quot;</span>)))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#b4b4b4;">.</span><span style="color:#dcdcaa;">Select</span>(<span style="color:#9cdcfe;">_</span>&nbsp;<span style="color:#b4b4b4;">=&gt;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#569cd6;">new</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;<span style="color:#9cdcfe;">_</span><span style="color:#b4b4b4;">.</span>FirstName,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe;">_</span><span style="color:#b4b4b4;">.</span>Address<span style="color:#b4b4b4;">.</span>City,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TotalPrice&nbsp;<span style="color:#b4b4b4;">=</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe;">_</span><span style="color:#b4b4b4;">.</span>Products<span style="color:#b4b4b4;">.</span><span style="color:#dcdcaa;">Sum</span>(<span style="color:#9cdcfe;">p</span>&nbsp;<span style="color:#b4b4b4;">=&gt;</span>&nbsp;<span style="color:#9cdcfe;">p</span><span style="color:#b4b4b4;">.</span>Price)
+ 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});</pre>
+
+<hr />
+@Html.ActionLink("Ef Core", "GetCustomersProductsProductPageEfCore", "Querie2", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Ef 6", "GetCustomersProductsProductPageEf6", "Querie2", null, new { @class = "btn btn-primary" })
+
+<div class="row">
+    <div class="col-md-8">
+        <pre class="mt-4" style="font-size:18px;">
+        @Model.Sql
+        </pre>
+    </div>
+    <div class="col-md-4">
+        <img src="~/images/customers_dependency.PNG" />
+    </div>
+</div>
+
+
+

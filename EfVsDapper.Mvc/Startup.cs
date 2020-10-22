@@ -1,3 +1,4 @@
+using EfVsDapper.Mvc.Queries;
 using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.Contracts;
 using EntityFrameworkVsCoreDapper.Helpers;
@@ -30,6 +31,7 @@ namespace EfVsDapper.Mvc
             services.AddScoped<IEf6Service, Ef6Service>();
             services.AddScoped<ConsoleHelper>();
             services.AddScoped<ResultService>();
+            services.AddScoped<CustomersWhereAddressCountryAndProductsCount>();
             services.AddSingleton<MessageService>();
             services.AddSingleton<ReflectionService>();
 

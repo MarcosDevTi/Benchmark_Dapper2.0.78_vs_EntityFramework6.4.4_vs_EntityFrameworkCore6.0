@@ -1,4 +1,5 @@
-﻿using EntityFrameworkVsCoreDapper.Context;
+﻿using EfVsDapper.Mvc.Queries;
+using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -9,10 +10,15 @@ namespace EfVsDapper.Mvc.Controllers
     {
         private readonly DotNetCoreContext _dotNetCoreContext;
         private readonly Ef6Context _ef6Context;
-        public QueriesController(DotNetCoreContext dotNetCoreContext, Ef6Context ef6Context)
+        private readonly CustomersWhereAddressCountryAndProductsCount _customersWhereAddressCountryAndProductsCount;
+        public QueriesController(
+            DotNetCoreContext dotNetCoreContext,
+            Ef6Context ef6Context,
+            CustomersWhereAddressCountryAndProductsCount customersWhereAddressCountryAndProductsCount)
         {
             _dotNetCoreContext = dotNetCoreContext;
             _ef6Context = ef6Context;
+            _customersWhereAddressCountryAndProductsCount = customersWhereAddressCountryAndProductsCount;
         }
         public IActionResult Index(string Sql, string Title)
         {
@@ -24,18 +30,21 @@ namespace EfVsDapper.Mvc.Controllers
             return View((Sql, Title));
         }
 
+        public IActionResult CustomersWhereAddressCountryAndProductsCount()
+        {
+            return View();
+        }
+
         public IActionResult GetCustomersWhereAddressCountryAndProductsCount()
         {
-            var query = _dotNetCoreContext.Customers.Where(c => c.Address.Country == "Brazil" && c.Products.Count() > 50).Select(_ =>
-            new
-            {
-                Name = _.FirstName,
-                _.Address.City,
-                TotalPrice =
-                _.Products.Sum(p => p.Price)
-            });
-            var result = query.ToSql();
-            return RedirectToAction("Index", new { Sql = result, Title = "Ef Core" });
+            var result = _customersWhereAddressCountryAndProductsCount.Query(_dotNetCoreContext.Customers).ToSql();
+            return View("CustomersWhereAddressCountryAndProductsCount", new { Sql = result, Title = "Ef Core" });
+        }
+
+        public IActionResult GetCustomersEf6WhereAddressCountryAndProductsCount()
+        {
+            var sql = _customersWhereAddressCountryAndProductsCount.Query(_ef6Context.Customers).ToString();
+            return RedirectToAction("CustomersWhereAddressCountryAndProductsCount", new { Sql = sql, Title = "Ef 6" });
         }
 
         public IActionResult GetCustomersProductsProductPageEfCore()
@@ -78,20 +87,7 @@ namespace EfVsDapper.Mvc.Controllers
         }
 
 
-        public IActionResult GetCustomersEf6WhereAddressCountryAndProductsCount()
-        {
-            var query = _ef6Context.Customers.Where(c => c.Address.Country == "Brazil" && c.Products.Count() > 50).Select(_ =>
-            new
-            {
-                Name = _.FirstName,
-                _.Address.City,
-                TotalPrice =
-                _.Products.Sum(p => p.Price)
-            }
-            );
-            var sql = query.ToString();
-            return RedirectToAction("Index", new { Sql = sql, Title = "Ef 6" });
-        }
+
 
         public IActionResult JoinProductWithCustomersAndAddressEfCore()
         {

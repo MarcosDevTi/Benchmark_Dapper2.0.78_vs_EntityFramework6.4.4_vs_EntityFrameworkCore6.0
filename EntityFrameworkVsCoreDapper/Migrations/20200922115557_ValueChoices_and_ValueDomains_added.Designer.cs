@@ -4,14 +4,16 @@ using EntityFrameworkVsCoreDapper.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EntityFrameworkVsCoreDapper.Migrations
 {
     [DbContext(typeof(DotNetCoreContext))]
-    partial class DotNetCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20200922115557_ValueChoices_and_ValueDomains_added")]
+    partial class ValueChoices_and_ValueDomains_added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

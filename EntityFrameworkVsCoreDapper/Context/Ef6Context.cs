@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using EntityFrameworkVsCoreDapper.Entities;
+using System.Data.Entity;
 using System.Diagnostics;
 
 namespace EntityFrameworkVsCoreDapper.Context
@@ -14,5 +15,7 @@ namespace EntityFrameworkVsCoreDapper.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Address> Address { get; set; }
         public DbSet<ProductPage> ProductPages { get; set; }
+        public DbSet<ValueChoice> ValueChoices { get; set; }
+        public DbSet<ValueDomain> ValueDomains { get; set; }
     }
 }

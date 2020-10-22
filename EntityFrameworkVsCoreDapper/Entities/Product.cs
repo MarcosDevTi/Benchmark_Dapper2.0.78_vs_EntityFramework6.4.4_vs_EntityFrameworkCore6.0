@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EntityFrameworkVsCoreDapper.Entities;
+using System;
 
 namespace EntityFrameworkVsCoreDapper
 {
@@ -11,6 +12,7 @@ namespace EntityFrameworkVsCoreDapper
         public string Brand { get; set; }
         public Guid? CustomerId { get; set; }
         public Guid? ProductPageId { get; set; }
+        public ValueChoice Category { get; set; }
         public ProductPage ProductPage { get; set; }
     }
 }

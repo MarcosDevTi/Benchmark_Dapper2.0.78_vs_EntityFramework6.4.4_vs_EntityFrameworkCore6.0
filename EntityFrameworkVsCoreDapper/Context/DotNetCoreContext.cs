@@ -1,4 +1,5 @@
 ﻿using EntityFrameworkVsCoreDapper.Context.Maps;
+using EntityFrameworkVsCoreDapper.Entities;
 using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,8 @@ namespace EntityFrameworkVsCoreDapper.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<ProductPage> ProductPages { get; set; }
+        public DbSet<ValueChoice> ValueChoices { get; set; }
+        public DbSet<ValueDomain> ValueDomains { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,6 +24,8 @@ namespace EntityFrameworkVsCoreDapper.Context
             modelBuilder.ApplyConfiguration(new CustomerMap());
             modelBuilder.ApplyConfiguration(new AddressMap());
             modelBuilder.ApplyConfiguration(new ProductPageMap());
+            modelBuilder.ApplyConfiguration(new ValueChoiceMap());
+            modelBuilder.ApplyConfiguration(new ValueDomainMap());
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
