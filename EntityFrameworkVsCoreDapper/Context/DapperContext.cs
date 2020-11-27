@@ -10,11 +10,10 @@ namespace EntityFrameworkVsCoreDapper.Context
     public class DapperContext : IDisposable
     {
         public IDbConnection OpenedConnection { get; set; }
-        private readonly IConfiguration _configuration;
 
-        public DapperContext(IConfiguration _configuration)
+        public DapperContext(IConfiguration configuration)
         {
-            OpenedConnection = new ProfiledDbConnection(new SqlConnection(_configuration.GetConnectionString("DefaultConnection")), MiniProfiler.Current);
+            OpenedConnection = new ProfiledDbConnection(new SqlConnection(configuration.GetConnectionString("DefaultConnection")), MiniProfiler.Current);
             OpenedConnection.Open();
         }
 

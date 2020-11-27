@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace EntityFrameworkVsCoreDapper.Results
 {
@@ -29,18 +30,18 @@ namespace EntityFrameworkVsCoreDapper.Results
             return process.PrivateMemorySize64.ConvertBytesToMegabytes();
         }
 
-        public void ClearResult(Guid id)
+        public async Task ClearResult(Guid id)
         {
-            var result = _netcoreContext.Results.Find(id);
+            var result = await _netcoreContext.Results.FindAsync(id);
             if (result == null) return;
-            var itemForRemove = _netcoreContext.Results.Find(id);
+            var itemForRemove = await _netcoreContext.Results.FindAsync(id);
             if (itemForRemove == null) return;
 
             _netcoreContext.Results.Remove(itemForRemove);
-            _netcoreContext.SaveChanges();
+            await _netcoreContext.SaveChangesAsync();
         }
 
-        public void SaveSelect(int amount, TimeSpan tempoResult, double initMemory, TypeTransaction typeTransaction, OperationType operationType)
+        public async Task SaveSelect(int amount, TimeSpan tempoResult, double initMemory, TypeTransaction typeTransaction, OperationType operationType)
         {
             var stopMemory = GetMemory();
             var ramDiference = stopMemory - initMemory;
@@ -51,7 +52,7 @@ namespace EntityFrameworkVsCoreDapper.Results
             _.Amount == amount && _.OperationType == operationType && _.TypeTransaction == typeTransaction);
             ManageResult(resultsTracked);
 
-            var resultTracked = resultsTracked.FirstOrDefault();
+            var resultTracked = await resultsTracked.FirstOrDefaultAsync();
 
             if (resultTracked == null)
             {
@@ -67,8 +68,8 @@ namespace EntityFrameworkVsCoreDapper.Results
                     TempoMin = tempoResult
                 };
 
-                _netcoreContext.Add(resultSave);
-                _netcoreContext.SaveChanges();
+                await _netcoreContext.AddAsync(resultSave);
+                await _netcoreContext.SaveChangesAsync();
             }
             else
             {
@@ -77,9 +78,9 @@ namespace EntityFrameworkVsCoreDapper.Results
                     _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
                 }
 
-                SaveChangementResult(_netcoreContext.Results.FirstOrDefault(_ =>
-        _.Amount == amount && _.OperationType == operationType && _.TypeTransaction == typeTransaction), tempoResult, ramDiference);
-
+                await SaveChangementResult(await _netcoreContext.Results.FirstOrDefaultAsync(_ =>
+                    _.Amount == amount && _.OperationType == operationType &&
+                    _.TypeTransaction == typeTransaction), tempoResult, ramDiference);
             }
         }
 
@@ -93,7 +94,7 @@ namespace EntityFrameworkVsCoreDapper.Results
             }
         }
 
-        public void SaveChangementResult(Result databaseResultTracked, TimeSpan tempo, double ram)
+        public async Task SaveChangementResult(Result databaseResultTracked, TimeSpan tempo, double ram)
         {
             var changed = false;
             if (tempo > databaseResultTracked.TempoMax)
@@ -118,30 +119,28 @@ namespace EntityFrameworkVsCoreDapper.Results
             }
             if (changed)
             {
-                _netcoreContext.SaveChanges();
+                await _netcoreContext.SaveChangesAsync();
             }
-
-
         }
 
-        public long CountCustomers() => _netcoreContext.Customers.Count();
-        public long CountProducts() => _netcoreContext.Products.Count();
+        public async Task<long> CountCustomers() => await _netcoreContext.Customers.CountAsync();
+        public async Task<long> CountProducts() => await _netcoreContext.Products.CountAsync();
 
-        public ResultViewChart GetResultsChart(OperationType operationType, params int[] sequenceAmountInteractions)
+        public async Task<ResultViewChart> GetResultsChart(OperationType operationType, params int[] sequenceAmountInteractions)
         {
             var result = new ResultViewChart
             {
-                Dapper = GetTempoChart(sequenceAmountInteractions, TypeTransaction.Dapper, operationType),
-                Ef6 = GetTempoChart(sequenceAmountInteractions, TypeTransaction.Ef6, operationType),
-                EFCore = GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCore, operationType),
-                EfCoreAsNoTracking = GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCoreAsNoTracking, operationType),
-                EfCoreAsNoTrackingHardSql = GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCoreAsNoTrackingSqlHard, operationType)
+                Dapper = await GetTempoChart(sequenceAmountInteractions, TypeTransaction.Dapper, operationType),
+                Ef6 = await GetTempoChart(sequenceAmountInteractions, TypeTransaction.Ef6, operationType),
+                EFCore = await GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCore, operationType),
+                EfCoreAsNoTracking = await GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCoreAsNoTracking, operationType),
+                EfCoreAsNoTrackingHardSql = await GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCoreAsNoTrackingSqlHard, operationType)
             };
 
             return result;
         }
 
-        public IEnumerable<ResultView> GetResults(OperationType operationType, params int[] sequenceAmountInteractions)
+        public async Task<IEnumerable<ResultView>> GetResults(OperationType operationType, params int[] sequenceAmountInteractions)
         {
             var results = new List<ResultView>();
 
@@ -152,47 +151,47 @@ namespace EntityFrameworkVsCoreDapper.Results
                     Dapper = new ItemResultView
                     {
                         Interactions = inter,
-                        Display = GetTempo(inter, TypeTransaction.Dapper, operationType)
+                        Display = await GetTempo(inter, TypeTransaction.Dapper, operationType)
                     },
                     Ef6 = new ItemResultView
                     {
                         Interactions = inter,
-                        Display = GetTempo(inter, TypeTransaction.Ef6, operationType)
+                        Display = await GetTempo(inter, TypeTransaction.Ef6, operationType)
                     },
                     EFCore = new ItemResultView
                     {
                         Interactions = inter,
-                        Display = GetTempo(inter, TypeTransaction.EfCore, operationType)
+                        Display = await GetTempo(inter, TypeTransaction.EfCore, operationType)
                     },
                     EfCoreAsNoTracking = new ItemResultView
                     {
                         Interactions = inter,
-                        Display = GetTempo(inter, TypeTransaction.EfCoreAsNoTracking, operationType)
+                        Display = await GetTempo(inter, TypeTransaction.EfCoreAsNoTracking, operationType)
                     },
                     EfCoreAsNoTrackingHardSql = new ItemResultView
                     {
                         Interactions = inter,
-                        Display = GetTempo(inter, TypeTransaction.EfCoreAsNoTrackingSqlHard, operationType)
+                        Display = await GetTempo(inter, TypeTransaction.EfCoreAsNoTrackingSqlHard, operationType)
                     },
                 });
             }
             return results;
         }
 
-        public string GetTempoChart(int[] interactions, TypeTransaction typeTransaction, OperationType operationType)
+        public async Task<string> GetTempoChart(int[] interactions, TypeTransaction typeTransaction, OperationType operationType)
         {
-            var result = _netcoreContext.Results
+            var result = await _netcoreContext.Results
                 .Where(_ => _.OperationType == operationType && _.TypeTransaction == typeTransaction && interactions.Contains(_.Amount))
                 .OrderBy(_ => _.Amount)
                 .Select(_ => _.TempoMin.TotalMilliseconds)
-                .ToArray();
+                .ToArrayAsync();
 
             return JsonConvert.SerializeObject(result);
         }
 
-        public ResultDetailsCell GetTempo(int amount, TypeTransaction typeTransaction, OperationType operationType)
+        public async Task<ResultDetailsCell> GetTempo(int amount, TypeTransaction typeTransaction, OperationType operationType)
         {
-            var result = _netcoreContext.Results.FirstOrDefault(_ =>
+            var result = await _netcoreContext.Results.FirstOrDefaultAsync(_ =>
                 _.OperationType == operationType && _.TypeTransaction == typeTransaction && _.Amount == amount);
 
             return new ResultDetailsCell
@@ -207,20 +206,18 @@ namespace EntityFrameworkVsCoreDapper.Results
         public string FormatTempo(TimeSpan? tempo)
         {
             var result = string.Empty;
-            if (tempo != null)
+            if (tempo == null) return result;
+            if (tempo?.Minutes != 0)
             {
-                if (tempo?.Minutes != 0)
-                {
-                    result += " " + tempo?.Minutes + " minutes";
-                }
-                if (tempo?.Seconds != 0)
-                {
-                    result += " " + tempo?.Seconds + " seconds";
-                }
-                if (tempo?.Milliseconds != 0)
-                {
-                    result += " " + tempo?.Milliseconds + " milliseconds";
-                }
+                result += " " + tempo?.Minutes + " minutes";
+            }
+            if (tempo?.Seconds != 0)
+            {
+                result += " " + tempo?.Seconds + " seconds";
+            }
+            if (tempo?.Milliseconds != 0)
+            {
+                result += " " + tempo?.Milliseconds + " milliseconds";
             }
             return result;
         }
@@ -228,20 +225,18 @@ namespace EntityFrameworkVsCoreDapper.Results
         public string FormatTempoSimplified(TimeSpan? tempo)
         {
             var result = string.Empty;
-            if (tempo != null)
+            if (tempo == null) return result;
+            if (tempo?.Minutes != 0)
             {
-                if (tempo?.Minutes != 0)
-                {
-                    result += tempo?.Minutes;
-                }
-                if (tempo?.Seconds != 0)
-                {
-                    result += tempo?.Minutes == null ? ": " : "" + tempo?.Seconds;
-                }
-                if (tempo?.Milliseconds != 0)
-                {
-                    result += tempo?.Seconds == null ? ": " : "" + tempo?.Milliseconds;
-                }
+                result += tempo?.Minutes;
+            }
+            if (tempo?.Seconds != 0)
+            {
+                result += "" + tempo?.Seconds;
+            }
+            if (tempo?.Milliseconds != 0)
+            {
+                result += "" + tempo?.Milliseconds;
             }
             return result;
         }

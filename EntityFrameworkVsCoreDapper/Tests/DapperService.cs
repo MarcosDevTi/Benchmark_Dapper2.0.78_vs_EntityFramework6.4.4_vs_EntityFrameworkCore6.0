@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using Bogus;
+﻿using Bogus;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.Contracts;
 using EntityFrameworkVsCoreDapper.Helpers;
 using EntityFrameworkVsCoreDapper.Results;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EntityFrameworkVsCoreDapper.Tests
 {
@@ -25,21 +26,21 @@ namespace EntityFrameworkVsCoreDapper.Tests
             _resultService = resultService;
         }
 
-        public TimeSpan SelectSingleProducts(int take)
+        public async Task<TimeSpan> SelectSingleProducts(int take)
         {
             var sql = $"select top({take}) * from products";
 
             var watch = _consoleHelper.StartChrono();
 
-            var rders = _dapperContext.OpenedConnection.Query<Product>(sql);
+            var rders = await _dapperContext.OpenedConnection.QueryAsync<Product>(sql);
 
             var result = _consoleHelper.StopChrono(watch, "Dapper single select");
 
-            _resultService.SaveSelect(take, result.Tempo, watch.InitMemory, TypeTransaction.Dapper, OperationType.SelectSingle);
+            await _resultService.SaveSelect(take, result.Tempo, watch.InitMemory, TypeTransaction.Dapper, OperationType.SelectSingle);
 
             return result.Tempo;
         }
-        public TimeSpan SelectComplexCustomers(int take)
+        public async Task<TimeSpan> SelectComplexCustomers(int take)
         {
             var faker = new Faker();
             var sql = new StringBuilder()
@@ -65,7 +66,7 @@ namespace EntityFrameworkVsCoreDapper.Tests
 
             var customerDictionary = new Dictionary<Guid, Customer>();
 
-            var rders = _dapperContext.OpenedConnection.Query<Customer, Address, Product, Customer>(
+            var rders = await _dapperContext.OpenedConnection.QueryAsync<Customer, Address, Product, Customer>(
                 sql,
                 (customer, address, product) =>
                 {
@@ -82,85 +83,87 @@ namespace EntityFrameworkVsCoreDapper.Tests
                     customer.Address = address;
                     return customerEntry;
                 },
-                splitOn: "Id, Id").Distinct();
+                splitOn: "Id, Id");
+            var tt = rders.Distinct();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "Dapper").Tempo;
-            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.SelectComplex);
+            await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.SelectComplex);
 
             return tempoResult;
         }
 
-        public TimeSpan InsertSingleProducts(int interactions)
+        public async Task<TimeSpan> InsertSingleProducts(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
             using (var transaction = _dapperContext.OpenedConnection.BeginTransaction())
             {
-                AddProducts(new ListTests().ObtenirListProductsAleatoire(interactions, null), transaction);
+                await AddProducts(new ListTests().ObtenirListProductsAleatoire(interactions, null), transaction);
                 transaction.Commit();
             }
             var tempoResult = _consoleHelper.StopChrono(watch, "Dapper").Tempo;
 
-            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.InsertSingle);
+            await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.InsertSingle);
             return tempoResult;
         }
-        public TimeSpan InsertComplexCustomers(int interactions)
+        public async Task<TimeSpan> InsertComplexCustomers(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
             using (var transaction = _dapperContext.OpenedConnection.BeginTransaction())
             {
-                AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions), transaction);
+                await AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions), transaction);
                 transaction.Commit();
             }
 
             var tempoResult = _consoleHelper.StopChrono(watch, "Dapper").Tempo;
-            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.InsertComplex);
+            await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Dapper,
+                OperationType.InsertComplex);
             return tempoResult;
         }
 
-        public void AddCustomers(IEnumerable<Customer> customers, IDbTransaction transaction)
+        public async Task AddCustomers(IEnumerable<Customer> customers, IDbTransaction transaction)
         {
             foreach (var customer in customers)
             {
-                AddAddress(customer.Address, transaction);
-                AddCustomer(customer, transaction);
+                await AddAddress(customer.Address, transaction);
+                await AddCustomer(customer, transaction);
 
                 foreach (var product in customer.Products)
                 {
-                    AddProduct(product, transaction);
+                    await AddProduct(product, transaction);
                 }
             }
         }
-        public void AddProducts(IEnumerable<Product> products, IDbTransaction transaction)
+        public async Task AddProducts(IEnumerable<Product> products, IDbTransaction transaction)
         {
             foreach (var product in products)
-                AddProduct(product, transaction);
+                await AddProduct(product, transaction);
         }
 
-        public void AddProduct(Product product, IDbTransaction transaction)
+        public async Task AddProduct(Product product, IDbTransaction transaction)
         {
             var sql = "INSERT INTO PRODUCTS (Id, Name, Description, Price, OldPrice, Brand, CustomerId) Values" +
                 "(@Id, @Name, @Description, @Price, @OldPrice, @Brand, @CustomerId);";
-            _dapperContext.OpenedConnection.Execute(sql, product, transaction: transaction);
+            await _dapperContext.OpenedConnection.ExecuteAsync(sql, product, transaction: transaction);
         }
-        public void AddAddress(Address address, IDbTransaction transaction)
+        public async Task AddAddress(Address address, IDbTransaction transaction)
         {
             var sql = "Insert into Address (Id, Number, Street, City, Country, ZipCode, AdministrativeRegion) Values" +
                 "(@Id, @Number, @Street, @City, @Country, @ZipCode, @AdministrativeRegion)";
-            _dapperContext.OpenedConnection.Execute(sql, address, transaction: transaction);
+            await _dapperContext.OpenedConnection.ExecuteAsync(sql, address, transaction: transaction);
         }
-        public void AddCustomer(Customer customer, IDbTransaction transaction)
+        public async Task AddCustomer(Customer customer, IDbTransaction transaction)
         {
             var sql = "Insert into Customers (Id, FirstName, LastName, Email, Status, BirthDate, AddressId) Values" +
                 $"(@Id, @FirstName, @LastName, @Email, @Status, @BirthDate, @AddressId)";
-            _dapperContext.OpenedConnection.Execute(sql, customer, transaction: transaction);
+            await _dapperContext.OpenedConnection.ExecuteAsync(sql, customer, transaction: transaction);
         }
-        public void AddCustomerContrib(Customer customer, IDbTransaction transaction) =>
-             _dapperContext.OpenedConnection.Insert(customer, transaction);
-        public void AddProductContrib(Product product, IDbTransaction transaction) =>
-            _dapperContext.OpenedConnection.Insert(product, transaction);
-        public void AddAddressContrib(Address address, IDbTransaction transaction) =>
-            _dapperContext.OpenedConnection.Insert(address, transaction);
+        public async Task AddCustomerContrib(Customer customer, IDbTransaction transaction) =>
+             await _dapperContext.OpenedConnection.InsertAsync(customer, transaction);
+        public async Task AddProductContrib(Product product, IDbTransaction transaction) =>
+            await _dapperContext.OpenedConnection.InsertAsync(product, transaction);
+        public async Task AddAddressContrib(Address address, IDbTransaction transaction) =>
+            await _dapperContext.OpenedConnection.InsertAsync(address, transaction);
     }
 }

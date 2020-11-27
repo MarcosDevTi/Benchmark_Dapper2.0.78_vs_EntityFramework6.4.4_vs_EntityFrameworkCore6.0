@@ -17,5 +17,7 @@ namespace EntityFrameworkVsCoreDapper.Context
         public DbSet<ProductPage> ProductPages { get; set; }
         public DbSet<ValueChoice> ValueChoices { get; set; }
         public DbSet<ValueDomain> ValueDomains { get; set; }
+
+
     }
 }

@@ -1,8 +1,9 @@
 ﻿using EfVsDapper.Mvc.Helpers;
+using EntityFrameworkVsCoreDapper.Contracts;
 using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using EntityFrameworkVsCoreDapper.Contracts;
+using System.Threading.Tasks;
 
 namespace EfVsDapper.Mvc.Controllers
 {
@@ -27,68 +28,68 @@ namespace EfVsDapper.Mvc.Controllers
             _messageService = messageService;
         }
 
-        public IActionResult SelectComplex()
+        public async Task<IActionResult> SelectComplex()
         {
             ViewBag.LastResult = _messageService.LastResult;
-            ViewBag.CountProducts = _resultService.CountProducts();
-            ViewBag.CountCustomers = _resultService.CountCustomers();
+            ViewBag.CountProducts = await _resultService.CountProducts();
+            ViewBag.CountCustomers = await _resultService.CountCustomers();
 
-            return View(_resultService.GetResults(OperationType.SelectComplex, InteractionsService.SelectComplex));
+            return View(await _resultService.GetResults(OperationType.SelectComplex, InteractionsService.SelectComplex));
         }
-        public IActionResult InsertComplex()
+        public async Task<IActionResult> InsertComplex()
         {
             ViewBag.LastResult = _messageService.LastResult;
-            ViewBag.CountProducts = _resultService.CountProducts();
-            ViewBag.CountCustomers = _resultService.CountCustomers();
+            ViewBag.CountProducts = await _resultService.CountProducts();
+            ViewBag.CountCustomers = await _resultService.CountCustomers();
 
-            return View(_resultService.GetResults(OperationType.InsertComplex, InteractionsService.InsertComplex));
-        }
-
-        public IActionResult SelectProductDapper(int interactions)
-        {
-            _dapperTests.SelectComplexCustomers(interactions);
-            return RedirectToAction("SelectComplex");
-        }
-        public IActionResult SelectProductEf6(int interactions)
-        {
-            _ef6Tests.SelectComplexCustomers(interactions);
-            return RedirectToAction("SelectComplex");
-        }
-        public IActionResult SelectProductEfCore(int interactions)
-        {
-            _efCoreTests.SelectComplexCustomers(interactions);
-            return RedirectToAction("SelectComplex");
-        }
-        public IActionResult SelectProductEfCoreAsNoTracking(int interactions)
-        {
-            _efCoreTests.SelectComplexCustomersAsNoTracking(interactions);
-            return RedirectToAction("SelectComplex");
+            return View(await _resultService.GetResults(OperationType.InsertComplex, InteractionsService.InsertComplex));
         }
 
-        public IActionResult InsertCustomerDapper(int interactions)
+        public async Task<IActionResult> SelectProductDapper(int interactions)
         {
-            _dapperTests.InsertComplexCustomers(interactions);
+            await _dapperTests.SelectComplexCustomers(interactions);
+            return RedirectToAction("SelectComplex");
+        }
+        public async Task<IActionResult> SelectProductEf6(int interactions)
+        {
+            await _ef6Tests.SelectComplexCustomers(interactions);
+            return RedirectToAction("SelectComplex");
+        }
+        public async Task<IActionResult> SelectProductEfCore(int interactions)
+        {
+            await _efCoreTests.SelectComplexCustomers(interactions);
+            return RedirectToAction("SelectComplex");
+        }
+        public async Task<IActionResult> SelectProductEfCoreAsNoTracking(int interactions)
+        {
+            await _efCoreTests.SelectComplexCustomersAsNoTracking(interactions);
+            return RedirectToAction("SelectComplex");
+        }
+
+        public async Task<IActionResult> InsertCustomerDapper(int interactions)
+        {
+            await _dapperTests.InsertComplexCustomers(interactions);
             return RedirectToAction("InsertComplex");
         }
-        public IActionResult InsertCustomerEf6(int interactions)
+        public async Task<IActionResult> InsertCustomerEf6(int interactions)
         {
-            _ef6Tests.InsertComplexCustomers(interactions);
+            await _ef6Tests.InsertComplexCustomers(interactions);
             return RedirectToAction("InsertComplex");
         }
-        public IActionResult InsertCustomerEfCore(int interactions)
+        public async Task<IActionResult> InsertCustomerEfCore(int interactions)
         {
-            _efCoreTests.InsertComplexCustomers(interactions);
+            await _efCoreTests.InsertComplexCustomers(interactions);
             return RedirectToAction("InsertComplex");
         }
-        public IActionResult InsertCustomerEfCoreAsNoTrackingHardSql(int interactions)
+        public async Task<IActionResult> InsertCustomerEfCoreAsNoTrackingHardSql(int interactions)
         {
-            _efCoreTests.InsertComplexCustomersAsNoTrackingSqlCommand(interactions);
+            await _efCoreTests.InsertComplexCustomersAsNoTrackingSqlCommand(interactions);
             return RedirectToAction("InsertComplex");
         }
 
-        public IActionResult Clear(Guid idResult, string actionRetour)
+        public async Task<IActionResult> Clear(Guid idResult, string actionRetour)
         {
-            _resultService.ClearResult(idResult);
+            await _resultService.ClearResult(idResult);
             return RedirectToAction(actionRetour);
         }
     }

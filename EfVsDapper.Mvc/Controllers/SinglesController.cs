@@ -1,8 +1,9 @@
 ﻿using EfVsDapper.Mvc.Helpers;
+using EntityFrameworkVsCoreDapper.Contracts;
 using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using EntityFrameworkVsCoreDapper.Contracts;
+using System.Threading.Tasks;
 
 namespace EfVsDapper.Mvc.Controllers
 {
@@ -27,73 +28,73 @@ namespace EfVsDapper.Mvc.Controllers
             _messageService = messageService;
         }
 
-        public IActionResult SelectSingles()
+        public async Task<IActionResult> SelectSingles()
         {
             ViewBag.LastResult = _messageService.LastResult;
-            ViewBag.CountProducts = _resultService.CountProducts();
-            ViewBag.CountCustomers = _resultService.CountCustomers();
+            ViewBag.CountProducts = await _resultService.CountProducts();
+            ViewBag.CountCustomers = await _resultService.CountCustomers();
 
-            return View(_resultService.GetResults(OperationType.SelectSingle, InteractionsService.SelectSingle));
+            return View(await _resultService.GetResults(OperationType.SelectSingle, InteractionsService.SelectSingle));
         }
-        public IActionResult InsertSingles()
+        public async Task<IActionResult> InsertSingles()
         {
             ViewBag.LastResult = _messageService.LastResult;
-            ViewBag.CountProducts = _resultService.CountProducts();
-            ViewBag.CountCustomers = _resultService.CountCustomers();
+            ViewBag.CountProducts = await _resultService.CountProducts();
+            ViewBag.CountCustomers = await _resultService.CountCustomers();
 
-            return View(_resultService.GetResults(OperationType.InsertSingle, InteractionsService.InsertSingle));
-        }
-
-        public IActionResult SelectProductDapper(int interactions)
-        {
-            _dapperTests.SelectSingleProducts(interactions);
-            return RedirectToAction("SelectSingles");
-        }
-        public IActionResult SelectProductEf6(int interactions)
-        {
-            _ef6Tests.SelectSingleProducts(interactions);
-            return RedirectToAction("SelectSingles");
-        }
-        public IActionResult SelectProductEfCore(int interactions)
-        {
-            _efCoreTests.SelectSingleProducts(interactions);
-            return RedirectToAction("SelectSingles");
-        }
-        public IActionResult SelectProductEfCoreAsNoTracking(int interactions)
-        {
-            _efCoreTests.SelectSingleProductsAsNoTracking(interactions);
-            return RedirectToAction("SelectSingles");
-        }
-        public IActionResult SelectProductEfCoreAsNoTrackingHardSql(int interactions)
-        {
-            _efCoreTests.SelectSingleProductsAsNoTrackingSqlQuery(interactions);
-            return RedirectToAction("SelectSingles");
+            return View(await _resultService.GetResults(OperationType.InsertSingle, InteractionsService.InsertSingle));
         }
 
-        public IActionResult InsertProductDapper(int interactions)
+        public async Task<IActionResult> SelectProductDapper(int interactions)
         {
-            _dapperTests.InsertSingleProducts(interactions);
+            await _dapperTests.SelectSingleProducts(interactions);
+            return RedirectToAction("SelectSingles");
+        }
+        public async Task<IActionResult> SelectProductEf6(int interactions)
+        {
+            await _ef6Tests.SelectSingleProducts(interactions);
+            return RedirectToAction("SelectSingles");
+        }
+        public async Task<IActionResult> SelectProductEfCore(int interactions)
+        {
+            await _efCoreTests.SelectSingleProducts(interactions);
+            return RedirectToAction("SelectSingles");
+        }
+        public async Task<IActionResult> SelectProductEfCoreAsNoTracking(int interactions)
+        {
+            await _efCoreTests.SelectSingleProductsAsNoTracking(interactions);
+            return RedirectToAction("SelectSingles");
+        }
+        public async Task<IActionResult> SelectProductEfCoreAsNoTrackingHardSql(int interactions)
+        {
+            await _efCoreTests.SelectSingleProductsAsNoTrackingSqlQuery(interactions);
+            return RedirectToAction("SelectSingles");
+        }
+
+        public async Task<IActionResult> InsertProductDapper(int interactions)
+        {
+            await _dapperTests.InsertSingleProducts(interactions);
             return RedirectToAction("InsertSingles");
         }
-        public IActionResult InsertProductEf6(int interactions)
+        public async Task<IActionResult> InsertProductEf6(int interactions)
         {
-            _ef6Tests.InsertSingleProducts(interactions);
+            await _ef6Tests.InsertSingleProducts(interactions);
             return RedirectToAction("InsertSingles");
         }
-        public IActionResult InsertProductEfCore(int interactions)
+        public async Task<IActionResult> InsertProductEfCore(int interactions)
         {
-            _efCoreTests.InsertSingleProducts(interactions);
+            await _efCoreTests.InsertSingleProducts(interactions);
             return RedirectToAction("InsertSingles");
         }
-        public IActionResult InsertProductEfCoreAsNoTrackingHardSql(int interactions)
+        public async Task<IActionResult> InsertProductEfCoreAsNoTrackingHardSql(int interactions)
         {
-            _efCoreTests.InsertSingleProductsAsNoTrackingSqlCommand(interactions);
+            await _efCoreTests.InsertSingleProductsAsNoTrackingSqlCommand(interactions);
             return RedirectToAction("InsertSingles");
         }
 
-        public IActionResult Clear(Guid idResult, string ActionRetour)
+        public async Task<IActionResult> Clear(Guid idResult, string ActionRetour)
         {
-            _resultService.ClearResult(idResult);
+            await _resultService.ClearResult(idResult);
             return RedirectToAction(ActionRetour);
         }
     }

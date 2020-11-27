@@ -6,12 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="31.0.3" />
-    <PackageReference Include="Dapper" Version="2.0.35" />
-    <PackageReference Include="Dapper.Contrib" Version="2.0.35" />
+    <PackageReference Include="Dapper" Version="2.0.78" />
+    <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
     <PackageReference Include="Dapper.FluentMap.Dommel" Version="2.0.0" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0-rc.2.20475.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0-rc.2.20475.6">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

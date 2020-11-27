@@ -1,6 +1,7 @@
 ﻿using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace EfVsDapper.Mvc.Controllers
 {
@@ -11,11 +12,11 @@ namespace EfVsDapper.Mvc.Controllers
         {
             _resultService = resultService;
         }
-        public IActionResult Index(OperationType operationType, string interactions)
+        public async Task<IActionResult> Index(OperationType operationType, string interactions)
         {
             ViewBag.Interactions = interactions;
             ViewBag.OperationType = operationType.ToString();
-            return View(_resultService.GetResultsChart(operationType, JsonConvert.DeserializeObject<int[]>(interactions)));
+            return View(await _resultService.GetResultsChart(operationType, JsonConvert.DeserializeObject<int[]>(interactions)));
         }
     }
 }

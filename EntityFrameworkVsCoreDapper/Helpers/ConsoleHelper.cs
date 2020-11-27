@@ -1,6 +1,6 @@
-﻿using System;
+﻿using EntityFrameworkVsCoreDapper.Results;
+using System;
 using System.Diagnostics;
-using EntityFrameworkVsCoreDapper.Results;
 
 namespace EntityFrameworkVsCoreDapper.Helpers
 {

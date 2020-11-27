@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace EntityFrameworkVsCoreDapper.Contracts
 {
     public interface IDapperService
     {
-        TimeSpan SelectSingleProducts(int take);
-        TimeSpan SelectComplexCustomers(int take);
+        Task<TimeSpan> SelectSingleProducts(int take);
+        Task<TimeSpan> SelectComplexCustomers(int take);
 
-        TimeSpan InsertSingleProducts(int interactions);
-        TimeSpan InsertComplexCustomers(int interactions);
+        Task<TimeSpan> InsertSingleProducts(int interactions);
+        Task<TimeSpan> InsertComplexCustomers(int interactions);
     }
 }

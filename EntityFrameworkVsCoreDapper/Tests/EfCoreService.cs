@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace EntityFrameworkVsCoreDapper.Tests
 {
@@ -23,17 +24,18 @@ namespace EntityFrameworkVsCoreDapper.Tests
             _resultService = resultService;
         }
 
-        public TimeSpan InsertComplexCustomers(int interactions)
+        public async Task<TimeSpan> InsertComplexCustomers(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
-            new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => _netcoreContext.AddAsync(_));
-            _netcoreContext.SaveChanges();
+            new ListTests().ObtenirListCustomersAleatoire(interactions)
+                .ForEach(async _ => await _netcoreContext.AddAsync(_));
+            await _netcoreContext.SaveChangesAsync();
             var tempoResult = _consoleHelper.StopChrono(watch, "EFCore").Tempo;
-            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.InsertComplex);
+            await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.InsertComplex);
             return tempoResult;
         }
-        public TimeSpan SelectSingleProducts(int take)
+        public async Task<TimeSpan> SelectSingleProducts(int take)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -42,35 +44,36 @@ namespace EntityFrameworkVsCoreDapper.Tests
 
             watch.Watch.Stop();
 
-            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.SelectSingle);
+            await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.SelectSingle);
 
             return tempoResult;
         }
-        public TimeSpan SelectSingleProductsAsNoTracking(int take)
+        public async Task<TimeSpan> SelectSingleProductsAsNoTracking(int take)
         {
             var watch = _consoleHelper.StartChrono();
 
             _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            var teste = _netcoreContext.Products.Take(take).ToList();
+            var teste = await _netcoreContext.Products.Take(take).ToListAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core single select AsNoTracking").Tempo;
 
-            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTracking, OperationType.SelectSingle);
+            await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTracking, OperationType.SelectSingle);
 
             return tempoResult;
         }
-        public TimeSpan SelectSingleProductsAsNoTrackingSqlQuery(int take)
+        public async Task<TimeSpan> SelectSingleProductsAsNoTrackingSqlQuery(int take)
         {
             var watch = _consoleHelper.StartChrono();
 
             _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            var teste = _netcoreContext.Products.FromSqlRaw($"select top({take}) * from products").ToList();
+            var teste = await _netcoreContext.Products.FromSqlRaw(
+                $"select top({take}) * from products").ToListAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core single select AsNoTracking SqlHard").Tempo;
-            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTrackingSqlHard, OperationType.SelectSingle);
+            await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTrackingSqlHard, OperationType.SelectSingle);
             return tempoResult;
         }
-        public TimeSpan SelectComplexCustomers(int take)
+        public async Task<TimeSpan> SelectComplexCustomers(int take)
         {
             var faker = new Faker();
             var watch = _consoleHelper.StartChrono();
@@ -80,12 +83,12 @@ namespace EntityFrameworkVsCoreDapper.Tests
                 _.Products.Count(_ => _.Description != faker.Commerce.ProductName().Replace("'", "")) > 0)
                 .Take(take);
 
-            var res = teste.ToList();
+            var res = await teste.ToListAsync();
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core").Tempo;
-            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.SelectComplex);
+            await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.SelectComplex);
             return tempoResult;
         }
-        public TimeSpan SelectComplexCustomersAsNoTracking(int take)
+        public async Task<TimeSpan> SelectComplexCustomersAsNoTracking(int take)
         {
             var faker = new Faker();
             var watch = _consoleHelper.StartChrono();
@@ -100,90 +103,88 @@ namespace EntityFrameworkVsCoreDapper.Tests
 
 
 
-            var aa = teste.ToList();
+            var aa = await teste.ToListAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core AsNoTracking").Tempo;
-            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTracking, OperationType.SelectComplex);
+            await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTracking, OperationType.SelectComplex);
             return tempoResult;
         }
-        public TimeSpan InsertSingleProducts(int interactions)
+        public async Task<TimeSpan> InsertSingleProducts(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
-            new ListTests().ObtenirListProductsAleatoire(interactions, null).ForEach(_ => _netcoreContext.Products.Add(_));
-            _netcoreContext.SaveChanges();
+            new ListTests().ObtenirListProductsAleatoire(interactions, null).ForEach(async _ => await _netcoreContext.Products.AddAsync(_));
+            await _netcoreContext.SaveChangesAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core").Tempo;
-            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.InsertSingle);
+            await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.InsertSingle);
             return tempoResult;
         }
-        public TimeSpan InsertSingleProductsAsNoTrackingSqlCommand(int interactions)
+        public async Task<TimeSpan> InsertSingleProductsAsNoTrackingSqlCommand(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
 
-            AddProducts(new ListTests().ObtenirListProductsAleatoire(interactions, null));
-            _netcoreContext.SaveChanges();
+            await AddProducts(new ListTests().ObtenirListProductsAleatoire(interactions, null));
+            await _netcoreContext.SaveChangesAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core").Tempo;
-            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTrackingSqlHard, OperationType.InsertSingle);
+            await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTrackingSqlHard, OperationType.InsertSingle);
             return tempoResult;
         }
-        public TimeSpan InsertComplexCustomersAsNoTrackingSqlCommand(int interactions)
+        public async Task<TimeSpan> InsertComplexCustomersAsNoTrackingSqlCommand(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
-            AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions));
-            _netcoreContext.SaveChanges();
+            await AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions));
+            await _netcoreContext.SaveChangesAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core").Tempo;
-            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTrackingSqlHard, OperationType.InsertComplex);
+            await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTrackingSqlHard, OperationType.InsertComplex);
             return tempoResult;
         }
 
-        public void AddCustomers(IEnumerable<Customer> customers)
+        public async Task AddCustomers(IEnumerable<Customer> customers)
         {
             foreach (var customer in customers)
             {
-                AddAddress(customer.Address);
-                AddCustomer(customer);
+                await AddAddress(customer.Address);
+                await AddCustomer(customer);
 
                 foreach (var product in customer.Products)
-                    AddProduct(product);
+                    await AddProduct(product);
             }
         }
 
-        public void AddProducts(IEnumerable<Product> products)
+        public async Task AddProducts(IEnumerable<Product> products)
         {
             foreach (var product in products)
-                AddProduct(product);
+                await AddProduct(product);
         }
 
-        public void AddProduct(Product product)
+        public async Task AddProduct(Product product)
         {
             var sql = "INSERT INTO PRODUCTS (Id, Name, Description, Price, OldPrice, Brand, CustomerId) Values" +
                 $"('{product.Id}', '{product.Name}', '{product.Description}', {product.Price.ToString(CultureInfo.CreateSpecificCulture("en-US"))}, " +
                 $"{product.OldPrice.ToString(CultureInfo.CreateSpecificCulture("en-US"))}, '{product.Brand}', {FormatCustomer(product.CustomerId)})";
-            _netcoreContext.Database.ExecuteSqlRaw(sql);
+            await _netcoreContext.Database.ExecuteSqlRawAsync(sql);
         }
 
         private string FormatCustomer(Guid? id)
         {
-            if (id == null)
-                return "null";
-            return $"'{id}'";
+            return id == null ? "null" : $"'{id}'";
         }
-        public void AddAddress(Address address)
+        public async Task AddAddress(Address address)
         {
             var sql = "Insert into Address (Id, Number, Street, City, Country, ZipCode, AdministrativeRegion) Values" +
                 $"('{address.Id}','{address.Number}', '{address.Street.Replace("'", "")}', '{address.City.Replace("'", "")}', '{address.Country.Replace("'", "")}', '{address.ZipCode}', '{address.AdministrativeRegion}')";
-            _netcoreContext.Database.ExecuteSqlRaw(sql);
+            await _netcoreContext.Database.ExecuteSqlRawAsync(sql);
         }
-        public void AddCustomer(Customer customer)
+        public async Task AddCustomer(Customer customer)
         {
             var sql = "Insert into Customers (Id, FirstName, LastName, Email, Status, BirthDate, AddressId) Values" +
                 $"('{customer.Id}', '{customer.FirstName.Replace("'", "")}', '{customer.LastName.Replace("'", "")}', '{customer.Email}', '{customer.Status}', '{customer.BirthDate}', '{customer.AddressId}')";
-            _netcoreContext.Database.ExecuteSqlRaw(sql);
+            await _netcoreContext.Database.ExecuteSqlRawAsync(sql);
         }
     }
 }

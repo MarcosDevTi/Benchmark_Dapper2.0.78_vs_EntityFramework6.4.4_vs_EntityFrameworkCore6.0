@@ -1,9 +1,11 @@
-﻿using System;
-using System.Linq;
-using EntityFrameworkVsCoreDapper.Context;
+﻿using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.Contracts;
 using EntityFrameworkVsCoreDapper.Helpers;
 using EntityFrameworkVsCoreDapper.Results;
+using System;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EntityFrameworkVsCoreDapper.Tests
 {
@@ -19,31 +21,34 @@ namespace EntityFrameworkVsCoreDapper.Tests
             _resultService = resultService;
         }
 
-        public TimeSpan InsertComplexCustomers(int interactions)
+        public async Task<TimeSpan> InsertComplexCustomers(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
 
-            new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ => _ef6Context.Customers.Add(_));
-            _ef6Context.SaveChanges();
+            new ListTests().ObtenirListCustomersAleatoire(interactions).ForEach(_ =>
+                 _ef6Context.Customers.Add(_));
+            await _ef6Context.SaveChangesAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF 6").Tempo;
-            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.InsertComplex);
+            await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory,
+                TypeTransaction.Ef6, OperationType.InsertComplex);
             return tempoResult;
         }
-        public TimeSpan InsertSingleProducts(int interactions)
+        public async Task<TimeSpan> InsertSingleProducts(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
             var aa = new ListTests().ObtenirListProductsAleatoire(interactions, null);
 
-            new ListTests().ObtenirListProductsAleatoire(interactions, null).ForEach(_ => _ef6Context.Products.Add(_));
-            _ef6Context.SaveChanges();
+            new ListTests().ObtenirListProductsAleatoire(interactions, null).ForEach(_ =>
+                _ef6Context.Products.Add(_));
+            await _ef6Context.SaveChangesAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF 6 single select").Tempo;
-            _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.InsertSingle);
+            await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.InsertSingle);
             return tempoResult;
         }
 
-        public TimeSpan SelectComplexCustomers(int take)
+        public async Task<TimeSpan> SelectComplexCustomers(int take)
         {
             var watch = _consoleHelper.StartChrono();
 
@@ -53,23 +58,23 @@ namespace EntityFrameworkVsCoreDapper.Tests
 
             var sql = teste.ToString();
 
-            teste.ToList();
+            _ = await teste.ToListAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF 6").Tempo;
-            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.SelectComplex);
+            await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.SelectComplex);
 
             return tempoResult;
         }
-        public TimeSpan SelectSingleProducts(int take)
+        public async Task<TimeSpan> SelectSingleProducts(int take)
         {
             var watch = _consoleHelper.StartChrono();
 
-            var teste = _ef6Context.Products.Take(take).ToList();
+            var teste = await _ef6Context.Products.Take(take).ToListAsync();
             var tempoResult = _consoleHelper.StopChrono(watch, "EF 6 single select").Tempo;
 
             watch.Watch.Stop();
 
-            _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.SelectSingle);
+            await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Ef6, OperationType.SelectSingle);
 
             return tempoResult;
         }

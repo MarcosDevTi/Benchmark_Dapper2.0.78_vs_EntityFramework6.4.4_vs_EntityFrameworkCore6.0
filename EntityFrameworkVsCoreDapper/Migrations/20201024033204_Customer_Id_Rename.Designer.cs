@@ -4,14 +4,16 @@ using EntityFrameworkVsCoreDapper.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EntityFrameworkVsCoreDapper.Migrations
 {
     [DbContext(typeof(DotNetCoreContext))]
-    partial class DotNetCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20201024033204_Customer_Id_Rename")]
+    partial class Customer_Id_Rename
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,8 +156,12 @@ namespace EntityFrameworkVsCoreDapper.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Customer_Id");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -174,6 +180,8 @@ namespace EntityFrameworkVsCoreDapper.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("CustomerId");
 
@@ -270,6 +278,10 @@ namespace EntityFrameworkVsCoreDapper.Migrations
 
             modelBuilder.Entity("EntityFrameworkVsCoreDapper.Product", b =>
                 {
+                    b.HasOne("EntityFrameworkVsCoreDapper.Entities.ValueChoice", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("EntityFrameworkVsCoreDapper.Customer", "Customer")
                         .WithMany("Products")
                         .HasForeignKey("CustomerId");
@@ -277,6 +289,8 @@ namespace EntityFrameworkVsCoreDapper.Migrations
                     b.HasOne("EntityFrameworkVsCoreDapper.ProductPage", "ProductPage")
                         .WithMany()
                         .HasForeignKey("ProductPageId");
+
+                    b.Navigation("Category");
 
                     b.Navigation("Customer");
 

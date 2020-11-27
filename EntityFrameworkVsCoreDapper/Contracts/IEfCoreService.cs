@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace EntityFrameworkVsCoreDapper.Contracts
 {
     public interface IEfCoreService
     {
-        TimeSpan InsertComplexCustomers(int interactions);
-        TimeSpan InsertComplexCustomersAsNoTrackingSqlCommand(int interactions);
-        TimeSpan InsertSingleProducts(int interactions);
-        TimeSpan InsertSingleProductsAsNoTrackingSqlCommand(int interactions);
+        Task<TimeSpan> InsertComplexCustomers(int interactions);
+        Task<TimeSpan> InsertComplexCustomersAsNoTrackingSqlCommand(int interactions);
+        Task<TimeSpan> InsertSingleProducts(int interactions);
+        Task<TimeSpan> InsertSingleProductsAsNoTrackingSqlCommand(int interactions);
 
-        TimeSpan SelectSingleProducts(int take);
-        TimeSpan SelectSingleProductsAsNoTracking(int take);
-        TimeSpan SelectSingleProductsAsNoTrackingSqlQuery(int take);
-        TimeSpan SelectComplexCustomers(int take);
-        TimeSpan SelectComplexCustomersAsNoTracking(int take);
-        
+        Task<TimeSpan> SelectSingleProducts(int take);
+        Task<TimeSpan> SelectSingleProductsAsNoTracking(int take);
+        Task<TimeSpan> SelectSingleProductsAsNoTrackingSqlQuery(int take);
+        Task<TimeSpan> SelectComplexCustomers(int take);
+        Task<TimeSpan> SelectComplexCustomersAsNoTracking(int take);
+
 
     }
 }
