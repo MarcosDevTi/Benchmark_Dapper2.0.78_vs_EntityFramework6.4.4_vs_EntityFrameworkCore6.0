@@ -88,6 +88,17 @@ namespace EntityFrameworkVsCoreDapper.Tests
             await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.SelectComplex);
             return tempoResult;
         }
+
+        private async Task CallSelectComplexCustomers(int take, Faker faker)
+        {
+            var teste = _netcoreContext.Customers.Include(_ => _.Address).Include(_ => _.Products)
+               .Where(_ => _.FirstName != "Test First Name" &&
+               !_.Address.City.StartsWith("Qu") &&
+               _.Products.Any(_ => _.Description != "asdfa"))
+               .Take(take);
+
+            var res = await teste.ToListAsync();
+        }
         public async Task<TimeSpan> SelectComplexCustomersAsNoTracking(int take)
         {
             var faker = new Faker();
@@ -101,8 +112,6 @@ namespace EntityFrameworkVsCoreDapper.Tests
                 _.Description != faker.Commerce.ProductName().Replace("'", "")))
                 .Take(take);
 
-
-
             var aa = await teste.ToListAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core AsNoTracking").Tempo;
@@ -111,9 +120,10 @@ namespace EntityFrameworkVsCoreDapper.Tests
         }
         public async Task<TimeSpan> InsertSingleProducts(int interactions)
         {
+            var listCustomers = new ListTests().ObtenirListProductsAleatoire(interactions, null);
             var watch = _consoleHelper.StartChrono();
 
-            new ListTests().ObtenirListProductsAleatoire(interactions, null).ForEach(async _ => await _netcoreContext.Products.AddAsync(_));
+            await _netcoreContext.Products.AddRangeAsync(listCustomers);
             await _netcoreContext.SaveChangesAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core").Tempo;

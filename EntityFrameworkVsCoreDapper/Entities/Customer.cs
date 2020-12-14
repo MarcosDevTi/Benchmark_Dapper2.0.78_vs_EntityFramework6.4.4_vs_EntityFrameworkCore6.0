@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace EntityFrameworkVsCoreDapper
 {
-    public class Customer: Entity
+    public class Customer : Entity
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

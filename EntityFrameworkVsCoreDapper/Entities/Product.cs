@@ -12,7 +12,6 @@ namespace EntityFrameworkVsCoreDapper
         public Guid? CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
         public Guid? ProductPageId { get; set; }
-        //public ValueChoice Category { get; set; }
         public ProductPage ProductPage { get; set; }
     }
 }

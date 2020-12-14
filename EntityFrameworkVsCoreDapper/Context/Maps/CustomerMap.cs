@@ -7,14 +7,16 @@ namespace EntityFrameworkVsCoreDapper.Context.Maps
     {
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
+            builder.ToTable("efdp_customer");
             builder.HasIndex(_ => _.AddressId);
             builder.HasIndex(_ => _.Email);
-            builder.HasIndex(_ => _.Id);
 
-            builder.Property(_ => _.FirstName).HasMaxLength(50);
-            builder.Property(_ => _.LastName).HasMaxLength(80);
-            builder.Property(_ => _.Email).HasMaxLength(150);
-            builder.Property(_ => _.Status).HasMaxLength(20);
+            builder.Property(_ => _.FirstName).HasColumnName("first_name").HasMaxLength(50);
+            builder.Property(_ => _.LastName).HasColumnName("last_name").HasMaxLength(80);
+            builder.Property(_ => _.Email).HasColumnName("email").HasMaxLength(150);
+            builder.Property(_ => _.Status).HasColumnName("status").HasMaxLength(20);
+            builder.Property(_ => _.BirthDate).HasColumnName("birth_date");
+            builder.Property(_ => _.AddressId).HasColumnName("address_id");
         }
     }
 }

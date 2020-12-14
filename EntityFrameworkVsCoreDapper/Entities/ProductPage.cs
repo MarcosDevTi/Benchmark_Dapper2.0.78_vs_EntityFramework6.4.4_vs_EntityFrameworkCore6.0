@@ -1,6 +1,4 @@
-﻿using EntityFrameworkVsCoreDapper.Entities;
-
-namespace EntityFrameworkVsCoreDapper
+﻿namespace EntityFrameworkVsCoreDapper
 {
     public class ProductPage : Entity
     {
@@ -8,6 +6,5 @@ namespace EntityFrameworkVsCoreDapper
         public string SmallDescription { get; set; }
         public string FullDescription { get; set; }
         public string ImageLink { get; set; }
-        public ValueChoice Type { get; set; }
     }
 }

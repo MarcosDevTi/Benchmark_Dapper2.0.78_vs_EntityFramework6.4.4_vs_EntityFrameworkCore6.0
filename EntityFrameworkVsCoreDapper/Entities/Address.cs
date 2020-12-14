@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace EntityFrameworkVsCoreDapper
+﻿namespace EntityFrameworkVsCoreDapper
 {
-    [Table("Address")]
     public class Address : Entity
     {
         public string Number { get; set; }

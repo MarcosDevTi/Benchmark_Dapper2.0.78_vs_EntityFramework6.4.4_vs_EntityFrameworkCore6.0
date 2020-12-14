@@ -17,7 +17,7 @@ namespace EntityFrameworkVsCoreDapper.Migrations
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.0-rc.2.20475.6");
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("EntityFrameworkVsCoreDapper.Address", b =>
                 {
@@ -27,32 +27,37 @@ namespace EntityFrameworkVsCoreDapper.Migrations
 
                     b.Property<string>("AdministrativeRegion")
                         .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasColumnType("nvarchar(5)")
+                        .HasColumnName("administrative_region");
 
                     b.Property<string>("City")
                         .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
+                        .HasColumnType("nvarchar(80)")
+                        .HasColumnName("city");
 
                     b.Property<string>("Country")
                         .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
+                        .HasColumnType("nvarchar(80)")
+                        .HasColumnName("country");
 
                     b.Property<string>("Number")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("number");
 
                     b.Property<string>("Street")
                         .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(150)")
+                        .HasColumnName("street");
 
                     b.Property<string>("ZipCode")
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(30)")
+                        .HasColumnName("zip_code");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id");
-
-                    b.ToTable("Address");
+                    b.ToTable("efdp_address");
                 });
 
             modelBuilder.Entity("EntityFrameworkVsCoreDapper.Customer", b =>
@@ -62,26 +67,32 @@ namespace EntityFrameworkVsCoreDapper.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("AddressId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("address_id");
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("birth_date");
 
                     b.Property<string>("Email")
                         .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(150)")
+                        .HasColumnName("email");
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("first_name");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
+                        .HasColumnType("nvarchar(80)")
+                        .HasColumnName("last_name");
 
                     b.Property<string>("Status")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("status");
 
                     b.HasKey("Id");
 
@@ -89,59 +100,7 @@ namespace EntityFrameworkVsCoreDapper.Migrations
 
                     b.HasIndex("Email");
 
-                    b.HasIndex("Id");
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("EntityFrameworkVsCoreDapper.Entities.ValueChoice", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<int>("OrderPresentation")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("ValueDomainId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ValueDomainId");
-
-                    b.ToTable("ValueChoices");
-                });
-
-            modelBuilder.Entity("EntityFrameworkVsCoreDapper.Entities.ValueDomain", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ValueDomains");
+                    b.ToTable("efdp_customer");
                 });
 
             modelBuilder.Entity("EntityFrameworkVsCoreDapper.Product", b =>
@@ -152,38 +111,43 @@ namespace EntityFrameworkVsCoreDapper.Migrations
 
                     b.Property<string>("Brand")
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(30)")
+                        .HasColumnName("brand");
 
                     b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("customer_id");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(150)")
+                        .HasColumnName("name");
 
                     b.Property<decimal>("OldPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("old_price");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("price");
 
                     b.Property<Guid?>("ProductPageId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("product_page_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("Id");
-
                     b.HasIndex("Name");
 
                     b.HasIndex("ProductPageId");
 
-                    b.ToTable("Products");
+                    b.ToTable("efdp_product");
                 });
 
             modelBuilder.Entity("EntityFrameworkVsCoreDapper.ProductPage", b =>
@@ -194,30 +158,27 @@ namespace EntityFrameworkVsCoreDapper.Migrations
 
                     b.Property<string>("FullDescription")
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("full_description");
 
                     b.Property<string>("ImageLink")
                         .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasColumnType("nvarchar(300)")
+                        .HasColumnName("image_link");
 
                     b.Property<string>("SmallDescription")
                         .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)");
+                        .HasColumnType("nvarchar(120)")
+                        .HasColumnName("small_description");
 
                     b.Property<string>("Title")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<Guid?>("TypeId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("title");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id");
-
-                    b.HasIndex("TypeId");
-
-                    b.ToTable("ProductPages");
+                    b.ToTable("efdp_product_page");
                 });
 
             modelBuilder.Entity("EntityFrameworkVsCoreDapper.Results.Result", b =>
@@ -261,13 +222,6 @@ namespace EntityFrameworkVsCoreDapper.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("EntityFrameworkVsCoreDapper.Entities.ValueChoice", b =>
-                {
-                    b.HasOne("EntityFrameworkVsCoreDapper.Entities.ValueDomain", null)
-                        .WithMany("ValueChoices")
-                        .HasForeignKey("ValueDomainId");
-                });
-
             modelBuilder.Entity("EntityFrameworkVsCoreDapper.Product", b =>
                 {
                     b.HasOne("EntityFrameworkVsCoreDapper.Customer", "Customer")
@@ -283,23 +237,9 @@ namespace EntityFrameworkVsCoreDapper.Migrations
                     b.Navigation("ProductPage");
                 });
 
-            modelBuilder.Entity("EntityFrameworkVsCoreDapper.ProductPage", b =>
-                {
-                    b.HasOne("EntityFrameworkVsCoreDapper.Entities.ValueChoice", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId");
-
-                    b.Navigation("Type");
-                });
-
             modelBuilder.Entity("EntityFrameworkVsCoreDapper.Customer", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("EntityFrameworkVsCoreDapper.Entities.ValueDomain", b =>
-                {
-                    b.Navigation("ValueChoices");
                 });
 #pragma warning restore 612, 618
         }

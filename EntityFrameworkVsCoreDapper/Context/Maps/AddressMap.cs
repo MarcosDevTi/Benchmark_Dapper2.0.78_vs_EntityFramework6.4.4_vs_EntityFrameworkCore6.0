@@ -7,12 +7,13 @@ namespace EntityFrameworkVsCoreDapper.Context.Maps
     {
         public void Configure(EntityTypeBuilder<Address> builder)
         {
-            builder.HasIndex(_ => _.Id);
-            builder.Property(_ => _.City).HasMaxLength(80);
-            builder.Property(_ => _.Street).HasMaxLength(150);
-            builder.Property(_ => _.Country).HasMaxLength(80);
-            builder.Property(_ => _.ZipCode).HasMaxLength(30);
-            builder.Property(_ => _.AdministrativeRegion).HasMaxLength(5);
+            builder.ToTable("efdp_address");
+            builder.Property(_ => _.Number).HasColumnName("number").HasMaxLength(40);
+            builder.Property(_ => _.City).HasColumnName("city").HasMaxLength(80);
+            builder.Property(_ => _.Street).HasColumnName("street").HasMaxLength(150);
+            builder.Property(_ => _.Country).HasColumnName("country").HasMaxLength(80);
+            builder.Property(_ => _.ZipCode).HasColumnName("zip_code").HasMaxLength(30);
+            builder.Property(_ => _.AdministrativeRegion).HasColumnName("administrative_region").HasMaxLength(5);
         }
     }
 }

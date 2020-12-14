@@ -1,6 +1,5 @@
 ﻿using Bogus;
 using Dapper;
-using Dapper.Contrib.Extensions;
 using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.Contracts;
 using EntityFrameworkVsCoreDapper.Helpers;
@@ -28,11 +27,14 @@ namespace EntityFrameworkVsCoreDapper.Tests
 
         public async Task<TimeSpan> SelectSingleProducts(int take)
         {
-            var sql = $"select top({take}) * from products";
+            var sql = $@"select top(@take) id, name, description, price, old_price OldPrice,
+                        brand, customer_id CustomerId, product_page_id ProductPageId
+                        from efdp_product";
 
             var watch = _consoleHelper.StartChrono();
 
-            var rders = await _dapperContext.OpenedConnection.QueryAsync<Product>(sql);
+            var rders = await _dapperContext.OpenedConnection.QueryAsync<Product>(
+                sql, new { take });
 
             var result = _consoleHelper.StopChrono(watch, "Dapper single select");
 
@@ -42,6 +44,19 @@ namespace EntityFrameworkVsCoreDapper.Tests
         }
         public async Task<TimeSpan> SelectComplexCustomers(int take)
         {
+            var test =
+                @"select 
+                cust.first_name FirstName, cust.last_name LastName, cust.email Email, cust.status Status, 
+                    cust.birth_date BirthDate,
+                cust.address_id, addr.id, addr.number, addr.street, addr.city, addr.country, addr.zip_code ZipCode,
+                    addr.administrative_region AdministrativeRegion,
+                prod.id IdProduct, prod.id, prod.name, prod.description, prod.price, prod.old_price OldPrice, prod.brand,
+                prod.product_page_id ProductPageId, prod_pg.Id, prod_pg.title, prod_pg.small_description SmallDescription,
+                    prod_pg.full_description FullDescription, prod_pg.image_link ImageLink
+                from efdp_customer cust
+                left join efdp_address addr on addr.id = cust.address_id
+                left join efdp_product prod on prod.customer_id = cust.id
+                left join efdp_product_page prod_pg on prod_pg.Id = prod.product_page_id";
             var faker = new Faker();
             var sql = new StringBuilder()
                 .AppendLine("SELECT [t].[Id], [t].[AddressId], [t].[BirthDate], [t].[Email], [t].[FirstName], [t].[LastName], [t].[Status], [a0].[Id], " +
@@ -124,46 +139,25 @@ namespace EntityFrameworkVsCoreDapper.Tests
 
         public async Task AddCustomers(IEnumerable<Customer> customers, IDbTransaction transaction)
         {
-            foreach (var customer in customers)
-            {
-                await AddAddress(customer.Address, transaction);
-                await AddCustomer(customer, transaction);
+            var adresses = customers.Select(c => c.Address);
+            var sqlAdresses = "Insert into efdp_address (id, number, street, city, country, zip_code, administrative_region) Values" +
+               "(@Id, @Number, @Street, @City, @Country, @ZipCode, @AdministrativeRegion)";
+            await _dapperContext.OpenedConnection.ExecuteAsync(sqlAdresses, adresses, transaction: transaction);
 
-                foreach (var product in customer.Products)
-                {
-                    await AddProduct(product, transaction);
-                }
-            }
+            var sql = "Insert into efdp_customer (id, first_name, last_name, email, status, birth_date, address_id) Values" +
+                $"(@Id, @FirstName, @LastName, @Email, @Status, @BirthDate, @AddressId)";
+            await _dapperContext.OpenedConnection.ExecuteAsync(sql, customers, transaction: transaction);
+
+            var products = customers.SelectMany(c => c.Products);
+            var sqlProducts = "insert into efdp_product (id, name, description, price, old_price, brand, customer_id) Values" +
+              "(@Id, @Name, @Description, @Price, @OldPrice, @Brand, @CustomerId);";
+            await _dapperContext.OpenedConnection.ExecuteAsync(sqlProducts, products, transaction: transaction);
         }
         public async Task AddProducts(IEnumerable<Product> products, IDbTransaction transaction)
         {
-            foreach (var product in products)
-                await AddProduct(product, transaction);
-        }
-
-        public async Task AddProduct(Product product, IDbTransaction transaction)
-        {
-            var sql = "INSERT INTO PRODUCTS (Id, Name, Description, Price, OldPrice, Brand, CustomerId) Values" +
+            var sql = "INSERT INTO efdp_product (id, name, description, price, old_price, brand, customer_id) Values" +
                 "(@Id, @Name, @Description, @Price, @OldPrice, @Brand, @CustomerId);";
-            await _dapperContext.OpenedConnection.ExecuteAsync(sql, product, transaction: transaction);
+            await _dapperContext.OpenedConnection.ExecuteAsync(sql, products, transaction: transaction);
         }
-        public async Task AddAddress(Address address, IDbTransaction transaction)
-        {
-            var sql = "Insert into Address (Id, Number, Street, City, Country, ZipCode, AdministrativeRegion) Values" +
-                "(@Id, @Number, @Street, @City, @Country, @ZipCode, @AdministrativeRegion)";
-            await _dapperContext.OpenedConnection.ExecuteAsync(sql, address, transaction: transaction);
-        }
-        public async Task AddCustomer(Customer customer, IDbTransaction transaction)
-        {
-            var sql = "Insert into Customers (Id, FirstName, LastName, Email, Status, BirthDate, AddressId) Values" +
-                $"(@Id, @FirstName, @LastName, @Email, @Status, @BirthDate, @AddressId)";
-            await _dapperContext.OpenedConnection.ExecuteAsync(sql, customer, transaction: transaction);
-        }
-        public async Task AddCustomerContrib(Customer customer, IDbTransaction transaction) =>
-             await _dapperContext.OpenedConnection.InsertAsync(customer, transaction);
-        public async Task AddProductContrib(Product product, IDbTransaction transaction) =>
-            await _dapperContext.OpenedConnection.InsertAsync(product, transaction);
-        public async Task AddAddressContrib(Address address, IDbTransaction transaction) =>
-            await _dapperContext.OpenedConnection.InsertAsync(address, transaction);
     }
 }
