@@ -65,14 +65,14 @@ namespace EntityFrameworkVsCoreDapper.Tests
                 .AppendLine("FROM (")
                 .AppendLine($"    SELECT TOP({take}) [c].[Id], [c].[AddressId], [c].[BirthDate], [c].[Email], [c].[FirstName], [c].[LastName], [c].[Status]")
                 .AppendLine("    FROM [Customers] AS [c]")
-                .AppendLine("    LEFT JOIN [Address] AS [a] ON [c].[AddressId] = [a].[Id]")
+                .AppendLine("    LEFT JOIN [Addresses] AS [a] ON [c].[AddressId] = [a].[Id]")
                 .AppendLine($"    WHERE ((([c].[FirstName] <> N'{faker.Name.FirstName().Replace("'", "")}') OR [c].[FirstName] IS NULL) AND ([a].[City] IS NOT NULL AND NOT ([a].[City]" +
                 $" LIKE N'{faker.Address.City().Replace("'", "")}%'))) AND EXISTS (")
                 .AppendLine("        SELECT 1")
                 .AppendLine("        FROM [Products] AS [p]")
                 .AppendLine($"        WHERE ([c].[Id] = [p].[CustomerId]) AND (([p].[Description] <> N'{faker.Commerce.ProductName().Replace("'", "")}') OR [p].[Description] IS NULL))")
                 .AppendLine(") AS [t]")
-                .AppendLine("LEFT JOIN [Address] AS [a0] ON [t].[AddressId] = [a0].[Id]")
+                .AppendLine("LEFT JOIN [Addresses] AS [a0] ON [t].[AddressId] = [a0].[Id]")
                 .AppendLine("LEFT JOIN [Products] AS [p0] ON [t].[Id] = [p0].[CustomerId]")
                 .AppendLine("ORDER BY [t].[Id], [p0].[Id]")
                 .ToString();
@@ -148,9 +148,16 @@ namespace EntityFrameworkVsCoreDapper.Tests
                 $"(@Id, @FirstName, @LastName, @Email, @Status, @BirthDate, @AddressId)";
             await _dapperContext.OpenedConnection.ExecuteAsync(sql, customers, transaction: transaction);
 
+            var productsPageSql =
+                @"insert into efdp_product_page
+                  (id, title, small_description, full_description, image_link)
+                  Values (@Id, @Title, @SmallDescription, @FullDescription, @ImageLink)";
+            var pages = customers.SelectMany(c => c.Products).Select(_ => _.ProductPage);
+            await _dapperContext.OpenedConnection.ExecuteAsync(productsPageSql, pages, transaction: transaction);
+            
             var products = customers.SelectMany(c => c.Products);
-            var sqlProducts = "insert into efdp_product (id, name, description, price, old_price, brand, customer_id) Values" +
-              "(@Id, @Name, @Description, @Price, @OldPrice, @Brand, @CustomerId);";
+            var sqlProducts = "insert into efdp_product (id, name, description, price, old_price, brand, customer_id, product_page_id) Values" +
+              "(@Id, @Name, @Description, @Price, @OldPrice, @Brand, @CustomerId, @ProductPageId);";
             await _dapperContext.OpenedConnection.ExecuteAsync(sqlProducts, products, transaction: transaction);
         }
         public async Task AddProducts(IEnumerable<Product> products, IDbTransaction transaction)

@@ -37,10 +37,10 @@ namespace EntityFrameworkVsCoreDapper.Tests
         public async Task<TimeSpan> InsertSingleProducts(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
-            var aa = new ListTests().ObtenirListProductsAleatoire(interactions, null);
+            //new ListTests().ObtenirListProductsAleatoire(interactions, null).ForEach(_ =>
+            //    _ef6Context.Products.Add(_));
 
-            new ListTests().ObtenirListProductsAleatoire(interactions, null).ForEach(_ =>
-                _ef6Context.Products.Add(_));
+            _ef6Context.Products.AddRange(new ListTests().ObtenirListProductsAleatoire(interactions, null));
             await _ef6Context.SaveChangesAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF 6 single select").Tempo;

@@ -27,9 +27,9 @@ namespace EntityFrameworkVsCoreDapper.Tests
         public async Task<TimeSpan> InsertComplexCustomers(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
-
-            new ListTests().ObtenirListCustomersAleatoire(interactions)
-                .ForEach(async _ => await _netcoreContext.AddAsync(_));
+            await _netcoreContext.AddRangeAsync(new ListTests().ObtenirListCustomersAleatoire(interactions));
+            //new ListTests().ObtenirListCustomersAleatoire(interactions)
+            //    .ForEach(async _ => await _netcoreContext.AddAsync(_));
             await _netcoreContext.SaveChangesAsync();
             var tempoResult = _consoleHelper.StopChrono(watch, "EFCore").Tempo;
             await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.InsertComplex);
