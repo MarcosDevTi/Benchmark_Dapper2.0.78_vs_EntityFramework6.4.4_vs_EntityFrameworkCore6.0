@@ -1,4 +1,8 @@
-﻿namespace EntityFrameworkVsCoreDapper
+﻿using Dapper.Contrib.Extensions;
+using System.ComponentModel.DataAnnotations.Schema;
+using TableAttribute = System.ComponentModel.DataAnnotations.Schema.TableAttribute;
+
+namespace EntityFrameworkVsCoreDapper
 {
     public class Address : Entity
     {

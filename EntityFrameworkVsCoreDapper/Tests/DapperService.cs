@@ -2,6 +2,7 @@
 using Dapper;
 using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.Contracts;
+using EntityFrameworkVsCoreDapper.DtoDapper;
 using EntityFrameworkVsCoreDapper.Helpers;
 using EntityFrameworkVsCoreDapper.Results;
 using System;
@@ -44,66 +45,74 @@ namespace EntityFrameworkVsCoreDapper.Tests
         }
         public async Task<TimeSpan> SelectComplexCustomers(int take)
         {
-            var test =
-                @"select 
-                cust.first_name FirstName, cust.last_name LastName, cust.email Email, cust.status Status, 
-                    cust.birth_date BirthDate,
-                cust.address_id, addr.id, addr.number, addr.street, addr.city, addr.country, addr.zip_code ZipCode,
-                    addr.administrative_region AdministrativeRegion,
-                prod.id IdProduct, prod.id, prod.name, prod.description, prod.price, prod.old_price OldPrice, prod.brand,
-                prod.product_page_id ProductPageId, prod_pg.Id, prod_pg.title, prod_pg.small_description SmallDescription,
-                    prod_pg.full_description FullDescription, prod_pg.image_link ImageLink
-                from efdp_customer cust
-                left join efdp_address addr on addr.id = cust.address_id
-                left join efdp_product prod on prod.customer_id = cust.id
-                left join efdp_product_page prod_pg on prod_pg.Id = prod.product_page_id";
-            var faker = new Faker();
-            var sql = new StringBuilder()
-                .AppendLine("SELECT [t].[Id], [t].[AddressId], [t].[BirthDate], [t].[Email], [t].[FirstName], [t].[LastName], [t].[Status], [a0].[Id], " +
-                "[a0].[AdministrativeRegion], [a0].[City], [a0].[Country], [a0].[Number], [a0].[Street], [a0].[ZipCode], [p0].[Id], [p0].[Brand], [p0].[CustomerId], " +
-                "[p0].[Description], [p0].[Name], [p0].[OldPrice], [p0].[Price]")
-                .AppendLine("FROM (")
-                .AppendLine($"    SELECT TOP({take}) [c].[Id], [c].[AddressId], [c].[BirthDate], [c].[Email], [c].[FirstName], [c].[LastName], [c].[Status]")
-                .AppendLine("    FROM [Customers] AS [c]")
-                .AppendLine("    LEFT JOIN [Addresses] AS [a] ON [c].[AddressId] = [a].[Id]")
-                .AppendLine($"    WHERE ((([c].[FirstName] <> N'{faker.Name.FirstName().Replace("'", "")}') OR [c].[FirstName] IS NULL) AND ([a].[City] IS NOT NULL AND NOT ([a].[City]" +
-                $" LIKE N'{faker.Address.City().Replace("'", "")}%'))) AND EXISTS (")
-                .AppendLine("        SELECT 1")
-                .AppendLine("        FROM [Products] AS [p]")
-                .AppendLine($"        WHERE ([c].[Id] = [p].[CustomerId]) AND (([p].[Description] <> N'{faker.Commerce.ProductName().Replace("'", "")}') OR [p].[Description] IS NULL))")
-                .AppendLine(") AS [t]")
-                .AppendLine("LEFT JOIN [Addresses] AS [a0] ON [t].[AddressId] = [a0].[Id]")
-                .AppendLine("LEFT JOIN [Products] AS [p0] ON [t].[Id] = [p0].[CustomerId]")
-                .AppendLine("ORDER BY [t].[Id], [p0].[Id]")
-                .ToString();
+
+            var sql = @"select
+                        -- Customer
+                        cust.id CustomerId, (cust.first_name + cust.last_name) Name, cust.email, cust.birth_date BirthDate,
+                        -- Address
+                        addr.id AddressId, addr.street, addr.city, addr.number, addr.zip_code ZipCode, addr.country,
+                        -- Product
+                        prod.id ProductId, prod.name, prod.description, prod.brand, prod.Price,
+                        -- Product Page
+                        prod_pg.id ProductPageId, prod_pg.title, prod_pg.small_description Description, 
+                            prod_pg.image_link ImageLink
+                        from (
+							select TOP(@take) id, first_name, last_name, email, birth_date, address_id from efdp_customer
+						) cust
+                        left join efdp_address addr on addr.id = cust.address_id
+                        left join efdp_product prod on prod.customer_id = cust.Id
+                        left join efdp_product_page prod_pg on prod_pg.Id = prod.product_page_id";
 
             var watch = _consoleHelper.StartChrono();
 
-            var customerDictionary = new Dictionary<Guid, Customer>();
+            var customerDictionary = new Dictionary<Guid, CustomerDtoDapper>();
+            var productDict = new Dictionary<(Guid, Guid), ProductDtoDapper>();
 
-            var rders = await _dapperContext.OpenedConnection.QueryAsync<Customer, Address, Product, Customer>(
-                sql,
-                (customer, address, product) =>
+            var rders = await _dapperContext.OpenedConnection
+                .QueryAsync<CustomerDtoDapper, AddressDtoDapper, ProductDtoDapper, ProductPageDtoDapper, CustomerDtoDapper >(sql,
+                (customer, address, product, page) =>
                 {
-                    Customer customerEntry;
-
-                    if (!customerDictionary.TryGetValue(customer.Id, out customerEntry))
+                    CustomerDtoDapper customerEntry;
+                    if (!customerDictionary.TryGetValue(customer.CustomerId,  out  customerEntry))
                     {
-                        customerEntry = customer;
-                        customerEntry.Products = new List<Product>();
-                        customerDictionary.Add(customerEntry.Id, customerEntry);
+                        customerDictionary.Add(customer.CustomerId, customerEntry = customer);
+                        if (address != null)
+                        {
+                            customerEntry.Address = address;
+                        }
+                    }
+                    if (product is not null 
+                        && !productDict.TryGetValue((product.ProductId, customer.CustomerId), out ProductDtoDapper productEntry))
+                    {
+                        productDict.Add((product.ProductId, customer.CustomerId), productEntry = product);
+                        if (customerEntry.Products == null)
+                        {
+                            customerEntry.Products = new List<ProductDtoDapper>();
+                            if (page is not null)
+                            {
+                                productEntry.ProductPage = page;
+                            }
+                            customerEntry.Products.Add(productEntry);
+                        }
+                        else
+                        {
+                            if(page is not null)
+                            {
+                                productEntry.ProductPage = page;
+                            }
+                            customerEntry.Products.Add(productEntry);
+                        }
                     }
 
-                    customerEntry.Products.Add(product);
-                    customer.Address = address;
                     return customerEntry;
                 },
-                splitOn: "Id, Id");
-            var tt = rders.Distinct();
+                new { take },
+                splitOn: "AddressId, ProductId, ProductPageId");
+            var tt = rders.Distinct().ToList();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "Dapper").Tempo;
             await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.SelectComplex);
-
+            var cout = tt.Count();
             return tempoResult;
         }
 

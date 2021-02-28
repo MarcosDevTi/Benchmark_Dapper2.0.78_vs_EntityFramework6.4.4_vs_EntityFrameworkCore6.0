@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EntityFrameworkVsCoreDapper.Dtos
+namespace EntityFrameworkVsCoreDapper.DtoDapper
 {
-    public class ProductPageDto
+    public class ProductPageDtoDapper
     {
         public Guid ProductPageId { get; set; }
         public string Title { get; set; }

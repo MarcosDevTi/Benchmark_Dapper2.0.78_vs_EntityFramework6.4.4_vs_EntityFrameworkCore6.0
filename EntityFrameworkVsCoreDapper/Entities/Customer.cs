@@ -12,6 +12,6 @@ namespace EntityFrameworkVsCoreDapper
         public DateTime BirthDate { get; set; }
         public Address Address { get; set; }
         public Guid? AddressId { get; set; }
-        public ICollection<Product> Products { get; set; }
+        public IEnumerable<Product> Products { get; set; }
     }
 }

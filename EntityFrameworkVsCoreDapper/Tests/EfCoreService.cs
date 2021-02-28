@@ -1,6 +1,6 @@
-﻿using Bogus;
-using EntityFrameworkVsCoreDapper.Context;
+﻿using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.Contracts;
+using EntityFrameworkVsCoreDapper.Dtos;
 using EntityFrameworkVsCoreDapper.Helpers;
 using EntityFrameworkVsCoreDapper.Results;
 using Microsoft.EntityFrameworkCore;
@@ -28,8 +28,6 @@ namespace EntityFrameworkVsCoreDapper.Tests
         {
             var watch = _consoleHelper.StartChrono();
             await _netcoreContext.AddRangeAsync(new ListTests().ObtenirListCustomersAleatoire(interactions));
-            //new ListTests().ObtenirListCustomersAleatoire(interactions)
-            //    .ForEach(async _ => await _netcoreContext.AddAsync(_));
             await _netcoreContext.SaveChangesAsync();
             var tempoResult = _consoleHelper.StopChrono(watch, "EFCore").Tempo;
             await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.InsertComplex);
@@ -73,48 +71,62 @@ namespace EntityFrameworkVsCoreDapper.Tests
             await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTrackingSqlHard, OperationType.SelectSingle);
             return tempoResult;
         }
+        public IQueryable<CustomerDto> GetQueryComplexCustomers(int take)
+        {
+            return _netcoreContext.Customers
+                .Select(c => new CustomerDto
+                {
+                    CustomerId = c.Id,
+                    Name = c.FirstName + " " + c.LastName,
+                    Email = c.Email,
+                    BirthDate = c.BirthDate,
+                    Address = new AddressDto
+                    {
+                        AddressId = c.Address.Id,
+                        Street = c.Address.Street,
+                        City = c.Address.City,
+                        Number = c.Address.Number,
+                        ZipCode = c.Address.ZipCode,
+                        Country = c.Address.Country
+                    },
+                    Products = c.Products.Select(p => new ProductDto
+                    {
+                        ProductId = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Brand = p.Brand,
+                        Price = p.Price,
+                        ProductPage = new ProductPageDto
+                        {
+                            ProductPageId = p.ProductPage.Id,
+                            Title = p.ProductPage.Title,
+                            Description = p.ProductPage.SmallDescription,
+                            ImageLink = p.ProductPage.ImageLink,
+                        }
+                    })
+                }).Take(take);
+        }
         public async Task<TimeSpan> SelectComplexCustomers(int take)
         {
-            var faker = new Faker();
             var watch = _consoleHelper.StartChrono();
 
-            var teste = _netcoreContext.Customers.Include(_ => _.Address).Include(_ => _.Products)
-                .Where(_ => _.FirstName != "Test First Name" && !_.Address.City.StartsWith(faker.Address.City().Replace("'", "")) &&
-                _.Products.Count(_ => _.Description != faker.Commerce.ProductName().Replace("'", "")) > 0)
-                .Take(take);
+            var res = await GetQueryComplexCustomers(take).ToListAsync();
 
-            var res = await teste.ToListAsync();
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core").Tempo;
+
             await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCore, OperationType.SelectComplex);
             return tempoResult;
         }
 
-        private async Task CallSelectComplexCustomers(int take, Faker faker)
-        {
-            var teste = _netcoreContext.Customers.Include(_ => _.Address).Include(_ => _.Products)
-               .Where(_ => _.FirstName != "Test First Name" &&
-               !_.Address.City.StartsWith("Qu") &&
-               _.Products.Any(_ => _.Description != "asdfa"))
-               .Take(take);
-
-            var res = await teste.ToListAsync();
-        }
         public async Task<TimeSpan> SelectComplexCustomersAsNoTracking(int take)
         {
-            var faker = new Faker();
             var watch = _consoleHelper.StartChrono();
 
             _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            var teste = _netcoreContext.Customers
-                .Include(_ => _.Address)
-                .Include(_ => _.Products)
-                .Where(_ => _.FirstName != "Test First Name" && !_.Address.City.StartsWith(faker.Address.City().Replace("'", "")) && _.Products.Any(_ =>
-                _.Description != faker.Commerce.ProductName().Replace("'", "")))
-                .Take(take);
-
-            var aa = await teste.ToListAsync();
+            var aa = await GetQueryComplexCustomers(take).ToListAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core AsNoTracking").Tempo;
+
             await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTracking, OperationType.SelectComplex);
             return tempoResult;
         }
@@ -133,7 +145,6 @@ namespace EntityFrameworkVsCoreDapper.Tests
         public async Task<TimeSpan> InsertSingleProductsAsNoTrackingSqlCommand(int interactions)
         {
             var watch = _consoleHelper.StartChrono();
-
 
             await AddProducts(new ListTests().ObtenirListProductsAleatoire(interactions, null));
             await _netcoreContext.SaveChangesAsync();

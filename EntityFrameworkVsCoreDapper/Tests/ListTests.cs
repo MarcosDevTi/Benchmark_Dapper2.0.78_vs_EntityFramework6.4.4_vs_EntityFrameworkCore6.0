@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Bogus;
+using System;
 using System.Collections.Generic;
-using Bogus;
 
 namespace EntityFrameworkVsCoreDapper.Tests
 {
@@ -31,10 +31,10 @@ namespace EntityFrameworkVsCoreDapper.Tests
         }
         public List<Customer> ObtenirListCustomersAleatoire(int interactions)
         {
-            var faker = new Faker();
             var list = new List<Customer>();
             for (var i = 0; i < interactions; i++)
             {
+                var faker = new Faker();
                 var idAddress = Guid.NewGuid();
                 var idCustomer = Guid.NewGuid();
 
@@ -66,11 +66,10 @@ namespace EntityFrameworkVsCoreDapper.Tests
 
         private List<Product> List5Products(Guid customerId)
         {
-            var faker = new Faker();
-
             var list = new List<Product>();
             for (var i = 0; i < 5; i++)
             {
+                var faker = new Faker();
                 var productId = Guid.NewGuid();
                 var pageId = Guid.NewGuid();
                 list.Add(new Product
