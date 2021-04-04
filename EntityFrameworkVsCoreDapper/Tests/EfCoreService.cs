@@ -71,6 +71,44 @@ namespace EntityFrameworkVsCoreDapper.Tests
             await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.EfCoreAsNoTrackingSqlHard, OperationType.SelectSingle);
             return tempoResult;
         }
+        public IQueryable<CustomerDto> GetQueryComplexCustomersAsNoTracking(int take)
+        {
+            return _netcoreContext.Customers
+                .AsNoTrackingWithIdentityResolution()
+                .Include(a => a.Address).Include(c => c.Products)
+                .Select(c => new CustomerDto
+                {
+                    CustomerId = c.Id,
+                    Name = c.FirstName + " " + c.LastName,
+                    Email = c.Email,
+                    BirthDate = c.BirthDate,
+                    Address = new AddressDto
+                    {
+                        AddressId = c.Address.Id,
+                        Street = c.Address.Street,
+                        City = c.Address.City,
+                        Number = c.Address.Number,
+                        ZipCode = c.Address.ZipCode,
+                        Country = c.Address.Country
+                    },
+                    Products = c.Products.Select(p => new ProductDto
+                    {
+                        ProductId = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Brand = p.Brand,
+                        Price = p.Price,
+                        ProductPage = new ProductPageDto
+                        {
+                            ProductPageId = p.ProductPage.Id,
+                            Title = p.ProductPage.Title,
+                            Description = p.ProductPage.SmallDescription,
+                            ImageLink = p.ProductPage.ImageLink,
+                        }
+                    })
+                }).Take(take);
+        }
+
         public IQueryable<CustomerDto> GetQueryComplexCustomers(int take)
         {
             return _netcoreContext.Customers
@@ -122,8 +160,8 @@ namespace EntityFrameworkVsCoreDapper.Tests
         {
             var watch = _consoleHelper.StartChrono();
 
-            _netcoreContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            var aa = await GetQueryComplexCustomers(take).ToListAsync();
+
+            var aa = await GetQueryComplexCustomersAsNoTracking(take).ToListAsync();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "EF Core AsNoTracking").Tempo;
 

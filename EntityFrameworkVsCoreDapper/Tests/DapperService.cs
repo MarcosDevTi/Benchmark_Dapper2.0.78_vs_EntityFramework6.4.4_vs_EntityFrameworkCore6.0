@@ -1,5 +1,4 @@
-﻿using Bogus;
-using Dapper;
+﻿using Dapper;
 using EntityFrameworkVsCoreDapper.Context;
 using EntityFrameworkVsCoreDapper.Contracts;
 using EntityFrameworkVsCoreDapper.DtoDapper;
@@ -9,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EntityFrameworkVsCoreDapper.Tests
@@ -45,7 +43,6 @@ namespace EntityFrameworkVsCoreDapper.Tests
         }
         public async Task<TimeSpan> SelectComplexCustomers(int take)
         {
-
             var sql = @"select
                         -- Customer
                         cust.id CustomerId, (cust.first_name + cust.last_name) Name, cust.email, cust.birth_date BirthDate,
@@ -57,7 +54,7 @@ namespace EntityFrameworkVsCoreDapper.Tests
                         prod_pg.id ProductPageId, prod_pg.title, prod_pg.small_description Description, 
                             prod_pg.image_link ImageLink
                         from (
-							select TOP(@take) id, first_name, last_name, email, birth_date, address_id from efdp_customer
+							select top(@take) id, first_name, last_name, email, birth_date, address_id from efdp_customer
 						) cust
                         left join efdp_address addr on addr.id = cust.address_id
                         left join efdp_product prod on prod.customer_id = cust.Id
@@ -69,11 +66,11 @@ namespace EntityFrameworkVsCoreDapper.Tests
             var productDict = new Dictionary<(Guid, Guid), ProductDtoDapper>();
 
             var rders = await _dapperContext.OpenedConnection
-                .QueryAsync<CustomerDtoDapper, AddressDtoDapper, ProductDtoDapper, ProductPageDtoDapper, CustomerDtoDapper >(sql,
+                .QueryAsync<CustomerDtoDapper, AddressDtoDapper, ProductDtoDapper, ProductPageDtoDapper, CustomerDtoDapper>(sql,
                 (customer, address, product, page) =>
                 {
                     CustomerDtoDapper customerEntry;
-                    if (!customerDictionary.TryGetValue(customer.CustomerId,  out  customerEntry))
+                    if (!customerDictionary.TryGetValue(customer.CustomerId, out customerEntry))
                     {
                         customerDictionary.Add(customer.CustomerId, customerEntry = customer);
                         if (address != null)
@@ -81,7 +78,7 @@ namespace EntityFrameworkVsCoreDapper.Tests
                             customerEntry.Address = address;
                         }
                     }
-                    if (product is not null 
+                    if (product is not null
                         && !productDict.TryGetValue((product.ProductId, customer.CustomerId), out ProductDtoDapper productEntry))
                     {
                         productDict.Add((product.ProductId, customer.CustomerId), productEntry = product);
@@ -96,7 +93,7 @@ namespace EntityFrameworkVsCoreDapper.Tests
                         }
                         else
                         {
-                            if(page is not null)
+                            if (page is not null)
                             {
                                 productEntry.ProductPage = page;
                             }
@@ -163,7 +160,7 @@ namespace EntityFrameworkVsCoreDapper.Tests
                   Values (@Id, @Title, @SmallDescription, @FullDescription, @ImageLink)";
             var pages = customers.SelectMany(c => c.Products).Select(_ => _.ProductPage);
             await _dapperContext.OpenedConnection.ExecuteAsync(productsPageSql, pages, transaction: transaction);
-            
+
             var products = customers.SelectMany(c => c.Products);
             var sqlProducts = "insert into efdp_product (id, name, description, price, old_price, brand, customer_id, product_page_id) Values" +
               "(@Id, @Name, @Description, @Price, @OldPrice, @Brand, @CustomerId, @ProductPageId);";
@@ -171,7 +168,7 @@ namespace EntityFrameworkVsCoreDapper.Tests
         }
         public async Task AddProducts(IEnumerable<Product> products, IDbTransaction transaction)
         {
-            var sql = "INSERT INTO efdp_product (id, name, description, price, old_price, brand, customer_id) Values" +
+            var sql = "insert into efdp_product (id, name, description, price, old_price, brand, customer_id) Values" +
                 "(@Id, @Name, @Description, @Price, @OldPrice, @Brand, @CustomerId);";
             await _dapperContext.OpenedConnection.ExecuteAsync(sql, products, transaction: transaction);
         }
