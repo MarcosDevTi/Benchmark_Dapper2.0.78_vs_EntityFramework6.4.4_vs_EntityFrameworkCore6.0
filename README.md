@@ -15,6 +15,30 @@
 <img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/select single graph.PNG"> </img>
 <img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/select single.PNG"> </img>
 
+``` ini
+
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.18363.1440 (1909/November2018Update/19H2)
+Intel Core i7-6700K CPU 4.00GHz (Skylake), 1 CPU, 8 logical and 4 physical cores
+.NET Core SDK=6.0.100-preview.2.21155.3
+  [Host]     : .NET Core 6.0.0 (CoreCLR 6.0.21.15406, CoreFX 6.0.21.15406), X64 RyuJIT
+  DefaultJob : .NET Core 6.0.0 (CoreCLR 6.0.21.15406, CoreFX 6.0.21.15406), X64 RyuJIT
+
+
+```
+|                          Method |       Mean |      Error |     StdDev |     Median |
+|-------------------------------- |-----------:|-----------:|-----------:|-----------:|
+|              InsertProductsAdo1 |   3.107 ms |  0.1717 ms |  0.4926 ms |   3.025 ms |
+|   InsertProductsAdoSqlBulkCopy1 |   4.459 ms |  0.2370 ms |  0.6408 ms |   4.294 ms |
+|           InsertProductsDapper1 |   2.355 ms |  0.0987 ms |  0.2833 ms |   2.313 ms |
+|           InsertProductsEfCore1 |   3.500 ms |  0.1899 ms |  0.5480 ms |   3.321 ms |
+|             InsertProductsAdo20 |   8.363 ms |  0.3987 ms |  1.0847 ms |   8.178 ms |
+|  InsertProductsAdoSqlBulkCopy20 |  12.442 ms |  1.3327 ms |  3.8663 ms |  13.054 ms |
+|          InsertProductsDapper20 |  11.936 ms |  0.5755 ms |  1.6233 ms |  11.808 ms |
+|          InsertProductsEfCore20 |  18.128 ms |  1.0233 ms |  3.0013 ms |  17.979 ms |
+|            InsertProductsAdo200 | 116.066 ms | 12.5700 ms | 33.5519 ms | 105.651 ms |
+| InsertProductsAdoSqlBulkCopy200 |  91.139 ms |  5.9899 ms | 16.6974 ms |  95.650 ms |
+|         InsertProductsDapper200 | 131.735 ms | 19.2877 ms | 55.6494 ms | 135.175 ms |
+|         InsertProductsEfCore200 | 131.087 ms | 13.9288 ms | 37.1789 ms | 124.958 ms |
 
 <div>Dapper 2.0.30</div>
 <div>EntityFramework 6.4</div>
