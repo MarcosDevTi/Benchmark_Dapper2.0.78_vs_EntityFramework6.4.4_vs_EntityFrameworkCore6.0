@@ -24,3 +24,12 @@ Intel Core i7-6700K CPU 4.00GHz (Skylake), 1 CPU, 8 logical and 4 physical cores
 |          &#39;Insert 5 Product Dapper&#39; | 5.881 ms | 0.3838 ms | 1.1317 ms | 5.623 ms |
 |       &#39;Insert 5 Product Ef Core 6&#39; | 5.543 ms | 0.3048 ms | 0.7813 ms | 5.516 ms |
 |            &#39;Insert 5 Product Ef 6&#39; | 6.206 ms | 0.2454 ms | 0.7119 ms | 6.215 ms |
+
+
+|                           Method |     Mean |    Error |   StdDev |   Median |
+|--------------------------------- |---------:|---------:|---------:|---------:|
+|         &#39;Insert 20 Products Ado&#39; | 20.98 ms | 1.408 ms | 4.108 ms | 21.20 ms |
+| &#39;Insert 20 Products SqlBulkCopy&#39; | 16.22 ms | 0.775 ms | 2.210 ms | 16.58 ms |
+|      &#39;Insert 20 Products Dapper&#39; | 15.37 ms | 0.942 ms | 2.688 ms | 14.97 ms |
+|   &#39;Insert 20 Products Ef Core 6&#39; | 15.81 ms | 1.335 ms | 3.633 ms | 14.74 ms |
+|        &#39;Insert 20 Products Ef 6&#39; | 25.18 ms | 1.164 ms | 3.433 ms | 24.53 ms |
