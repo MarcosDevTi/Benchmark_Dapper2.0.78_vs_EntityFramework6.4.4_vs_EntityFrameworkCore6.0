@@ -12,10 +12,11 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th style="width: 10%" scope="col">#</th>
-            <th style="width: 30%" scope="col">Dapper</th>
-            <th style="width: 30%" scope="col">Ef 6</th>
-            <th style="width: 30%" scope="col">Ef Core</th>
+            <th style="width: 20%" scope="col">#</th>
+            <th style="width: 20%" scope="col">Dapper</th>
+            <th style="width: 20%" scope="col">Ef 6</th>
+            <th style="width: 20%" scope="col">Ef Core</th>
+            <th style="width: 20%" scope="col">Ado</th>
         </tr>
     </thead>
     <tbody>
@@ -29,6 +30,7 @@
                     <cell-result controller-name="Singles" interaction-element="@interac" action-retour="InsertSingles" action-name="InsertProductDapper" item-result-view="@item.Dapper"></cell-result>
                     <cell-result controller-name="Singles" interaction-element="@interac" action-retour="InsertSingles" action-name="InsertProductEf6" item-result-view="@item.Ef6"></cell-result>
                     <cell-result controller-name="Singles" interaction-element="@interac" action-retour="InsertSingles" action-name="InsertProductEfCore" item-result-view="@item.EFCore"></cell-result>
+                    <cell-result controller-name="Singles" interaction-element="@interac" action-retour="InsertSingles" action-name="InsertProductAdo" item-result-view="@item.Ado"></cell-result>
                 </tr>
                 interac++;
             }

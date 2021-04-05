@@ -12,18 +12,21 @@ namespace EfVsDapper.Mvc.Controllers
         private readonly IDapperService _dapperTests;
         private readonly IEf6Service _ef6Tests;
         private readonly IEfCoreService _efCoreTests;
+        private readonly IAdoService _adoService;
         private readonly ResultService _resultService;
         private readonly MessageService _messageService;
         public SinglesController(
             IDapperService dapperTests,
             IEfCoreService efCoreTests,
             IEf6Service ef6Tests,
+            IAdoService adoService,
             ResultService resultService,
             MessageService messageService)
         {
             _dapperTests = dapperTests;
             _efCoreTests = efCoreTests;
             _ef6Tests = ef6Tests;
+            _adoService = adoService;
             _resultService = resultService;
             _messageService = messageService;
         }
@@ -89,6 +92,12 @@ namespace EfVsDapper.Mvc.Controllers
         public async Task<IActionResult> InsertProductEfCoreAsNoTrackingHardSql(int interactions)
         {
             await _efCoreTests.InsertSingleProductsAsNoTrackingSqlCommand(interactions);
+            return RedirectToAction("InsertSingles");
+        }
+
+        public async Task<IActionResult> InsertProductAdo(int interactions)
+        {
+            await _adoService.InsertSingleProducts(interactions);
             return RedirectToAction("InsertSingles");
         }
 

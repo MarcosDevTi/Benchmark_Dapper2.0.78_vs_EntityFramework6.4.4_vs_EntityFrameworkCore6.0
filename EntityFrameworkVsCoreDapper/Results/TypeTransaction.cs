@@ -7,5 +7,6 @@
         EfCore,
         EfCoreAsNoTracking,
         EfCoreAsNoTrackingSqlHard,
+        Ado
     }
 }

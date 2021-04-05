@@ -8,7 +8,8 @@ namespace TestBench
     {
         static void Main(string[] args)
         {
-            var summary = BenchmarkRunner.Run<DatabaseTestPerformance>();
+            //var summary = BenchmarkRunner.Run<DatabaseTestPerformance>();
+            var summary2 = BenchmarkRunner.Run<SinglesInserts>();
         }
     }
 }

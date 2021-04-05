@@ -5,6 +5,7 @@
         public ItemResultView Dapper { get; set; }
         public ItemResultView Ef6 { get; set; }
         public ItemResultView EFCore { get; set; }
+        public ItemResultView Ado { get; set; }
         public ItemResultView EfCoreAsNoTracking { get; set; }
         public ItemResultView EfCoreAsNoTrackingHardSql { get; set; }
     }
@@ -24,5 +25,6 @@
         public string EFCore { get; set; }
         public string EfCoreAsNoTracking { get; set; }
         public string EfCoreAsNoTrackingHardSql { get; set; }
+        public string Ado { get; set; }
     }
 }

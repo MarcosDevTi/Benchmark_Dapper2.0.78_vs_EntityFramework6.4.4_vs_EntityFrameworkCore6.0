@@ -102,11 +102,9 @@ namespace EntityFrameworkVsCoreDapper.Tests
         {
             var watch = _consoleHelper.StartChrono();
 
-            using (var transaction = _dapperContext.OpenedConnection.BeginTransaction())
-            {
-                await AddProducts(new ListTests().ObtenirListProductsAleatoire(interactions, null), transaction);
-                transaction.Commit();
-            }
+            
+            await AddProducts(new ListTests().ObtenirListProductsAleatoire(interactions, null));
+                
             var tempoResult = _consoleHelper.StopChrono(watch, "Dapper").Tempo;
 
             await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.InsertSingle);
@@ -116,11 +114,7 @@ namespace EntityFrameworkVsCoreDapper.Tests
         {
             var watch = _consoleHelper.StartChrono();
 
-            using (var transaction = _dapperContext.OpenedConnection.BeginTransaction())
-            {
-                await AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions), transaction);
-                transaction.Commit();
-            }
+            await AddCustomers(new ListTests().ObtenirListCustomersAleatoire(interactions));
 
             var tempoResult = _consoleHelper.StopChrono(watch, "Dapper").Tempo;
             await _resultService.SaveSelect(interactions, tempoResult, watch.InitMemory, TypeTransaction.Dapper,
@@ -128,34 +122,34 @@ namespace EntityFrameworkVsCoreDapper.Tests
             return tempoResult;
         }
 
-        public async Task AddCustomers(IEnumerable<Customer> customers, IDbTransaction transaction)
+        public async Task AddCustomers(IEnumerable<Customer> customers)
         {
             var adresses = customers.Select(c => c.Address);
             var sqlAdresses = "Insert into efdp_address (id, number, street, city, country, zip_code, administrative_region) Values" +
                "(@Id, @Number, @Street, @City, @Country, @ZipCode, @AdministrativeRegion)";
-            await _dapperContext.OpenedConnection.ExecuteAsync(sqlAdresses, adresses, transaction: transaction);
+            await _dapperContext.OpenedConnection.ExecuteAsync(sqlAdresses, adresses);
 
             var sql = "Insert into efdp_customer (id, first_name, last_name, email, status, birth_date, address_id) Values" +
                 $"(@Id, @FirstName, @LastName, @Email, @Status, @BirthDate, @AddressId)";
-            await _dapperContext.OpenedConnection.ExecuteAsync(sql, customers, transaction: transaction);
+            await _dapperContext.OpenedConnection.ExecuteAsync(sql, customers);
 
             var productsPageSql =
                 @"insert into efdp_product_page
                   (id, title, small_description, full_description, image_link)
                   Values (@Id, @Title, @SmallDescription, @FullDescription, @ImageLink)";
             var pages = customers.SelectMany(c => c.Products).Select(_ => _.ProductPage);
-            await _dapperContext.OpenedConnection.ExecuteAsync(productsPageSql, pages, transaction: transaction);
+            await _dapperContext.OpenedConnection.ExecuteAsync(productsPageSql, pages);
 
             var products = customers.SelectMany(c => c.Products);
             var sqlProducts = "insert into efdp_product (id, name, description, price, old_price, brand, customer_id, product_page_id) Values" +
               "(@Id, @Name, @Description, @Price, @OldPrice, @Brand, @CustomerId, @ProductPageId);";
-            await _dapperContext.OpenedConnection.ExecuteAsync(sqlProducts, products, transaction: transaction);
+            await _dapperContext.OpenedConnection.ExecuteAsync(sqlProducts, products);
         }
-        public async Task AddProducts(IEnumerable<Product> products, IDbTransaction transaction)
+        public async Task AddProducts(IEnumerable<Product> products)
         {
             var sql = "insert into efdp_product (id, name, description, price, old_price, brand, customer_id) Values" +
                 "(@Id, @Name, @Description, @Price, @OldPrice, @Brand, @CustomerId);";
-            await _dapperContext.OpenedConnection.ExecuteAsync(sql, products, transaction: transaction);
+            await _dapperContext.OpenedConnection.ExecuteAsync(sql, products);
         }
     }
 }

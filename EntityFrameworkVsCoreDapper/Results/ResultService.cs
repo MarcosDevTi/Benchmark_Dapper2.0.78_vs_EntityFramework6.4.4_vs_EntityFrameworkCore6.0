@@ -134,7 +134,8 @@ namespace EntityFrameworkVsCoreDapper.Results
                 Ef6 = await GetTempoChart(sequenceAmountInteractions, TypeTransaction.Ef6, operationType),
                 EFCore = await GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCore, operationType),
                 EfCoreAsNoTracking = await GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCoreAsNoTracking, operationType),
-                EfCoreAsNoTrackingHardSql = await GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCoreAsNoTrackingSqlHard, operationType)
+                EfCoreAsNoTrackingHardSql = await GetTempoChart(sequenceAmountInteractions, TypeTransaction.EfCoreAsNoTrackingSqlHard, operationType),
+                Ado = await GetTempoChart(sequenceAmountInteractions, TypeTransaction.Ado, operationType),
             };
 
             return result;
@@ -173,6 +174,11 @@ namespace EntityFrameworkVsCoreDapper.Results
                         Interactions = inter,
                         Display = await GetTempo(inter, TypeTransaction.EfCoreAsNoTrackingSqlHard, operationType)
                     },
+                    Ado = new ItemResultView
+                    {
+                        Interactions = inter,
+                        Display = await GetTempo(inter, TypeTransaction.Ado, operationType)
+                    }
                 });
             }
             return results;

@@ -13,7 +13,7 @@ namespace EntityFrameworkVsCoreDapper.Context
 
         public DapperContext(IConfiguration configuration)
         {
-            OpenedConnection = new ProfiledDbConnection(new SqlConnection(configuration.GetConnectionString("DefaultConnection")), MiniProfiler.Current);
+            OpenedConnection = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
             OpenedConnection.Open();
         }
 
