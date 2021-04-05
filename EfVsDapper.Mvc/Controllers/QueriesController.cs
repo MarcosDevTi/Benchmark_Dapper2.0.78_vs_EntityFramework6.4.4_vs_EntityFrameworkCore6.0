@@ -86,9 +86,6 @@ namespace EfVsDapper.Mvc.Controllers
             return RedirectToAction("Index", new { Sql = sql, Title = "Ef Core" });
         }
 
-
-
-
         public IActionResult JoinProductWithCustomersAndAddressEfCore()
         {
             var query = from p in _dotNetCoreContext.Products

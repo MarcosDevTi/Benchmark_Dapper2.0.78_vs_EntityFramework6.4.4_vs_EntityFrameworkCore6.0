@@ -63,49 +63,34 @@ namespace EntityFrameworkVsCoreDapper.Tests
             var watch = _consoleHelper.StartChrono();
 
             var customerDictionary = new Dictionary<Guid, CustomerDtoDapper>();
-            var productDict = new Dictionary<(Guid, Guid), ProductDtoDapper>();
+            var productDict = new Dictionary<Guid, ProductDtoDapper>();
 
-            var rders = await _dapperContext.OpenedConnection
+            await _dapperContext.OpenedConnection
                 .QueryAsync<CustomerDtoDapper, AddressDtoDapper, ProductDtoDapper, ProductPageDtoDapper, CustomerDtoDapper>(sql,
-                (customer, address, product, page) =>
+                (cust, address, prod, page) =>
                 {
-                    CustomerDtoDapper customerEntry;
-                    if (!customerDictionary.TryGetValue(customer.CustomerId, out customerEntry))
+                    var customerIsAreadyAdded = customerDictionary.TryGetValue(cust.CustomerId, out CustomerDtoDapper customer);
+                    if (!customerIsAreadyAdded)
+                        customerDictionary.Add(cust.CustomerId, customer = cust);
+
+                    if (cust is not null && prod is not null)
                     {
-                        customerDictionary.Add(customer.CustomerId, customerEntry = customer);
-                        if (address != null)
+                        if (!productDict.TryGetValue(prod.ProductId, out ProductDtoDapper product))
                         {
-                            customerEntry.Address = address;
-                        }
-                    }
-                    if (product is not null
-                        && !productDict.TryGetValue((product.ProductId, customer.CustomerId), out ProductDtoDapper productEntry))
-                    {
-                        productDict.Add((product.ProductId, customer.CustomerId), productEntry = product);
-                        if (customerEntry.Products == null)
-                        {
-                            customerEntry.Products = new List<ProductDtoDapper>();
-                            if (page is not null)
-                            {
-                                productEntry.ProductPage = page;
-                            }
-                            customerEntry.Products.Add(productEntry);
-                        }
-                        else
-                        {
-                            if (page is not null)
-                            {
-                                productEntry.ProductPage = page;
-                            }
-                            customerEntry.Products.Add(productEntry);
+                            productDict.Add(prod.ProductId, product = prod);
+                            product.ProductPage = page;
+                            customer.Products.Add(product);
                         }
                     }
 
-                    return customerEntry;
+                    if (!customerIsAreadyAdded)
+                        customer.Address = address;
+
+                    return customer;
                 },
                 new { take },
                 splitOn: "AddressId, ProductId, ProductPageId");
-            var tt = rders.Distinct().ToList();
+            var tt = customerDictionary.Values.ToList();
 
             var tempoResult = _consoleHelper.StopChrono(watch, "Dapper").Tempo;
             await _resultService.SaveSelect(take, tempoResult, watch.InitMemory, TypeTransaction.Dapper, OperationType.SelectComplex);
