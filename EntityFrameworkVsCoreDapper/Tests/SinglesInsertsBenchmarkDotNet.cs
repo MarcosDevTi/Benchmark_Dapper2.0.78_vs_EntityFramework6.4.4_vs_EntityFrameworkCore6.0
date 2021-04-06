@@ -1,29 +1,31 @@
 ﻿using Dapper;
 using EntityFrameworkVsCoreDapper.Context;
-using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace EntityFrameworkVsCoreDapper.Tests
 {
-    public class AdoServiceBenchmarkDotNet
+    public class SinglesInsertsBenchmarkDotNet
     {
         public async Task InsertSingleProductsSqlBulkCopy(int interactions, SqlConnection sqlConnection)
         {
             await AddProductsAdoSqlBulkCopy(new ListTests().ObtenirListProductsAleatoire(interactions, null), sqlConnection);
         }
 
-        public async Task InsertSingleProductsAdo(int interactions, string connectionStrings)
+        public async Task InsertSingleProductsAdo(int interactions, SqlConnection sqlConnection)
         {
-            await AddProductsAdo(new ListTests().ObtenirListProductsAleatoire(interactions, null), connectionStrings);
+            await AddProductsAdo(new ListTests().ObtenirListProductsAleatoire(interactions, null), sqlConnection);
+            await sqlConnection.CloseAsync();
         }
 
         public async Task InsertSingleProductsDapper(int interactions, SqlConnection sqlConnection)
         {
             await AddProductsDapper(new ListTests().ObtenirListProductsAleatoire(interactions, null), sqlConnection);
+            await sqlConnection.CloseAsync();
         }
 
         public async Task InsertSingleProductsEfCore(int interactions, DotNetCoreContext dotNetCoreContext)
@@ -32,6 +34,14 @@ namespace EntityFrameworkVsCoreDapper.Tests
 
             await dotNetCoreContext.Products.AddRangeAsync(listCustomers);
             await dotNetCoreContext.SaveChangesAsync();
+        }
+
+        public async Task InsertSingleProductsEf6(int interactions, Ef6Context ef6Context)
+        {
+            var listCustomers = new ListTests().ObtenirListProductsAleatoire(interactions, null);
+
+            ef6Context.Products.AddRange(listCustomers);
+            await ef6Context.SaveChangesAsync();
         }
 
         private async Task AddProductsAdoSqlBulkCopy(IEnumerable<Product> products, SqlConnection sqlConnection)
@@ -43,7 +53,7 @@ namespace EntityFrameworkVsCoreDapper.Tests
             sqlConnection.Close();
         }
 
-        private async Task AddProductsAdo(IEnumerable<Product> products, string connectionString)
+        private async Task AddProductsAdo(IEnumerable<Product> products, SqlConnection sqlConnection)
         {
             var sql = @"insert into efdp_product (id, name, description, price, old_price, brand) Values ";
 
@@ -54,9 +64,8 @@ namespace EntityFrameworkVsCoreDapper.Tests
 
             sql += string.Join(",\r\n", listParams.ToArray());
 
-            using var conn = new SqlConnection(connectionString);
 
-            using var cmd = new SqlCommand(sql, conn);
+            using var cmd = new SqlCommand(sql, sqlConnection);
 
             for (var i = 0; i < products.Count(); i++)
             {
@@ -72,9 +81,9 @@ namespace EntityFrameworkVsCoreDapper.Tests
 
             cmd.CommandType = CommandType.Text;
 
-            if (conn.State == ConnectionState.Closed)
+            if (sqlConnection.State == ConnectionState.Closed)
             {
-                await conn.OpenAsync();
+                await sqlConnection.OpenAsync();
             }
 
             await cmd.ExecuteNonQueryAsync();
@@ -98,11 +107,8 @@ namespace EntityFrameworkVsCoreDapper.Tests
             dt.Columns.Add("old_price", typeof(decimal));
             dt.Columns.Add("brand", typeof(string));
 
-
             foreach (var product in products)
-                dt.Rows.Add(
-                    product.Id, product.Name, product.Description, product.Price, product.OldPrice,
-                    product.Brand);
+                dt.Rows.Add(product.Id, product.Name, product.Description, product.Price, product.OldPrice, product.Brand);
 
             dt.AcceptChanges();
 

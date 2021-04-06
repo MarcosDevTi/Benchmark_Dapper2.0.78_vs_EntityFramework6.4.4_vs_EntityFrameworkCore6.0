@@ -22,7 +22,7 @@ namespace EntityFrameworkVsCoreDapper.Context
             modelBuilder.MapProductEf6();
             modelBuilder.MapProductPageMap();
 
-           // base.OnModelCreating(modelBuilder);
+            // base.OnModelCreating(modelBuilder);
         }
     }
 }
