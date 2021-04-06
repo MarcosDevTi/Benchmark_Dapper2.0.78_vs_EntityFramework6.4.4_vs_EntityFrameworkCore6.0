@@ -1,166 +1,85 @@
-<h3>Insert complex objects</h3>
-<img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/insert complex graph.PNG"> </img>
-<img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/insert conplex.PNG"> </img>
+![insert_singles](https://user-images.githubusercontent.com/35473406/113652005-06805580-9661-11eb-9b61-8b4eab37bdc4.PNG)
 
-<h3>Insert single objects</h3>
-<img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/insert ingle graph.PNG"> </img>
-<img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/insert single graph 2.PNG"> </img>
-<img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/insert single.PNG"> </img>
+``` ini
 
-<h3>Select complex objects</h3>
-<img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/select complex graph.PNG"> </img>
-<img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/select complex.PNG"> </img>
-
-<h3>Select single objects</h3>
-<img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/select single graph.PNG"> </img>
-<img src="https://raw.githubusercontent.com/MarcosDevTi/Benchmark_Dapper2.0.30_vs_EntityFramework6.4_vs_EntityFrameworkCore3.1/master/EfVsDapper.Mvc/wwwroot/images/select single.PNG"> </img>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.18363.1440 (1909/November2018Update/19H2)
+Intel Core i7-6700K CPU 4.00GHz (Skylake), 1 CPU, 8 logical and 4 physical cores
+.NET Core SDK=6.0.100-preview.2.21155.3
+  [Host]     : .NET Core 6.0.0 (CoreCLR 6.0.21.15406, CoreFX 6.0.21.15406), X64 RyuJIT
+  DefaultJob : .NET Core 6.0.0 (CoreCLR 6.0.21.15406, CoreFX 6.0.21.15406), X64 RyuJIT
 
 
-<div>Dapper 2.0.30</div>
-<div>EntityFramework 6.4</div>
-<div>EntityFrameworkCore 3.1</div>
-<br />
-<div>Framework version: DonetCore 3.1</div>
-<div>Database: SQL Server 2016</div>
-
-<h4>select count (*) from customers = 4 326 100
-<br />
-SELECT Name,Email,Street,Number,City,Country FROM Customers
-</h4>
-
-<h2>Inserts</h2>
-
-<div>
-<h5>With 10 000 Items</h5>
-<ul>
-<li>Dapper ---------------: 00:00:02.1937825</li>
-<li>EF 6 -------------------: 00:00:16.0704060</li>
-<li>EF Core ----------------: 00:00:02.4896326</li>
-<li><strong>EFCore AsNoTracking: 00:00:01.8780940</strong></li>
-</ul>
-</div>
-
-<div>
-<h5>With 500 Items</h5>
-<ul>
-<li><strong>Dapper ----------------: 00:00:00.0765094</strong></li>
-<li>EF 6 -------------------: 00:00:00.1943946</li>
-<li>EF Core ---------------: 00:00:00.0990530</li>
-<li>EFCore AsNoTracking: 00:00:00.0867977</li>
-</ul>
-</div>
+```
+|                             Method |     Mean |     Error |    StdDev |
+|----------------------------------- |---------:|----------:|----------:|
+|             &#39;Insert 1 Product Ado&#39; | 2.936 ms | 0.0576 ms | 0.1517 ms |
+| &#39;Insert 1 Product Ado SqlBulkCopy&#39; | 7.750 ms | 0.6424 ms | 1.8841 ms |
+|          &#39;Insert 1 Product Dapper&#39; | 2.346 ms | 0.1238 ms | 0.3632 ms |
+|       &#39;Insert 1 Product Ef Core 6&#39; | 3.000 ms | 0.1006 ms | 0.2598 ms |
+|            &#39;Insert 1 Product Ef 6&#39; | 3.373 ms | 0.1089 ms | 0.3175 ms |
 
 
-
-<div>
-<h5>With 20 Items</h5>
-<ul>
-<li>Dapper ----------------: 00:00:00.0044685</li>
-<li>EF 6 -------------------: 00:00:00.0101838</li>
-<li><strong>EF Core ---------------: 00:00:00.0032743</strong></li>
-<li>EFCore AsNoTracking: 00:00:00.0033132</li>
-</ul>
-</div>
+|                             Method |     Mean |     Error |    StdDev |   Median |
+|----------------------------------- |---------:|----------:|----------:|---------:|
+|             &#39;Insert 5 Product Ado&#39; | 5.260 ms | 0.1854 ms | 0.5198 ms | 5.002 ms |
+| &#39;Insert 5 Product Ado SqlBulkCopy&#39; | 7.950 ms | 0.8396 ms | 2.4623 ms | 7.639 ms |
+|          &#39;Insert 5 Product Dapper&#39; | 5.881 ms | 0.3838 ms | 1.1317 ms | 5.623 ms |
+|       &#39;Insert 5 Product Ef Core 6&#39; | 5.543 ms | 0.3048 ms | 0.7813 ms | 5.516 ms |
+|            &#39;Insert 5 Product Ef 6&#39; | 6.206 ms | 0.2454 ms | 0.7119 ms | 6.215 ms |
 
 
-<div><h2>Selects</h2></div>
+|                           Method |     Mean |    Error |   StdDev |   Median |
+|--------------------------------- |---------:|---------:|---------:|---------:|
+|         &#39;Insert 20 Products Ado&#39; | 20.98 ms | 1.408 ms | 4.108 ms | 21.20 ms |
+| &#39;Insert 20 Products SqlBulkCopy&#39; | 16.22 ms | 0.775 ms | 2.210 ms | 16.58 ms |
+|      &#39;Insert 20 Products Dapper&#39; | 15.37 ms | 0.942 ms | 2.688 ms | 14.97 ms |
+|   &#39;Insert 20 Products Ef Core 6&#39; | 15.81 ms | 1.335 ms | 3.633 ms | 14.74 ms |
+|        &#39;Insert 20 Products Ef 6&#39; | 25.18 ms | 1.164 ms | 3.433 ms | 24.53 ms |
 
 
-<div>
-<h5>With 5 Items</h5>
-<ul>
-<li>Dapper ----------------: 00:00:00.0265447</li>
-<li>EF 6 -------------------: 00:00:00.0258215</li>
-<li>EF Core ---------------: 00:00:00.1224790</li>
-<li><strong>EFCore AsNoTracking: 00:00:00.0032688</strong></li>
-</ul>
-</div>
+|                            Method |      Mean |     Error |   StdDev |    Median |
+|---------------------------------- |----------:|----------:|---------:|----------:|
+|         &#39;Insert 200 Products Ado&#39; | 115.66 ms |  9.798 ms | 28.11 ms | 103.54 ms |
+| &#39;Insert 200 Products SqlBulkCopy&#39; |  80.60 ms |  9.330 ms | 27.36 ms |  65.58 ms |
+|      &#39;Insert 200 Products Dapper&#39; | 160.93 ms | 14.577 ms | 42.06 ms | 152.06 ms |
+|   &#39;Insert 200 Products Ef Core 6&#39; | 148.79 ms | 18.131 ms | 48.08 ms | 143.86 ms |
+|        &#39;Insert 200 Products Ef 6&#39; | 230.36 ms | 27.114 ms | 78.66 ms | 219.55 ms |
 
 
-<div>
-<h5>With 10 Items</h5>
-<ul>
-<li>Dapper ----------------: 00:00:00.0021278</li>
-<li>EF 6 -------------------: 00:00:00.0015343</li>
-<li>EF Core ---------------: 00:00:00.0011850</li>
-<li><strong>EFCore AsNoTracking: 00:00:00.0002648</strong></li>
-</ul>
-</div>
+|                       Method |     Mean |    Error |   StdDev |
+|----------------------------- |---------:|---------:|---------:|
+|       &#39;Select 1 Product Ado&#39; | 150.1 μs |  0.97 μs |  0.91 μs |
+|    &#39;Select 1 Product Dapper&#39; | 120.4 μs |  0.66 μs |  0.62 μs |
+| &#39;Select 1 Product Ef Core 6&#39; | 648.4 μs | 18.81 μs | 54.27 μs |
+|      &#39;Select 1 Product Ef 6&#39; | 818.6 μs | 21.73 μs | 62.69 μs |
+
+|                       Method |     Mean |    Error |   StdDev |
+|----------------------------- |---------:|---------:|---------:|
+|       &#39;Select 5 Product Ado&#39; | 172.1 μs |  2.10 μs |  1.86 μs |
+|    &#39;Select 5 Product Dapper&#39; | 141.7 μs |  0.79 μs |  0.62 μs |
+| &#39;Select 5 Product Ef Core 6&#39; | 715.5 μs | 21.23 μs | 60.22 μs |
+|      &#39;Select 5 Product Ef 6&#39; | 868.5 μs | 24.91 μs | 72.67 μs |
 
 
-<div>
-<h5>With 30 Items</h5>
-<ul>
-<li>Dapper ----------------: 00:00:00.0003714</li>
-<li>EF 6 -------------------: 00:00:00.0013086</li>
-<li>EF Core ---------------: 00:00:00.0006102</li>
-<li><strong>EFCore AsNoTracking: 00:00:00.0003618</strong></li>
-</ul>
-</div>
+|                        Method |       Mean |    Error |    StdDev |
+|------------------------------ |-----------:|---------:|----------:|
+|       &#39;Select 50 Product Ado&#39; |   281.5 μs |  0.97 μs |   0.86 μs |
+|    &#39;Select 50 Product Dapper&#39; |   253.7 μs |  1.81 μs |   1.61 μs |
+| &#39;Select 50 Product Ef Core 6&#39; | 1,247.9 μs | 35.12 μs | 103.01 μs |
+|      &#39;Select 50 Product Ef 6&#39; | 1,328.2 μs | 49.19 μs | 143.49 μs |
 
 
+|                         Method |     Mean |     Error |    StdDev |   Median |
+|------------------------------- |---------:|----------:|----------:|---------:|
+|       &#39;Select 500 Product Ado&#39; | 2.513 ms | 0.0747 ms | 0.2142 ms | 2.468 ms |
+|    &#39;Select 500 Product Dapper&#39; | 2.276 ms | 0.1001 ms | 0.2871 ms | 2.231 ms |
+| &#39;Select 500 Product Ef Core 6&#39; | 4.519 ms | 0.4314 ms | 1.2721 ms | 3.787 ms |
+|      &#39;Select 500 Product Ef 6&#39; | 4.260 ms | 0.2179 ms | 0.6322 ms | 4.157 ms |
 
 
-<div>
-<h5>With 100 Items</h5>
-<ul>
-<li><strong>Dapper ----------------: 00:00:00.0005051</strong></li>
-<li>EF 6 -------------------: 00:00:00.0015608</li>
-<li>EF Core ---------------: 00:00:00.0009898</li>
-<li>EFCore AsNoTracking: 00:00:00.0005561</li>
-</ul>
-</div>
-
-
-<div>
-<h5>With 200 Items</h5>
-<ul>
-<li><strong>Dapper ----------------: 00:00:00.0007486</strong></li>
-<li>EF 6 ------------------: 00:00:00.0020365</li>
-<li>EF Core ---------------: 00:00:00.0016754</li>
-<li>EFCore AsNoTracking: 00:00:00.0008617</li>
-</ul>
-</div>
-
-
-<div>
-<h5>With 500 Items</h5>
-<ul>
-<li><strong>Dapper ----------------: 00:00:00.0015478</strong></li>
-<li>EF 6 -------------------: 00:00:00.0057808</li>
-<li>EF Core ---------------: 00:00:00.0074901</li>
-<li>EFCore AsNoTracking: 00:00:00.0036823</li>
-</ul>
-</div>
-
-
-<div>
-<h5>With 10 000 Items</h5>
-<ul>
-<li>Dapper ----------------: 00:00:00.0474821</li>
-<li>EF 6 --------------------: 00:00:00.0685237</li>
-<li>EF Core -----------------: 00:00:00.0711007</li>
-<li><strong>EFCore AsNoTracking: 00:00:00.0440667</strong></li>
-</ul>
-
-</div>
-
-<div>
-<h5>With 100 000 Items</h5>
-<ul>
-<li><strong>Dapper ---------------: 00:00:00.3126536</strong></li>
-<li>EF 6 ------------------: 00:00:00.8190117</li>
-<li>EF Core --------------: 00:00:00.6912632</li>
-<li>EFCore AsNoTracking: 00:00:00.3639308</li>
-</ul>
-</div>
-
-
-<div>
-<h5>With 1 000 000 Items</h5>
-<ul>
-<li><strong>Dapper ------------: 00:00:03.0104293</strong></li>
-<li>EFCore AsNoTracking: 00:00:03.5660426</li>
-</ul>
-</div>
-
+|                          Method |     Mean |    Error |   StdDev |
+|-------------------------------- |---------:|---------:|---------:|
+|       &#39;Select 5000 Product Ado&#39; | 16.91 ms | 0.318 ms | 0.340 ms |
+|    &#39;Select 5000 Product Dapper&#39; | 16.90 ms | 0.435 ms | 1.268 ms |
+| &#39;Select 5000 Product Ef Core 6&#39; | 28.25 ms | 0.554 ms | 0.955 ms |
+|      &#39;Select 5000 Product Ef 6&#39; | 31.44 ms | 0.841 ms | 2.441 ms |
