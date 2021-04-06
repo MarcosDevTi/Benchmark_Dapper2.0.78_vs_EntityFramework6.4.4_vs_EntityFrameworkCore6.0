@@ -20,17 +20,12 @@
                     data: @Model.Ef6
                 }, {
                     label: "Ef Core",
-                    backgroundColor: "#607d8b",
+                    backgroundColor: "#fff",
                     data: @Model.EFCore
                 }, {
                     label: "Ef Core As No Tracking",
                     backgroundColor: "#03a9f4",
                     data: @Model.EfCoreAsNoTracking
-                },
-                {
-                    label: "ADO",
-                    backgroundColor: "#ffc107",
-                    data: @Model.Ado
                 }
             ]
         },
@@ -38,6 +33,18 @@
             title: {
                 display: true,
                 text: '@ViewBag.OperationType'
+            },
+            scales: {
+                yAxes: [{
+                  gridLines: {
+                    color: 'white'
+                  }
+                }],
+                xAxes: [{
+                  gridLines: {
+                    color: 'white'
+                  }
+                }]
             }
         }
     });
